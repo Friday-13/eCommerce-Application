@@ -1,3 +1,5 @@
+import tsconfigPaths from "vite-tsconfig-paths";
+
 export default {
   base: "./",
   build: {
@@ -8,6 +10,7 @@ export default {
       },
     },
   },
+  plugins: [tsconfigPaths()],
   css: {
     modules: {
       localsConvention: "camelCase",
