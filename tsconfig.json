@@ -114,7 +114,7 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*.ts", ".eslintrc.cjs", "vite.config.ts", "validate-branch-name.config.cjs", "**/*.ts", "jest.config.js"],
+  "include": ["src/**/*.ts", ".eslintrc.cjs", "vite.config.ts", "**/*.ts", "jest.config.js"],
   "exclude": ["node_modules", "dist"],
   "plugins": [
     {
