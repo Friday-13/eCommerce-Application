@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "${0%/*}/h"
+
+# Запустить Prettier для форматирования файлов
+npm run format
+
+# Запустить ESLint для проверки JavaScript и TypeScript файлов
+npm run lint:js
+
+# Запустить Stylelint для проверки CSS и SCSS файлов
+npm run lint:css
+
+# Проверка коммита с использованием commitlint
+npx commitlint --edit $1
