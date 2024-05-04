@@ -7,7 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && npx gh-pages -d dist -b gh-pages"
+    "deploy": "npm run build && npx gh-pages -d dist -b gh-pages",
+    "lint:js": "eslint **/*.{js,ts}",
+    "lint:js:fix": "eslint **/*.{js,ts} --fix",
+    "lint:css": "stylelint '**/*.{css,scss}'",
+    "lint:css:fix": "stylelint '**/*.{css,scss}' --fix",
+    "format": "prettier --write .",
+    "jest:test": "jest",
+    "commit": "cz",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
