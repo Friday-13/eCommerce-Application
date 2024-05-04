@@ -27,6 +27,25 @@ The project is a part of the final task of the course [JavaScript/Front-end 2023
     * Husky [docs](https://typicode.github.io/husky/)
     * ESLint [docs](https://eslint.org/docs/latest/use/core-concepts)
 
+## Setup and Running:
+
+To clone and run this application, you need [Git](https://git-scm.com/) and [Node.js] (which comes with [npm](https://www.npmjs.com/)) installed on your computer. From your command line clone this repository:
+
+```$ git clone https://github.com/Friday-13/eCommerce-Application.git```
+
+Go into repository folder:
+
+```$ cd eCommerce-Application```
+
+Install dependencies:
+
+```$ npm install```
+
+Run the app:
+
+```$ npm run dev```
+
+
 ## Available Scripts
 
 <details><summary>Scripts</summary>
