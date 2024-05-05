@@ -29,21 +29,29 @@ The project is a part of the final task of the course [JavaScript/Front-end 2023
 
 ## Setup and Running:
 
-To clone and run this application, you need [Git](https://git-scm.com/) and [Node.js] (which comes with [npm](https://www.npmjs.com/)) installed on your computer. From your command line clone this repository:
+To clone and run this application, you need [Git](https://git-scm.com/) and [npm](https://www.npmjs.com/) installed on your computer. From your command line clone this repository:
 
-```$ git clone https://github.com/Friday-13/eCommerce-Application.git```
+```
+$ git clone https://github.com/Friday-13/eCommerce-Application.git
+```
 
 Go into repository folder:
 
-```$ cd eCommerce-Application```
+```
+$ cd eCommerce-Application
+```
 
 Install dependencies:
 
-```$ npm install```
+```
+$ npm install
+```
 
 Run the app:
 
-```$ npm run dev```
+```
+$ npm run dev
+```
 
 
 ## Available Scripts
@@ -51,26 +59,69 @@ Run the app:
 <details><summary>Scripts</summary>
 
    * To start a local development server:
-    ```npm run dev```
+    
+    ```
+    npm run dev
+    ```
+    
    * To generate a distribution-ready version of the project in the dist directory:
-    ```npm run build```
+    
+    ```
+    npm run build
+    ```
+
    * To start a local web server that serves the built solution from the dist directory for previewing:
-    ```npm run preview```
+    
+    ```
+    npm run preview
+    ```
+
    * To deploy the project at GitHub Pages:
-    ```npm run build && npx gh-pages -d dist -b gh-pages```
+
+    ```
+    npm run build && npx gh-pages -d dist -b gh-pages
+    ```
+
    * To run a JavaScript linter and catch potential issues early in the development process via ESLint:
-    ```npm run lint:js```
+
+    ```
+    npm run lint:js
+    ```
+
    * To fix linting issues in JavaScript and TypeScript files:
-    ```npm run lint:js:fix```
+    
+    ```
+    npm run lint:js:fix
+    ```
+
    * To ensure CSS and SCSS code maintains consistency across the stylesheets:
-    ```npm run lint:css```
+
+    ```
+    npm run lint:css
+    ```
+
    * To fix linting issues in CSS and SCSS codebase:
-    ```npm run lint:css:fix```
+
+    ```
+    npm run lint:css:fix
+    ```
+
    * To ensure consistent code style and formatting across the project files via Prettier:
-    ```npm run format```
+
+    ```
+    npm run format
+    ```
+
    * To run the test suite using Jest. Jest executes the project's test cases and provides the test results:
-    ```npm run jest:test```
+
+    ```
+    npm run jest:test
+    ```
+
    * To run Commitizen (cz) for creating structured and standardized commit messages:
-    ```npm run commit```
+
+    ```
+    npm run commit
+    ```
 
 </details>
