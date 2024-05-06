@@ -60,68 +60,46 @@ $ npm run dev
 
    * To start a local development server:
     
-    ```
     npm run dev
-    ```
-    
+        
    * To generate a distribution-ready version of the project in the dist directory:
     
-    ```
     npm run build
-    ```
-
+    
    * To start a local web server that serves the built solution from the dist directory for previewing:
     
-    ```
     npm run preview
-    ```
-
+    
    * To deploy the project at GitHub Pages:
 
-    ```
     npm run build && npx gh-pages -d dist -b gh-pages
-    ```
-
+    
    * To run a JavaScript linter and catch potential issues early in the development process via ESLint:
 
-    ```
     npm run lint:js
-    ```
-
+    
    * To fix linting issues in JavaScript and TypeScript files:
     
-    ```
     npm run lint:js:fix
-    ```
-
+    
    * To ensure CSS and SCSS code maintains consistency across the stylesheets:
 
-    ```
     npm run lint:css
-    ```
-
+    
    * To fix linting issues in CSS and SCSS codebase:
 
-    ```
     npm run lint:css:fix
-    ```
-
+    
    * To ensure consistent code style and formatting across the project files via Prettier:
 
-    ```
     npm run format
-    ```
-
+    
    * To run the test suite using Jest. Jest executes the project's test cases and provides the test results:
 
-    ```
     npm run jest:test
-    ```
-
+    
    * To run Commitizen (cz) for creating structured and standardized commit messages:
 
-    ```
     npm run commit
-    ```
-
+    
 </details>
