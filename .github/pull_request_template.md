@@ -1,6 +1,6 @@
 ## Related task(s)/issue(s) :link:
 
--   [link](https://github.com/)
+- [link](https://github.com/)
 
 ## Description :clipboard:
 
