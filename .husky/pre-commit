@@ -14,6 +14,7 @@ npm run lint:css
 
 # Проверка коммита с использованием commitlint
 echo "Validating commit message..."
-npx commitlint
+git log -1 --pretty=%B | npx commitlint --from-stdin
+
 
 echo "Pre-commit hook is running"
