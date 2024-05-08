@@ -1,14 +1,20 @@
 #!/usr/bin/env sh
-. "${0%/*}/h"
 
 # Запустить Prettier для форматирования файлов
+echo "Running Prettier..."
 npm run format
 
 # Запустить ESLint для проверки JavaScript и TypeScript файлов
+echo "Running ESLint..."
 npm run lint:js
 
 # Запустить Stylelint для проверки CSS и SCSS файлов
+echo "Running Stylelint..."
 npm run lint:css
 
 # Проверка коммита с использованием commitlint
-npx commitlint --edit $1
+echo "Validating commit message..."
+git log -1 --pretty=%B | npx commitlint
+
+
+echo "Pre-commit hook is running"

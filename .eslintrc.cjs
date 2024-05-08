@@ -1,18 +1,22 @@
-export default {
+module.exports = {
   env: {
     browser: true,
     commonjs: true,
     es2021: true,
     node: true,
   },
-  ignorePatterns: ['.eslintrc.cjs'],
+  ignorePatterns: [
+    '.eslintrc.cjs',
+    'jest.config.cjs',
+    '**/node_modules/**',
+    'commitlint.config.cjs',
+  ],
   parser: '@typescript-eslint/parser',
   extends: [
     'airbnb-base',
     'airbnb-typescript/base',
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
   ],
   overrides: [
     {

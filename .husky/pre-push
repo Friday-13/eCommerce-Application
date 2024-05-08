@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-. "${0%/*}/h"
 
 # Запуск тестов Jest
+echo "Running Jest..."
 npm run jest:test

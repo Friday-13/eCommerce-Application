@@ -1,7 +1,7 @@
 module.exports = {
   verbose: true,
   preset: 'ts-jest',
-  testEnvironment: 'jsdom', // тест веб-приложения
+  testEnvironment: 'jest-environment-jsdom', // тест веб-приложения
   transform: {
     // Трансформация файлов TypeScript с использованием ts-jest
     '^.+\\.(ts|tsx)$': 'ts-jest',
