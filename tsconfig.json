@@ -38,6 +38,14 @@
       "@models/*": ["./src/app/models/*"],
       "@services/*": ["./src/app/services/*"]
     },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "camelCaseOnly"
+        }
+      }
+    ],
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
     // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
@@ -121,13 +129,5 @@
     "**/*.ts",
     "jest.config.cjs"
   ],
-  "exclude": ["node_modules", "dist"],
-  "plugins": [
-    {
-      "name": "typescript-plugin-css-modules",
-      "options": {
-        "classnameTransform": "camelCaseOnly"
-      }
-    }
-  ]
+  "exclude": ["node_modules", "dist"]
 }
