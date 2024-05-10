@@ -1,4 +1,4 @@
-import { AutoInit } from "materialize-css";
+import { AutoInit } from 'materialize-css';
 
 export interface IAttributes {
   tag?: keyof HTMLElementTagNameMap;
