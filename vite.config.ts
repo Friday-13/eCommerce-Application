@@ -14,6 +14,7 @@ export default {
   css: {
     modules: {
       localsConvention: 'camelCase',
+      generateScopedName: '[local]',
     },
   },
   resolve: {},
