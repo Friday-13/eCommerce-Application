@@ -7,7 +7,9 @@ export interface IButtonAttributes extends IAttributes {
 export class ButtonComponent extends BaseComponent<HTMLButtonElement> {
   constructor(attrs: IButtonAttributes) {
     const mergedAttrs = attrs;
+    const defaultStyles = ['waves-effect', 'waves-light', 'btn'];
     mergedAttrs.tag = attrs.tag ? attrs.tag : 'button';
+    mergedAttrs.classList = attrs.classList ? attrs.classList : defaultStyles;
     super(mergedAttrs);
     if (mergedAttrs.type) {
       this.node.type = mergedAttrs.type;

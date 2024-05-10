@@ -1,3 +1,5 @@
+import { AutoInit } from "materialize-css";
+
 export interface IAttributes {
   tag?: keyof HTMLElementTagNameMap;
   id?: string;
@@ -25,6 +27,7 @@ export class BaseComponent<T extends HTMLElement = HTMLElement> {
     if (attributes.content) {
       this.#node.textContent = attributes.content;
     }
+    AutoInit(this.#node);
   }
 
   get node() {
