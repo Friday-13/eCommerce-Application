@@ -49,6 +49,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/dot-notation': 'error',
+    'no-underscore-dangle': 'off',
   },
   settings: {
     'import/parsers': {
