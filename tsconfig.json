@@ -36,7 +36,8 @@
       "@views/*": ["./src/app/views/*"],
       "@controllers/*": ["./src/app/controllers/*"],
       "@models/*": ["./src/app/models/*"],
-      "@services/*": ["./src/app/services/*"]
+      "@services/*": ["./src/app/services/*"],
+      "@components/*": ["./src/app/components/*"]
     },
     "plugins": [
       {
