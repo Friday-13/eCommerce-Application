@@ -1,4 +1,5 @@
 import { BaseComponent, IAttributes } from './base-component';
+// import { ButtonComponent } from './button-component';
 import { IInputAttributes, InputComponent } from './input-component';
 import { ILabelAttriubutes, LabelComponent } from './label-component';
 import { IValidator } from './validator';
@@ -103,5 +104,13 @@ export class InputFieldComponent extends BaseComponent {
   clearMessages() {
     this.validationMessages = [];
     this.#helper.textContent = '';
+  }
+
+  togglePasswordVisibility() {
+    if (this.#input.node.getAttribute('type') === 'password') {
+      this.#input.node.setAttribute('type', 'text');
+    } else {
+      this.#input.node.setAttribute('type', 'password');
+    }
   }
 }
