@@ -4,12 +4,11 @@ export default class View {
   protected _htmlElement = new BaseComponent({});
 
   constructor(attrs: IAttributes) {
-    this.createHtmlElement(attrs);
+    this.addHtmlElement(attrs);
   }
 
-  createHtmlElement(attrs: IAttributes) {
+  addHtmlElement(attrs: IAttributes) {
     this._htmlElement = new BaseComponent(attrs);
-    return new BaseComponent(attrs);
   }
 
   get htmlElement() {
