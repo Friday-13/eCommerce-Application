@@ -10,17 +10,9 @@ import {
   IOptionAttributes,
   OptionComponent,
 } from '@components/option-component';
-import { IValidator } from '@components/validator';
+import { IFormInputField, createInputField } from '@utils/create-input-field';
 import View from '@views/view';
 import { Datepicker, FormSelect } from 'materialize-css';
-
-interface IFormInputField {
-  id: string;
-  placeholder: string;
-  label: string;
-  type: string;
-  customValidators: Array<IValidator>;
-}
 
 export default class RegistrationView extends View {
   private form = new FormComponent({});
@@ -77,21 +69,6 @@ export default class RegistrationView extends View {
     this.appendChild(this.form);
   }
 
-  static createInputField(fieldAttrs: IFormInputField) {
-    const attrs: IInputFieldAttributes = {
-      customValidators: fieldAttrs.customValidators,
-    };
-    const inputAttrs: IInputAttributes = {
-      type: fieldAttrs.type,
-      placeholder: fieldAttrs.placeholder,
-    };
-    const labelAttrs: ILabelAttriubutes = {
-      for: fieldAttrs.id,
-      content: fieldAttrs.label,
-    };
-    return new InputFieldComponent(attrs, labelAttrs, inputAttrs);
-  }
-
   addEmailInput() {
     const fieldAttrs: IFormInputField = {
       label: 'E-mail',
@@ -100,7 +77,7 @@ export default class RegistrationView extends View {
       type: 'email',
       customValidators: [],
     };
-    this.emailInput = this.createInputField(fieldAttrs);
+    this.emailInput = createInputField(fieldAttrs);
     this.form.appendChild(this.emailInput);
   }
 
@@ -112,7 +89,7 @@ export default class RegistrationView extends View {
       type: 'password',
       customValidators: [],
     };
-    this.passwordInput = this.createInputField(fieldAttrs);
+    this.passwordInput = createInputField(fieldAttrs);
     this.form.appendChild(this.passwordInput);
   }
 
@@ -124,7 +101,7 @@ export default class RegistrationView extends View {
       placeholder: 'John',
       customValidators: [],
     };
-    this.firstNameInput = this.createInputField(fieldAttrs);
+    this.firstNameInput = createInputField(fieldAttrs);
     this.form.appendChild(this.firstNameInput);
   }
 
@@ -136,7 +113,7 @@ export default class RegistrationView extends View {
       placeholder: 'Doe',
       customValidators: [],
     };
-    this.secondNameInput = this.createInputField(fieldAttrs);
+    this.secondNameInput = createInputField(fieldAttrs);
     this.form.appendChild(this.secondNameInput);
   }
 
@@ -179,7 +156,7 @@ export default class RegistrationView extends View {
       placeholder: 'Dan Crescent',
       customValidators: [],
     };
-    this.streetInput = this.createInputField(attrs);
+    this.streetInput = createInputField(attrs);
     this.form.appendChild(this.streetInput);
   }
 
@@ -191,7 +168,7 @@ export default class RegistrationView extends View {
       placeholder: 'Lake Jeremyville',
       customValidators: [],
     };
-    this.cityInput = this.createInputField(attrs);
+    this.cityInput = createInputField(attrs);
     this.form.appendChild(this.cityInput);
   }
 
@@ -203,7 +180,7 @@ export default class RegistrationView extends View {
       placeholder: '2154',
       customValidators: [],
     };
-    this.postalCodeInput = this.createInputField(attrs);
+    this.postalCodeInput = createInputField(attrs);
     this.form.appendChild(this.postalCodeInput);
   }
 
