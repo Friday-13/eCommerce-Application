@@ -51,4 +51,12 @@ export class InputComponent extends BaseComponent<HTMLInputElement> {
   set value(newValue: string) {
     this.node.value = newValue;
   }
+
+  get type() {
+    return this.node.type;
+  }
+
+  set type(newType: string) {
+    this.node.type = newType;
+  }
 }

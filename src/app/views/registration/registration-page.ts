@@ -11,6 +11,11 @@ import {
   OptionComponent,
 } from '@components/option-component';
 import { IFormInputField, createInputField } from '@utils/create-input-field';
+import { birthdayLimitation } from '@utils/validators/birthday-validator';
+import {
+  atLeastOneCharacter,
+  noSpecialCharacter,
+} from '@utils/validators/name-validator';
 import View from '@views/view';
 import { Datepicker, FormSelect } from 'materialize-css';
 
@@ -99,7 +104,7 @@ export default class RegistrationView extends View {
       id: 'first-name',
       type: 'text',
       placeholder: 'John',
-      customValidators: [],
+      customValidators: [atLeastOneCharacter, noSpecialCharacter],
     };
     this.firstNameInput = createInputField(fieldAttrs);
     this.form.appendChild(this.firstNameInput);
@@ -111,7 +116,7 @@ export default class RegistrationView extends View {
       id: 'second-name',
       type: 'text',
       placeholder: 'Doe',
-      customValidators: [],
+      customValidators: [atLeastOneCharacter, noSpecialCharacter],
     };
     this.secondNameInput = createInputField(fieldAttrs);
     this.form.appendChild(this.secondNameInput);
@@ -123,7 +128,7 @@ export default class RegistrationView extends View {
       id: 'birthdate',
       type: 'text',
       placeholder: 'Birthday',
-      customValidators: [],
+      customValidators: [birthdayLimitation],
     };
 
     const attrs: IInputFieldAttributes = {
@@ -142,8 +147,11 @@ export default class RegistrationView extends View {
     this.birthdayInput = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
     this.form.appendChild(this.birthdayInput);
     this.birthdayInstance = Datepicker.init(this.birthdayInput.input.node, {
-      onSelect: () => {
-        console.log(this.birthdayInstance.date);
+      minDate: new Date('1900-01-01T00:00:00'),
+      maxDate: new Date(),
+      yearRange: 100,
+      onClose: () => {
+        this.birthdayInput.isValid();
       },
     });
   }

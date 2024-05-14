@@ -4,7 +4,7 @@ import {
   InputFieldComponent,
 } from '@components/input-field-component';
 import { ILabelAttriubutes } from '@components/label-component';
-import { IValidator } from '@components/validator';
+import { IValidator } from './validators/validator';
 
 export interface IFormInputField {
   id: string;

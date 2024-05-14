@@ -1,7 +1,7 @@
+import { IValidator } from '@utils/validators/validator';
 import { BaseComponent, IAttributes } from './base-component';
 import { IInputAttributes, InputComponent } from './input-component';
 import { ILabelAttriubutes, LabelComponent } from './label-component';
-import { IValidator } from './validator';
 
 export interface IInputFieldAttributes extends IAttributes {
   customValidators?: Array<IValidator>;
