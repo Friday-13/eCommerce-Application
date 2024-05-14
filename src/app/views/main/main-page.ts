@@ -30,7 +30,7 @@ export default class MainView extends View {
 
     this.appendChild(main);
     this.footerView.initializeFooter();
-    // this.appendChild(this.footerView.htmlElement); // ошибка не знаю как добавить footer
+    this.appendChild(this.footerView); // ошибка не знаю как добавить footer
 
     document.body.appendChild(this.htmlElement);
 

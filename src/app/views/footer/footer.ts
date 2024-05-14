@@ -9,7 +9,6 @@ export default class FooterView extends View {
       classList: ['footer'],
     };
     super(attrs);
-    this.initializeFooter();
   }
 
   public initializeFooter() {
@@ -27,44 +26,46 @@ export default class FooterView extends View {
     };
     const itemList = new BaseComponent(itemListAttrs);
 
-    // Создаем первый элемент списка с текстом "Привет"
-    const item1Attrs: IAttributes = {
+    // Создаем первый элемент списка
+    const itemYearAttrs: IAttributes = {
       tag: 'li',
       classList: 'footer__item',
-      content: 'Привет',
+      content: '2024',
     };
-    const item1 = new BaseComponent(item1Attrs);
+    const itemYear = new BaseComponent(itemYearAttrs);
 
-    // Создаем второй элемент списка с текстом "Привет" и ссылкой
-    const item2Attrs: IAttributes = {
+    // Создаем второй элемент списка - ссылка
+    const itemTeamAttrs: IAttributes = {
       tag: 'li',
       classList: 'footer__item',
     };
-    const item2 = new BaseComponent(item2Attrs);
-    const link2Attrs: IAnchorAttrs = {
-      href: '#teams',
-      content: 'Привет',
+    const itemTeam = new BaseComponent(itemTeamAttrs);
+    const linkTeamAttrs: IAnchorAttrs = {
+      href: '#team',
+      content: 'CodeCraft',
+      target: '_blank',
     };
-    const link2 = new AnchorComponent(link2Attrs);
-    item2.appendChild(link2);
+    const linkTeam = new AnchorComponent(linkTeamAttrs);
+    itemTeam.appendChild(linkTeam);
 
-    // Создаем третий элемент списка с текстом "Привет" и ссылкой
-    const item3Attrs: IAttributes = {
+    // Создаем третий элемент списка - ссылка
+    const itemSchoolAttrs: IAttributes = {
       tag: 'li',
       classList: 'footer__item',
     };
-    const item3 = new BaseComponent(item3Attrs);
-    const link3Attrs: IAnchorAttrs = {
-      href: '#school',
-      content: 'Привет',
+    const itemSchool = new BaseComponent(itemSchoolAttrs);
+    const linkSchoolAttrs: IAnchorAttrs = {
+      href: 'https://rs.school/',
+      content: 'RS School',
+      target: '_blank',
     };
-    const link3 = new AnchorComponent(link3Attrs);
-    item3.appendChild(link3);
+    const linkSchool = new AnchorComponent(linkSchoolAttrs);
+    itemSchool.appendChild(linkSchool);
 
     // Собираем все элементы вместе
-    itemList.appendChild(item1);
-    itemList.appendChild(item2);
-    itemList.appendChild(item3);
+    itemList.appendChild(itemYear);
+    itemList.appendChild(itemTeam);
+    itemList.appendChild(itemSchool);
 
     // Добавляем список в контейнер и контейнер в футер
     container.appendChild(itemList);
