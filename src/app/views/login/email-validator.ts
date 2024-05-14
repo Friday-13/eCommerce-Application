@@ -5,7 +5,7 @@ const emailValidator: IValidator = {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(value);
   },
-  invalidMessage: '',
+  invalidMessage: 'Please enter a valid email address.',
 };
 
 export default emailValidator;
