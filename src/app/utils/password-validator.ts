@@ -1,4 +1,4 @@
-import { IValidator } from '../../components/validator';
+import { IValidator } from './validator';
 
 export const passwordValidator: IValidator = {
   validateFunction: (value: string) => {

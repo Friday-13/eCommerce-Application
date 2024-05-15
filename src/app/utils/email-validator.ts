@@ -1,4 +1,4 @@
-import { IValidator } from '../../components/validator';
+import { IValidator } from './validator';
 
 const emailValidator: IValidator = {
   validateFunction: (value: string): boolean => {
