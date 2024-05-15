@@ -1,5 +1,4 @@
 import { BaseComponent, IAttributes } from './base-component';
-// import { ButtonComponent } from './button-component';
 import { IInputAttributes, InputComponent } from './input-component';
 import { ILabelAttriubutes, LabelComponent } from './label-component';
 import { IValidator } from './validator';
