@@ -1,4 +1,4 @@
-import { IValidator } from '../../components/validator';
+import { IValidator } from './validator';
 
 export const passwordValidator: IValidator = {
   validateFunction: (value: string) => {
@@ -6,7 +6,8 @@ export const passwordValidator: IValidator = {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])?.{8,}$/;
     return passwordRegex.test(value.trim());
   },
-  invalidMessage: '',
+  invalidMessage:
+    'Password must be at least 8 characters long, include an uppercase and a lowercase letter, and a digit.',
 };
 
 export const specialCharValidator: IValidator = {
@@ -14,5 +15,6 @@ export const specialCharValidator: IValidator = {
     const specialCharRegex = /[!@#$%^&*]/;
     return specialCharRegex.test(value);
   },
-  invalidMessage: '',
+  invalidMessage:
+    'Password must contain at least one special character (e.g., !@#$%^&*).',
 };

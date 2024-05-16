@@ -1,9 +1,13 @@
 import View from '@views/view';
 import { IAttributes } from '@components/base-component';
+<<<<<<< RSS-ECOMM-2_02
+import { FormComponent, IFormAttributes } from '@components/form-component';
+=======
 import {
   FormComponent,
   IFormAttributes,
 } from '@components/form-component';
+>>>>>>> feat/login-page
 import {
   IInputFieldAttributes,
   InputFieldComponent,
@@ -15,8 +19,11 @@ import {
   IButtonAttributes,
 } from '@components/button-component';
 import style from './login-page.module.scss';
-import emailValidator from './email-validator';
-import { passwordValidator, specialCharValidator } from './password-validator';
+import emailValidator from '../../utils/email-validator';
+import {
+  passwordValidator,
+  specialCharValidator,
+} from '../../utils/password-validator';
 
 export default class LoginView extends View {
   private form = new FormComponent({});
@@ -82,6 +89,7 @@ export default class LoginView extends View {
   public addEmailField() {
     const attrs: IInputFieldAttributes = {
       customValidators: [emailValidator],
+      // classList: 'red-text'
     };
     const labelAttrs: ILabelAttriubutes = {
       content: 'Enter your email',
@@ -101,6 +109,7 @@ export default class LoginView extends View {
   public addPasswordField() {
     const attrs: IInputFieldAttributes = {
       customValidators: [passwordValidator, specialCharValidator],
+      // classList: ['red-text']
     };
     const labelAttrs: ILabelAttriubutes = {
       content: 'Enter your password',
