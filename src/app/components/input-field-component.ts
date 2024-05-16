@@ -50,8 +50,8 @@ export class InputFieldComponent extends BaseComponent {
 
   protected addHelperComponent() {
     const attrs: IAttributes = {
-      tag: 'span',
-      classList: 'helper-text',
+      tag: 'div',
+      classList: 'red-text',
       content: '',
     };
     this.#helper = new BaseComponent(attrs);
