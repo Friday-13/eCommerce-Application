@@ -1,3 +1,36 @@
 * {
   margin: auto;
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  > main {
+    flex: 1 1 auto;
+    background-color: red;
+  }
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+}
+
+.footer {
+}
+
+.footer__container {
+}
+
+.footer__items {
+  display: flex;
+  gap: 10rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 6rem;
+}
+
+.footer__item {
+}

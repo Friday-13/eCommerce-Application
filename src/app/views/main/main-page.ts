@@ -1,8 +1,11 @@
 import View from '@views/view';
 import { BaseComponent, IAttributes } from '@components/base-component';
 import FooterView from '@views/footer/footer';
+import HeaderView from '@views/header/header';
 
 export default class MainView extends View {
+  private headerView: HeaderView;
+
   private footerView: FooterView;
 
   constructor() {
@@ -11,6 +14,7 @@ export default class MainView extends View {
       classList: ['wrapper'],
     };
     super(attrs);
+    this.headerView = new HeaderView();
     this.footerView = new FooterView();
     this.initializeContent();
   }
@@ -28,14 +32,12 @@ export default class MainView extends View {
     const mainContainer = new BaseComponent(mainContainerAttrs);
     main.appendChild(mainContainer);
 
+    this.headerView.initializeHeader();
+    this.appendChild(this.headerView);
     this.appendChild(main);
     this.footerView.initializeFooter();
-    this.appendChild(this.footerView); // ошибка не знаю как добавить footer
+    this.appendChild(this.footerView);
 
     document.body.appendChild(this.htmlElement);
-
-    // this.createHeader(mainShadow);
-    // this.createBody(mainShadow);
-    // this.createFooter(mainShadow);
   }
 }
