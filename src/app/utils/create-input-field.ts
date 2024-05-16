@@ -12,6 +12,7 @@ export interface IFormInputField {
   label: string;
   type: string;
   customValidators: Array<IValidator>;
+  disabled?: boolean;
 }
 
 export function createInputField(fieldAttrs: IFormInputField) {
@@ -21,6 +22,7 @@ export function createInputField(fieldAttrs: IFormInputField) {
   const inputAttrs: IInputAttributes = {
     type: fieldAttrs.type,
     placeholder: fieldAttrs.placeholder,
+    disabled: fieldAttrs.disabled,
   };
   const labelAttrs: ILabelAttriubutes = {
     for: fieldAttrs.id,

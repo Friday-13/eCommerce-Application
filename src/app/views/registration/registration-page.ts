@@ -12,10 +12,14 @@ import {
 } from '@components/option-component';
 import { IFormInputField, createInputField } from '@utils/create-input-field';
 import birthdayLimitation from '@utils/validators/age-validator';
+import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
+import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import {
-  atLeastOneCharacter,
-  noSpecialCharacterOrNumber,
-} from '@utils/validators/name-validator';
+  postalCodeNoCountryValidator,
+  postalCodeUKValidator,
+  postalCodeUSSRValidator,
+} from '@utils/validators/post-code-validator';
+import { IValidator } from '@utils/validators/validator';
 import View from '@views/view';
 import { Datepicker, FormSelect } from 'materialize-css';
 
@@ -40,6 +44,8 @@ export default class RegistrationView extends View {
 
   private countryInput = new BaseComponent({});
 
+  private countrySelector: FormSelect;
+
   constructor() {
     const attrs: IAttributes = {
       classList: 'row',
@@ -53,8 +59,8 @@ export default class RegistrationView extends View {
     this.addBirthdateInput();
     this.addStreetInput();
     this.addCityInput();
-    this.addPostalCodeInput();
     this.addCountryInput();
+    this.addPostalCodeInput();
   }
 
   addForm() {
@@ -128,7 +134,6 @@ export default class RegistrationView extends View {
       placeholder: 'Birthday',
       customValidators: [birthdayLimitation],
     };
-
     const attrs: IInputFieldAttributes = {
       customValidators: fieldAttrs.customValidators,
     };
@@ -178,18 +183,6 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.cityInput);
   }
 
-  addPostalCodeInput() {
-    const attrs: IFormInputField = {
-      id: 'postal-code',
-      type: 'text',
-      label: 'Postal code',
-      placeholder: '2154',
-      customValidators: [],
-    };
-    this.postalCodeInput = createInputField(attrs);
-    this.form.appendChild(this.postalCodeInput);
-  }
-
   addCountryInput() {
     const inputFieldAttrs: IAttributes = {
       classList: ['input-field', 'col', 's6'],
@@ -206,7 +199,7 @@ export default class RegistrationView extends View {
     inputFieldComponent.appendChild(selectComponent);
     inputFieldComponent.appendChild(labelComponent);
 
-    const options = ['Russia', 'UK', 'USA'];
+    const options = ['Russia', 'United Kingdom', 'Belarus'];
 
     const placeholderOptionAttrs: IOptionAttributes = {
       content: 'Select country',
@@ -227,7 +220,38 @@ export default class RegistrationView extends View {
     this.countryInput = inputFieldComponent;
     this.form.appendChild(this.countryInput);
     document.addEventListener('DOMContentLoaded', () => {
-      FormSelect.init(selectComponent.node, {});
+      this.countrySelector = FormSelect.init(selectComponent.node, {});
     });
+  }
+
+  addPostalCodeInput() {
+    const attrs: IFormInputField = {
+      id: 'postal-code',
+      type: 'text',
+      label: 'Postal code',
+      placeholder: '2154',
+      customValidators: [this.postalCodeValidator],
+    };
+    this.postalCodeInput = createInputField(attrs);
+    this.form.appendChild(this.postalCodeInput);
+  }
+
+  private postalCodeValidator: IValidator = {
+    invalidMessage: 'incorrect postal code',
+    validateFunction: this.postalCodeValidateFunction.bind(this),
+  };
+
+  postalCodeValidateFunction(value: string): boolean {
+    const country = this.countrySelector.input.value;
+    switch (country) {
+      case 'Russia':
+        return postalCodeUSSRValidator.validateFunction(value);
+      case 'United Kingdom':
+        return postalCodeUKValidator.validateFunction(value);
+      case 'Belarus':
+        return postalCodeUSSRValidator.validateFunction(value);
+      default:
+        return postalCodeNoCountryValidator.validateFunction(value);
+    }
   }
 }
