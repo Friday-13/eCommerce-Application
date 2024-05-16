@@ -11,10 +11,10 @@ import {
   OptionComponent,
 } from '@components/option-component';
 import { IFormInputField, createInputField } from '@utils/create-input-field';
-import { birthdayLimitation } from '@utils/validators/birthday-validator';
+import birthdayLimitation from '@utils/validators/age-validator';
 import {
   atLeastOneCharacter,
-  noSpecialCharacter,
+  noSpecialCharacterOrNumber,
 } from '@utils/validators/name-validator';
 import View from '@views/view';
 import { Datepicker, FormSelect } from 'materialize-css';
@@ -31,8 +31,6 @@ export default class RegistrationView extends View {
   private secondNameInput = new InputFieldComponent({}, {}, {});
 
   private birthdayInput = new InputFieldComponent({}, {}, {});
-
-  private birthdayInstance = Datepicker.init({} as Element, {});
 
   private streetInput = new InputFieldComponent({}, {}, {});
 
@@ -104,7 +102,7 @@ export default class RegistrationView extends View {
       id: 'first-name',
       type: 'text',
       placeholder: 'John',
-      customValidators: [atLeastOneCharacter, noSpecialCharacter],
+      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
     };
     this.firstNameInput = createInputField(fieldAttrs);
     this.form.appendChild(this.firstNameInput);
@@ -116,7 +114,7 @@ export default class RegistrationView extends View {
       id: 'second-name',
       type: 'text',
       placeholder: 'Doe',
-      customValidators: [atLeastOneCharacter, noSpecialCharacter],
+      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
     };
     this.secondNameInput = createInputField(fieldAttrs);
     this.form.appendChild(this.secondNameInput);
@@ -146,7 +144,7 @@ export default class RegistrationView extends View {
 
     this.birthdayInput = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
     this.form.appendChild(this.birthdayInput);
-    this.birthdayInstance = Datepicker.init(this.birthdayInput.input.node, {
+    Datepicker.init(this.birthdayInput.input.node, {
       minDate: new Date('1900-01-01T00:00:00'),
       maxDate: new Date(),
       yearRange: 100,
@@ -162,7 +160,7 @@ export default class RegistrationView extends View {
       type: 'text',
       label: 'Street',
       placeholder: 'Dan Crescent',
-      customValidators: [],
+      customValidators: [atLeastOneCharacter],
     };
     this.streetInput = createInputField(attrs);
     this.form.appendChild(this.streetInput);
@@ -174,7 +172,7 @@ export default class RegistrationView extends View {
       type: 'text',
       label: 'City',
       placeholder: 'Lake Jeremyville',
-      customValidators: [],
+      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
     };
     this.cityInput = createInputField(attrs);
     this.form.appendChild(this.cityInput);
