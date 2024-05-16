@@ -15,21 +15,21 @@ export default class FooterView extends View {
     // Создаем контейнер внутри footer
     const containerAttrs: IAttributes = {
       tag: 'div',
-      classList: 'footer__container',
+      classList: 'footer-container',
     };
     const container = new BaseComponent(containerAttrs);
 
     // Создаем список элементов
     const itemListAttrs: IAttributes = {
       tag: 'ul',
-      classList: 'footer__items',
+      classList: 'footer-items',
     };
     const itemList = new BaseComponent(itemListAttrs);
 
     // Создаем первый элемент списка
     const itemYearAttrs: IAttributes = {
       tag: 'li',
-      classList: 'footer__item',
+      classList: 'footer-item',
       content: '2024',
     };
     const itemYear = new BaseComponent(itemYearAttrs);

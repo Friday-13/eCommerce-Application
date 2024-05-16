@@ -18,19 +18,10 @@
   height: 100px;
 }
 
-.footer {
-}
-
-.footer__container {
-}
-
-.footer__items {
+.footer-items {
   display: flex;
   gap: 10rem;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   min-height: 6rem;
-}
-
-.footer__item {
 }
