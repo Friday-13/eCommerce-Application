@@ -1,6 +1,13 @@
 import View from '@views/view';
 import { IAttributes } from '@components/base-component';
+<<<<<<< RSS-ECOMM-2_02
 import { FormComponent, IFormAttributes } from '@components/form-component';
+=======
+import {
+  FormComponent,
+  IFormAttributes,
+} from '@components/form-component';
+>>>>>>> feat/login-page
 import {
   IInputFieldAttributes,
   InputFieldComponent,
