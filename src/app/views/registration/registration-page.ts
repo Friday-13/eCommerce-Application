@@ -1,4 +1,8 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
+import {
+  ButtonComponent,
+  IButtonAttributes,
+} from '@components/button-component';
 import { FormComponent, IFormAttributes } from '@components/form-component';
 import { IInputAttributes } from '@components/input-component';
 import {
@@ -44,6 +48,8 @@ export default class RegistrationView extends View {
 
   private countryInput = new BaseComponent({});
 
+  private submitButton = new ButtonComponent({});
+
   private countrySelector: FormSelect;
 
   constructor() {
@@ -61,13 +67,14 @@ export default class RegistrationView extends View {
     this.addCityInput();
     this.addCountryInput();
     this.addPostalCodeInput();
+    this.addSubmitButton();
   }
 
-  addForm() {
+  private addForm() {
     const attrs: IFormAttributes = {
       classList: 'col s6',
       onInput: () => {
-        console.log('Form input');
+        this.isValid();
       },
       onSubmit: () => {
         console.log('form submit');
@@ -78,7 +85,7 @@ export default class RegistrationView extends View {
     this.appendChild(this.form);
   }
 
-  addEmailInput() {
+  private addEmailInput() {
     const fieldAttrs: IFormInputField = {
       label: 'E-mail',
       id: 'email',
@@ -90,7 +97,7 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.emailInput);
   }
 
-  addPasswordInput() {
+  private addPasswordInput() {
     const fieldAttrs: IFormInputField = {
       label: 'Password',
       id: 'pass',
@@ -102,7 +109,7 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.passwordInput);
   }
 
-  addFirstNameInput() {
+  private addFirstNameInput() {
     const fieldAttrs: IFormInputField = {
       label: 'First Name',
       id: 'first-name',
@@ -114,7 +121,7 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.firstNameInput);
   }
 
-  addSecondNameInput() {
+  private addSecondNameInput() {
     const fieldAttrs: IFormInputField = {
       label: 'Second Name',
       id: 'second-name',
@@ -126,7 +133,7 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.secondNameInput);
   }
 
-  addBirthdateInput() {
+  private addBirthdateInput() {
     const fieldAttrs: IFormInputField = {
       label: 'Birthdate',
       id: 'birthdate',
@@ -171,7 +178,7 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.streetInput);
   }
 
-  addCityInput() {
+  private addCityInput() {
     const attrs: IFormInputField = {
       id: 'city',
       type: 'text',
@@ -183,7 +190,7 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.cityInput);
   }
 
-  addCountryInput() {
+  private addCountryInput() {
     const inputFieldAttrs: IAttributes = {
       classList: ['input-field', 'col', 's6'],
     };
@@ -224,7 +231,7 @@ export default class RegistrationView extends View {
     });
   }
 
-  addPostalCodeInput() {
+  private addPostalCodeInput() {
     const attrs: IFormInputField = {
       id: 'postal-code',
       type: 'text',
@@ -241,7 +248,7 @@ export default class RegistrationView extends View {
     validateFunction: this.postalCodeValidateFunction.bind(this),
   };
 
-  postalCodeValidateFunction(value: string): boolean {
+  private postalCodeValidateFunction(value: string): boolean {
     const country = this.countrySelector.input.value;
     switch (country) {
       case 'Russia':
@@ -253,5 +260,39 @@ export default class RegistrationView extends View {
       default:
         return postalCodeNoCountryValidator.validateFunction(value);
     }
+  }
+
+  private addSubmitButton() {
+    const attrs: IButtonAttributes = {
+      type: 'submit',
+      content: 'Sign Up',
+      tag: 'button',
+      disabled: true,
+    };
+    this.submitButton = new ButtonComponent(attrs);
+    this.submitButton.addClass('col');
+    this.submitButton.addClass('s6');
+    this.submitButton.addClass('offset-s3');
+    this.form.appendChild(this.submitButton);
+  }
+
+  isValid() {
+    const inputs = [
+      this.emailInput,
+      this.passwordInput,
+      this.firstNameInput,
+      this.secondNameInput,
+      this.birthdayInput,
+      this.cityInput,
+      this.postalCodeInput,
+    ];
+    const isValid = inputs.reduce(
+      (result, value) => result && value.isValid(),
+      true
+    );
+    if (isValid) {
+      this.submitButton.disabled = false;
+    }
+    return isValid;
   }
 }
