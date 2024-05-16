@@ -1,9 +1,6 @@
 import View from '@views/view';
 import { IAttributes } from '@components/base-component';
-import {
-  FormComponent,
-  IFormAttributes,
-} from '@components/form-component';
+import { FormComponent, IFormAttributes } from '@components/form-component';
 import {
   IInputFieldAttributes,
   InputFieldComponent,
@@ -16,7 +13,10 @@ import {
 } from '@components/button-component';
 import style from './login-page.module.scss';
 import emailValidator from '../../utils/email-validator';
-import { passwordValidator, specialCharValidator } from '../../utils/password-validator';
+import {
+  passwordValidator,
+  specialCharValidator,
+} from '../../utils/password-validator';
 
 export default class LoginView extends View {
   private form = new FormComponent({});
