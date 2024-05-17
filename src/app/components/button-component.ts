@@ -3,6 +3,7 @@ import { BaseComponent, IAttributes } from './base-component';
 export interface IButtonAttributes extends IAttributes {
   type?: 'submit' | 'reset' | 'button';
   onClick?: (event?: Event) => void;
+  disabled?: boolean;
 }
 export class ButtonComponent extends BaseComponent<HTMLButtonElement> {
   constructor(attrs: IButtonAttributes) {
@@ -17,5 +18,16 @@ export class ButtonComponent extends BaseComponent<HTMLButtonElement> {
     if (mergedAttrs.onClick) {
       this.node.addEventListener('click', mergedAttrs.onClick);
     }
+    if (mergedAttrs.disabled) {
+      this.node.disabled = mergedAttrs.disabled;
+    }
+  }
+
+  set disabled(newState: boolean) {
+    this.node.disabled = newState;
+  }
+
+  get disabled() {
+    return this.node.disabled;
   }
 }
