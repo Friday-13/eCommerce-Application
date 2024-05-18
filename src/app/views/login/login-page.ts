@@ -1,13 +1,6 @@
 import View from '@views/view';
 import { IAttributes } from '@components/base-component';
-<<<<<<< RSS-ECOMM-2_02
-import { FormComponent, IFormAttributes } from '@components/form-component';
-=======
-import {
-  FormComponent,
-  IFormAttributes,
-} from '@components/form-component';
->>>>>>> feat/login-page
+import { FormComponent, IFormAttributes} from '@components/form-component';
 import {
   IInputFieldAttributes,
   InputFieldComponent,
@@ -46,7 +39,6 @@ export default class LoginView extends View {
     };
     super(attrs);
     this.addForm();
-    this.addLoginFiled();
     this.addEmailField();
     this.addPasswordField();
     this.addLoginButton();
@@ -67,25 +59,7 @@ export default class LoginView extends View {
     this.appendChild(this.form);
   }
 
-  public addLoginFiled() {
-    const attrs: IInputFieldAttributes = {
-      customValidators: [],
-    };
-    const labelAttrs: ILabelAttriubutes = {
-      content: 'Enter your login',
-      for: 'login',
-    };
-    const inputAttrs: IInputAttributes = {
-      placeholder: 'Ivan Ivanov',
-      id: 'login',
-      type: 'text',
-      required: true,
-    };
-
-    this.loginField = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
-    this.form.appendChild(this.loginField);
-  }
-
+  
   public addEmailField() {
     const attrs: IInputFieldAttributes = {
       customValidators: [emailValidator],
