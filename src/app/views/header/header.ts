@@ -13,28 +13,24 @@ export default class HeaderView extends View {
   }
 
   public initializeHeader() {
-    // Создаем контейнер nav
     const navAttrs: IAttributes = {
       tag: 'nav',
     };
     const nav = new BaseComponent(navAttrs);
 
-    // Создаем контейнер для логотипа и меню
     const divAttrs: IAttributes = {
       tag: 'div',
       classList: ['nav-wrapper'],
     };
     const navContainer = new BaseComponent(divAttrs);
 
-    // Создаем логотип в виде изображения, используя ImageComponent
     const logoImgAttrs: IImageAttributes = {
-      src: '#', // Замените на путь к вашему логотипу
+      src: '#',
       alt: 'Logo',
       classList: ['logo'],
     };
     const logoImg = new ImageComponent(logoImgAttrs);
 
-    // Создаем список элементов меню
     const menuListAttrs: IAttributes = {
       tag: 'ul',
       id: 'nav-mobile',
@@ -42,7 +38,6 @@ export default class HeaderView extends View {
     };
     const menuListUl = new BaseComponent(menuListAttrs);
 
-    // для создания элемента меню
     const createMenuItem = (href: string, content: string): BaseComponent => {
       const itemAttrs: IAttributes = {
         tag: 'li',
@@ -60,17 +55,14 @@ export default class HeaderView extends View {
       return item;
     };
 
-    // Создаем элементы меню
     const menuItems = [
       createMenuItem('#signin', 'Sign in'),
       createMenuItem('#signup', 'Sign up'),
       createMenuItem('#signout', 'Sign out'),
     ];
 
-    // Добавляем элементы в список меню
     menuItems.forEach((item) => menuListUl.appendChild(item));
 
-    // Собираем все элементы вместе
     navContainer.appendChild(logoImg);
     navContainer.appendChild(menuListUl);
     nav.appendChild(navContainer);

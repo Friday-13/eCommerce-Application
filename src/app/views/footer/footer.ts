@@ -12,21 +12,18 @@ export default class FooterView extends View {
   }
 
   public initializeFooter() {
-    // Создаем контейнер внутри footer
     const containerAttrs: IAttributes = {
       tag: 'div',
       classList: ['footer-container'],
     };
     const container = new BaseComponent(containerAttrs);
 
-    // Создаем список элементов
     const itemListAttrs: IAttributes = {
       tag: 'ul',
       classList: ['footer-items'],
     };
     const itemList = new BaseComponent(itemListAttrs);
 
-    // Создаем первый элемент списка
     const itemYearAttrs: IAttributes = {
       tag: 'li',
       classList: ['footer-item'],
@@ -34,7 +31,6 @@ export default class FooterView extends View {
     };
     const itemYear = new BaseComponent(itemYearAttrs);
 
-    // Создаем второй элемент списка - ссылка
     const itemTeamAttrs: IAttributes = {
       tag: 'li',
       classList: ['footer__item'],
@@ -48,7 +44,6 @@ export default class FooterView extends View {
     const linkTeam = new AnchorComponent(linkTeamAttrs);
     itemTeam.appendChild(linkTeam);
 
-    // Создаем третий элемент списка - ссылка
     const itemSchoolAttrs: IAttributes = {
       tag: 'li',
       classList: ['footer__item'],
@@ -62,12 +57,10 @@ export default class FooterView extends View {
     const linkSchool = new AnchorComponent(linkSchoolAttrs);
     itemSchool.appendChild(linkSchool);
 
-    // Собираем все элементы вместе
     itemList.appendChild(itemYear);
     itemList.appendChild(itemTeam);
     itemList.appendChild(itemSchool);
 
-    // Добавляем список в контейнер и контейнер в футер
     container.appendChild(itemList);
     this.appendChild(container);
   }
