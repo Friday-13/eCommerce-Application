@@ -1,6 +1,6 @@
 import View from '@views/view';
 import { IAttributes } from '@components/base-component';
-import { FormComponent, IFormAttributes} from '@components/form-component';
+import { FormComponent, IFormAttributes } from '@components/form-component';
 import {
   IInputFieldAttributes,
   InputFieldComponent,
@@ -59,7 +59,6 @@ export default class LoginView extends View {
     this.appendChild(this.form);
   }
 
-  
   public addEmailField() {
     const attrs: IInputFieldAttributes = {
       customValidators: [emailValidator],
@@ -100,7 +99,10 @@ export default class LoginView extends View {
 
     const toggleButtonAttrs: IButtonAttributes = {
       content: 'Show/Hide Password',
-      onClick: () => {
+      onClick: (event) => {
+        if (event) {
+          event.preventDefault();
+        }
         this.passwordField.togglePasswordVisibility();
       },
     };
