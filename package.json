@@ -58,7 +58,6 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "dependencies": {
-    "materialize-css": "^1.0.0"
+  "dependencies": {    
   }
 }
