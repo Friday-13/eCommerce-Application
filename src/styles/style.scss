@@ -1,21 +1,10 @@
-* {
-  margin: auto;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-
-  > main {
-    flex: 1 1 auto;
-    background-color: red;
-  }
-}
-
 .logo {
   width: 100px;
   height: 100px;
+}
+
+.page-footer {
+  padding-top: 0;
 }
 
 .footer-items {
@@ -23,5 +12,20 @@
   gap: 10rem;
   align-items: center;
   justify-content: center;
-  min-height: 6rem;
+  min-height: 2rem;
+}
+
+.no-text-transform {
+  font-size: 24px;
+  text-transform: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
 }

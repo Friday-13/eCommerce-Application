@@ -28,7 +28,7 @@ export default class HeaderView extends View {
 
     // Создаем логотип в виде изображения, используя ImageComponent
     const logoImgAttrs: IImageAttributes = {
-      src: '/src/assets/10317098.png', // Замените на путь к вашему логотипу
+      src: '#', // Замените на путь к вашему логотипу
       alt: 'Logo',
       classList: ['logo'],
     };
@@ -52,7 +52,7 @@ export default class HeaderView extends View {
       const linkAttrs: IAnchorAttrs = {
         href,
         content,
-        classList: ['waves-effect waves-light btn-small'],
+        classList: ['waves-effect waves-light no-text-transform'],
       };
       const link = new AnchorComponent(linkAttrs);
 

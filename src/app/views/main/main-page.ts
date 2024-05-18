@@ -10,8 +10,8 @@ export default class MainView extends View {
 
   constructor() {
     const attrs: IAttributes = {
-      tag: 'div',
-      classList: ['wrapper'],
+      tag: 'main',
+      classList: ['main'],
     };
     super(attrs);
     this.headerView = new HeaderView();
@@ -20,24 +20,21 @@ export default class MainView extends View {
   }
 
   private initializeContent(): void {
-    const mainAttrs: IAttributes = {
-      tag: 'main',
-      classList: 'main',
-    };
-    const main = new BaseComponent(mainAttrs);
     const mainContainerAttrs: IAttributes = {
-      tag: 'div',
-      classList: 'main__container',
+      classList: ['main__container'],
     };
     const mainContainer = new BaseComponent(mainContainerAttrs);
-    main.appendChild(mainContainer);
+    this.appendChild(mainContainer);
 
+    // Инициализируем и добавляем header
     this.headerView.initializeHeader();
-    this.appendChild(this.headerView);
-    this.appendChild(main);
-    this.footerView.initializeFooter();
-    this.appendChild(this.footerView);
+    document.body.appendChild(this.headerView.htmlElement);
 
+    // Добавляем main
     document.body.appendChild(this.htmlElement);
+
+    // Инициализируем и добавляем footer
+    this.footerView.initializeFooter();
+    document.body.appendChild(this.footerView.htmlElement);
   }
 }

@@ -6,7 +6,7 @@ export default class FooterView extends View {
   constructor() {
     const attrs: IAttributes = {
       tag: 'footer',
-      classList: ['footer'],
+      classList: ['page-footer'],
     };
     super(attrs);
   }
@@ -15,21 +15,21 @@ export default class FooterView extends View {
     // Создаем контейнер внутри footer
     const containerAttrs: IAttributes = {
       tag: 'div',
-      classList: 'footer-container',
+      classList: ['footer-container'],
     };
     const container = new BaseComponent(containerAttrs);
 
     // Создаем список элементов
     const itemListAttrs: IAttributes = {
       tag: 'ul',
-      classList: 'footer-items',
+      classList: ['footer-items'],
     };
     const itemList = new BaseComponent(itemListAttrs);
 
     // Создаем первый элемент списка
     const itemYearAttrs: IAttributes = {
       tag: 'li',
-      classList: 'footer-item',
+      classList: ['footer-item'],
       content: '2024',
     };
     const itemYear = new BaseComponent(itemYearAttrs);
@@ -37,7 +37,7 @@ export default class FooterView extends View {
     // Создаем второй элемент списка - ссылка
     const itemTeamAttrs: IAttributes = {
       tag: 'li',
-      classList: 'footer__item',
+      classList: ['footer__item'],
     };
     const itemTeam = new BaseComponent(itemTeamAttrs);
     const linkTeamAttrs: IAnchorAttrs = {
@@ -51,7 +51,7 @@ export default class FooterView extends View {
     // Создаем третий элемент списка - ссылка
     const itemSchoolAttrs: IAttributes = {
       tag: 'li',
-      classList: 'footer__item',
+      classList: ['footer__item'],
     };
     const itemSchool = new BaseComponent(itemSchoolAttrs);
     const linkSchoolAttrs: IAnchorAttrs = {
