@@ -22,7 +22,6 @@
     "@commitlint/config-conventional": "^19.2.2",
     "@types/jest": "^29.5.12",
     "@types/materialize-css": "^1.0.14",
-    "@types/node-fetch": "^2.6.11",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "commitizen": "^4.3.0",
