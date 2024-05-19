@@ -19,7 +19,7 @@ export default {
   },
   resolve: {
     alias: {
-      'node-fetch': 'isomorphic-fetch'
-    }
+      'node-fetch': 'isomorphic-fetch',
+    },
   },
 };
