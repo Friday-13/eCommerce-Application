@@ -27,8 +27,8 @@ class App {
         document.body.appendChild(this.currentView.htmlElement);
         break;
       default:
-        // this.currentView = new MainView();
-        break;
+        this.currentView = new Error404();
+        document.body.appendChild(this.currentView.htmlElement);
     }
   };
 
