@@ -10,10 +10,10 @@ import {
 // const clientSecret: string = process.env.CTP_CLIENT_SECRET || '';
 // const authUrl: string = process.env.CTP_AUTH_URL || '';
 // const apiUrl: string = process.env.CTP_API_URL || '';
-const projectKey= 'codecraft';
-const clientId= 'TQkPgWWdSEP6AgSLuIa0vJP7';
+const projectKey = 'codecraft';
+const clientId = 'TQkPgWWdSEP6AgSLuIa0vJP7';
 const clientSecret = 'MQo0UrVH5H8wnU8voluDXX7bL1PbnwZW';
-const authUrl = 'https://auth.europe-west1.gcp.commercetools.com'
+const authUrl = 'https://auth.europe-west1.gcp.commercetools.com';
 const apiUrl = 'https://api.europe-west1.gcp.commercetools.com';
 
 const client = new ClientBuilder()
