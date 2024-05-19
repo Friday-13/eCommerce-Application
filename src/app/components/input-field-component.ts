@@ -112,4 +112,8 @@ export class InputFieldComponent extends BaseComponent {
       this.#input.node.setAttribute('type', 'password');
     }
   }
+
+  getValue(): string {
+    return this.#input.value;
+  }
 }

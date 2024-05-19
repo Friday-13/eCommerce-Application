@@ -9,6 +9,7 @@ export default {
         main: 'index.html',
       },
     },
+    plugins: ['vite-plugin-environment'],
   },
   plugins: [tsconfigPaths()],
   css: {
@@ -17,5 +18,12 @@ export default {
       generateScopedName: '[local]',
     },
   },
-  resolve: {},
+  resolve: {
+    alias: {
+      'node-fetch': 'isomorphic-fetch',
+    },
+  },
+  define: {
+    'process.env': process.env,
+  },
 };

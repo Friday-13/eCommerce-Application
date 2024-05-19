@@ -11,6 +11,7 @@ import {
   ButtonComponent,
   IButtonAttributes,
 } from '@components/button-component';
+import login from '@services/login-authorization';
 import style from './login-page.module.scss';
 import emailValidator from '../../utils/email-validator';
 import {
@@ -82,7 +83,6 @@ export default class LoginView extends View {
   public addPasswordField() {
     const attrs: IInputFieldAttributes = {
       customValidators: [passwordValidator, specialCharValidator],
-      // classList: ['red-text']
     };
     const labelAttrs: ILabelAttriubutes = {
       content: 'Enter your password',
@@ -115,14 +115,23 @@ export default class LoginView extends View {
     const attrs: IButtonAttributes = {
       type: 'button',
       content: 'Login',
-      onClick: () => {
-        // console.log('Trying login');
+      onClick: async () => {
+        const email = this.emailField.getValue();
+        const password = this.passwordField.getValue();
+
+        try {
+          const response = await login(email, password);
+          if (response && response.customer) {
+            // console.log('Login successful');
+          }
+        } catch (error) {
+          // console.error('Login failed:(', error);
+        }
       },
     };
     this.button = new ButtonComponent(attrs);
     this.button.addClass('col');
     this.button.addClass('s6');
-
     this.form.appendChild(this.button);
   }
 }
