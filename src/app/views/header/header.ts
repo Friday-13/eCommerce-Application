@@ -19,13 +19,12 @@ export default class HeaderView extends View {
     const nav = new BaseComponent(navAttrs);
 
     const divAttrs: IAttributes = {
-      tag: 'div',
       classList: ['nav-wrapper'],
     };
     const navContainer = new BaseComponent(divAttrs);
 
     const logoImgAttrs: IImageAttributes = {
-      src: '#',
+      src: '/src/assets/logo.webp',
       alt: 'Logo',
       classList: ['logo'],
     };
