@@ -17,5 +17,9 @@ export default {
       generateScopedName: '[local]',
     },
   },
-  resolve: {},
+  resolve: {
+    alias: {
+      'node-fetch': 'isomorphic-fetch'
+    }
+  },
 };
