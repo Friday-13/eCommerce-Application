@@ -1,13 +1,6 @@
 import View from '@views/view';
 import { IAttributes } from '@components/base-component';
-<<<<<<< RSS-ECOMM-2_02
 import { FormComponent, IFormAttributes } from '@components/form-component';
-=======
-import {
-  FormComponent,
-  IFormAttributes,
-} from '@components/form-component';
->>>>>>> feat/login-page
 import {
   IInputFieldAttributes,
   InputFieldComponent,
@@ -18,6 +11,7 @@ import {
   ButtonComponent,
   IButtonAttributes,
 } from '@components/button-component';
+import login from '@services/login-authorization';
 import style from './login-page.module.scss';
 import emailValidator from '../../utils/email-validator';
 import {
@@ -46,7 +40,6 @@ export default class LoginView extends View {
     };
     super(attrs);
     this.addForm();
-    this.addLoginFiled();
     this.addEmailField();
     this.addPasswordField();
     this.addLoginButton();
@@ -65,25 +58,6 @@ export default class LoginView extends View {
     };
     this.form = new FormComponent(attrs);
     this.appendChild(this.form);
-  }
-
-  public addLoginFiled() {
-    const attrs: IInputFieldAttributes = {
-      customValidators: [],
-    };
-    const labelAttrs: ILabelAttriubutes = {
-      content: 'Enter your login',
-      for: 'login',
-    };
-    const inputAttrs: IInputAttributes = {
-      placeholder: 'Ivan Ivanov',
-      id: 'login',
-      type: 'text',
-      required: true,
-    };
-
-    this.loginField = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
-    this.form.appendChild(this.loginField);
   }
 
   public addEmailField() {
@@ -109,7 +83,6 @@ export default class LoginView extends View {
   public addPasswordField() {
     const attrs: IInputFieldAttributes = {
       customValidators: [passwordValidator, specialCharValidator],
-      // classList: ['red-text']
     };
     const labelAttrs: ILabelAttriubutes = {
       content: 'Enter your password',
@@ -126,7 +99,10 @@ export default class LoginView extends View {
 
     const toggleButtonAttrs: IButtonAttributes = {
       content: 'Show/Hide Password',
-      onClick: () => {
+      onClick: (event) => {
+        if (event) {
+          event.preventDefault();
+        }
         this.passwordField.togglePasswordVisibility();
       },
     };
@@ -139,14 +115,23 @@ export default class LoginView extends View {
     const attrs: IButtonAttributes = {
       type: 'button',
       content: 'Login',
-      onClick: () => {
-        // console.log('Trying login');
+      onClick: async () => {
+        const email = this.emailField.getValue();
+        const password = this.passwordField.getValue();
+
+        try {
+          const response = await login(email, password);
+          if (response && response.customer) {
+            // console.log('Login successful');
+          }
+        } catch (error) {
+          // console.error('Login failed:(', error);
+        }
       },
     };
     this.button = new ButtonComponent(attrs);
     this.button.addClass('col');
     this.button.addClass('s6');
-
     this.form.appendChild(this.button);
   }
 }
