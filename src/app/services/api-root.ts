@@ -16,3 +16,34 @@ const getProject = () => {
 
 // Retrieve Project information and output the result to the log
 getProject().then(console.log).catch(console.error);
+
+// apiRoot
+//   .login()
+//   .post({
+//     // The CustomerDraft is the object within the body
+//     body: {
+//       email: 'sxxdk@example.com',
+//       password: 'examplePassword',
+//     },
+//   })
+//   .execute()
+//
+//   .then(({ body }) => {
+//     console.log(body.customer);
+//   })
+//   .catch(console.error);
+
+apiRoot
+  .customers()
+  .post({
+    // The CustomerDraft is the object within the body
+    body: {
+      email: 'sxxdk@example.com',
+      password: 'examplePassword',
+    },
+  })
+  .execute()
+  .then(({ body }) => {
+    console.log(body.customer);
+  })
+  .catch(console.error);

@@ -77,7 +77,8 @@ export default class RegistrationView extends View {
         this.isValid();
       },
       onSubmit: () => {
-        console.log('form submit');
+        // console.log('form submit');
+        this.submitForm();
       },
       noValidate: true,
     };
@@ -276,7 +277,7 @@ export default class RegistrationView extends View {
     this.form.appendChild(this.submitButton);
   }
 
-  isValid() {
+  sValid() {
     const inputs = [
       this.emailInput,
       this.passwordInput,
@@ -294,5 +295,9 @@ export default class RegistrationView extends View {
       this.submitButton.disabled = false;
     }
     return isValid;
+  }
+
+  submitForm() {
+    return false;
   }
 }
