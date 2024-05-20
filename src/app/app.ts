@@ -1,8 +1,10 @@
 import Error404 from '@views/404/404';
+import LoginView from '@views/login/login-page';
 import MainView from '@views/main/main-page';
+import RegistrationView from '@views/registration/registration-page';
 
 class App {
-  private currentView: Error404 | MainView | null = null;
+  private currentView: Error404 | MainView | RegistrationView | LoginView |null = null;
 
   constructor() {
     window.addEventListener('hashchange', this.route);
@@ -22,6 +24,14 @@ class App {
       case '#main':
         this.currentView = new MainView();
         break;
+      case '#registration':
+        this.currentView = new RegistrationView();
+        document.body.appendChild(this.currentView.htmlElement);
+        break;
+      case '#login':
+        this.currentView = new LoginView();
+        document.body.appendChild(this.currentView.htmlElement);
+        break;    
       case '#error':
         this.currentView = new Error404();
         document.body.appendChild(this.currentView.htmlElement);

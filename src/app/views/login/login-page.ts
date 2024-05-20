@@ -131,4 +131,8 @@ export default class LoginView extends View {
     this.button.addClass('s6');
     this.form.appendChild(this.button);
   }
+
+  public clearContent(): void {
+    document.body.removeChild(this.htmlElement);
+  } 
 }

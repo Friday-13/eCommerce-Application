@@ -2,6 +2,7 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
+import Router from '@utils/router';
 
 export default class HeaderView extends View {
   constructor() {
@@ -50,13 +51,18 @@ export default class HeaderView extends View {
       };
       const link = new AnchorComponent(linkAttrs);
 
+      link.node.addEventListener('click', (event) => {
+        event.preventDefault();
+        Router.navigateTo(href); 
+      });
+
       item.appendChild(link);
       return item;
     };
 
     const menuItems = [
-      createMenuItem('#signin', 'Sign in'),
-      createMenuItem('#signup', 'Sign up'),
+      createMenuItem('#registration', 'Sign in'),
+      createMenuItem('#login', 'Sign up'),
       createMenuItem('#signout', 'Sign out'),
     ];
 
@@ -68,3 +74,4 @@ export default class HeaderView extends View {
     this.appendChild(nav);
   }
 }
+
