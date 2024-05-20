@@ -1,3 +1,31 @@
-* {
-  margin: auto;
+.logo {
+  width: 100px;
+  height: 100px;
+}
+
+.page-footer {
+  padding-top: 0;
+}
+
+.footer-items {
+  display: flex;
+  gap: 10rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+}
+
+.no-text-transform {
+  font-size: 24px;
+  text-transform: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
 }

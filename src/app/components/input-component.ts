@@ -59,4 +59,12 @@ export class InputComponent extends BaseComponent<HTMLInputElement> {
   set type(newType: string) {
     this.node.type = newType;
   }
+
+  get isPassword(): boolean {
+    return this.node.type === 'password';
+  }
+
+  set togglePasswordVisibility(showPassword: boolean) {
+    this.node.type = showPassword ? 'text' : 'password';
+  }
 }
