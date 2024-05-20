@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import fetch from 'isomorphic-fetch';
 import { ClientBuilder } from '@commercetools/sdk-client-v2';
 import {
   createApiBuilderFromCtpClient,

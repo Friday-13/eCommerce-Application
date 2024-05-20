@@ -12,17 +12,14 @@ import {
   IButtonAttributes,
 } from '@components/button-component';
 import login from '@services/login-authorization';
-import style from './login-page.module.scss';
-import emailValidator from '../../utils/email-validator';
+import emailValidator from '@utils/validators/email-validator';
 import {
   passwordValidator,
   specialCharValidator,
-} from '../../utils/password-validator';
+} from '@utils/validators/password-validator';
 
 export default class LoginView extends View {
   private form = new FormComponent({});
-
-  private loginField = new InputFieldComponent({}, {}, {});
 
   private emailField = new InputFieldComponent({}, {}, {});
 
@@ -36,7 +33,7 @@ export default class LoginView extends View {
     const attrs: IAttributes = {
       tag: 'section',
       id: 'login-section',
-      classList: ['col s12', style.mySuperClass],
+      classList: ['col s12'],
     };
     super(attrs);
     this.addForm();

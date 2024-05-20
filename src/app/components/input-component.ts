@@ -52,6 +52,14 @@ export class InputComponent extends BaseComponent<HTMLInputElement> {
     this.node.value = newValue;
   }
 
+  get type() {
+    return this.node.type;
+  }
+
+  set type(newType: string) {
+    this.node.type = newType;
+  }
+
   get isPassword(): boolean {
     return this.node.type === 'password';
   }
