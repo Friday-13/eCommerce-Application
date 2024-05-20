@@ -1,7 +1,7 @@
 import { BaseComponent, IAttributes } from './base-component';
 import { IInputAttributes, InputComponent } from './input-component';
 import { ILabelAttriubutes, LabelComponent } from './label-component';
-import { IValidator } from './validator';
+import { IValidator } from '../utils/validator';
 
 export interface IInputFieldAttributes extends IAttributes {
   customValidators?: Array<IValidator>;
@@ -50,8 +50,8 @@ export class InputFieldComponent extends BaseComponent {
 
   protected addHelperComponent() {
     const attrs: IAttributes = {
-      tag: 'span',
-      classList: 'helper-text',
+      tag: 'div',
+      classList: 'red-text',
       content: '',
     };
     this.#helper = new BaseComponent(attrs);
@@ -103,5 +103,17 @@ export class InputFieldComponent extends BaseComponent {
   clearMessages() {
     this.validationMessages = [];
     this.#helper.textContent = '';
+  }
+
+  togglePasswordVisibility() {
+    if (this.#input.node.getAttribute('type') === 'password') {
+      this.#input.node.setAttribute('type', 'text');
+    } else {
+      this.#input.node.setAttribute('type', 'password');
+    }
+  }
+
+  getValue(): string {
+    return this.#input.value;
   }
 }
