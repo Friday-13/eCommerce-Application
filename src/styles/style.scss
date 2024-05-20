@@ -56,7 +56,7 @@ main {
 .page-image-man {
   max-width: 100%;
   height: auto;
-  
+
   @media (max-width: $large-screen) {
     display: none;
   }
@@ -76,6 +76,6 @@ main {
   font-size: clamp(2rem, 1.752rem + 1.24vw, 4rem);
 }
 
-@media #{$medium-and-down} {
-  // styles for medium screens and down
+.hide-on-med-and-down {
+  display: block !important; 
 }
