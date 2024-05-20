@@ -1,3 +1,4 @@
+import { CustomerDraft } from '@commercetools/platform-sdk';
 import { BaseComponent, IAttributes } from '@components/base-component';
 import {
   ButtonComponent,
@@ -14,6 +15,7 @@ import {
   IOptionAttributes,
   OptionComponent,
 } from '@components/option-component';
+import registration from '@services/customer-registration';
 import { IFormInputField, createInputField } from '@utils/create-input-field';
 import birthdayLimitation from '@utils/validators/age-validator';
 import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
@@ -50,7 +52,9 @@ export default class RegistrationView extends View {
 
   private submitButton = new ButtonComponent({});
 
-  private countrySelector: FormSelect;
+  private countrySelector: FormSelect = {} as FormSelect;
+
+  private countryCode: string = '';
 
   constructor() {
     const attrs: IAttributes = {
@@ -75,9 +79,6 @@ export default class RegistrationView extends View {
       classList: 'col s6',
       onInput: () => {
         this.isValid();
-      },
-      onSubmit: () => {
-        console.log('form submit');
       },
       noValidate: true,
     };
@@ -159,10 +160,12 @@ export default class RegistrationView extends View {
     Datepicker.init(this.birthdayInput.input.node, {
       minDate: new Date('1900-01-01T00:00:00'),
       maxDate: new Date(),
+      defaultDate: new Date('1984-11-01'),
       yearRange: 100,
       onClose: () => {
         this.birthdayInput.isValid();
       },
+      format: 'yyyy-mm-dd',
     });
   }
 
@@ -252,10 +255,13 @@ export default class RegistrationView extends View {
     const country = this.countrySelector.input.value;
     switch (country) {
       case 'Russia':
+        this.countryCode = 'RU';
         return postalCodeUSSRValidator.validateFunction(value);
       case 'United Kingdom':
+        this.countryCode = 'GB';
         return postalCodeUKValidator.validateFunction(value);
       case 'Belarus':
+        this.countryCode = 'BY';
         return postalCodeUSSRValidator.validateFunction(value);
       default:
         return postalCodeNoCountryValidator.validateFunction(value);
@@ -264,10 +270,13 @@ export default class RegistrationView extends View {
 
   private addSubmitButton() {
     const attrs: IButtonAttributes = {
-      type: 'submit',
+      type: 'button',
       content: 'Sign Up',
       tag: 'button',
       disabled: true,
+      onClick: () => {
+        this.submitForm();
+      },
     };
     this.submitButton = new ButtonComponent(attrs);
     this.submitButton.addClass('col');
@@ -294,5 +303,44 @@ export default class RegistrationView extends View {
       this.submitButton.disabled = false;
     }
     return isValid;
+  }
+
+  submitForm() {
+    if (!this.isValid()) {
+      RegistrationView.showErrorMessage('Form invalid');
+      return;
+    }
+    const customerData: CustomerDraft = {
+      email: this.emailInput.input.value,
+      password: this.passwordInput.input.value,
+      firstName: this.firstNameInput.input.value,
+      lastName: this.secondNameInput.input.value,
+      dateOfBirth: this.birthdayInput.input.value,
+      addresses: [
+        {
+          city: this.cityInput.input.value,
+          streetName: this.streetInput.input.value,
+          country: this.countryCode,
+          postalCode: this.postalCodeInput.input.value,
+        },
+      ],
+    };
+    /* TODO: add login and redirect */
+    registration(
+      customerData,
+      RegistrationView.showSucessMessage,
+      RegistrationView.showErrorMessage
+    );
+  }
+
+  static showSucessMessage(message: string) {
+    M.toast({
+      html: message,
+      classes: 'lime accent-2 black-text',
+    });
+  }
+
+  static showErrorMessage(message: string) {
+    M.toast({ html: message });
   }
 }

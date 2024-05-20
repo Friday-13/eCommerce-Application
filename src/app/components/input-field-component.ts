@@ -106,14 +106,14 @@ export class InputFieldComponent extends BaseComponent {
   }
 
   togglePasswordVisibility() {
-    if (this.#input.node.getAttribute('type') === 'password') {
-      this.#input.node.setAttribute('type', 'text');
+    if (this._input.node.getAttribute('type') === 'password') {
+      this._input.node.setAttribute('type', 'text');
     } else {
-      this.#input.node.setAttribute('type', 'password');
+      this._input.node.setAttribute('type', 'password');
     }
   }
 
   getValue(): string {
-    return this.#input.value;
+    return this._input.value;
   }
 }

@@ -23,7 +23,4 @@ export default {
       'node-fetch': 'isomorphic-fetch',
     },
   },
-  define: {
-    'process.env': process.env,
-  },
 };
