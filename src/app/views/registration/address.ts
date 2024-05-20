@@ -16,6 +16,10 @@ import {
 import { IValidator } from '@utils/validators/validator';
 import { FormSelect } from 'materialize-css';
 import { BaseAddress } from '@commercetools/platform-sdk';
+import {
+  CheckboxComponent,
+  ICheckboxAttributes,
+} from '@components/checkbox-component';
 import FormSectionView from './form-section';
 
 class AddressSection extends FormSectionView {
@@ -27,11 +31,17 @@ class AddressSection extends FormSectionView {
 
   private countrySelector: FormSelect;
 
+  private selectComponent = new BaseComponent({});
+
   private countryInput = new BaseComponent({});
 
   private countryCode: string = '';
 
+  private defaultCheckbox = new CheckboxComponent({});
+
   isEnable: boolean = true;
+
+  private _isDefault: boolean = false;
 
   constructor(title: string) {
     super(title);
@@ -39,6 +49,7 @@ class AddressSection extends FormSectionView {
     this.addCityInput();
     this.addCountryInput();
     this.addPostalCodeInput();
+    this.addSetDefaultCheckbox();
   }
 
   private addStreetInput() {
@@ -74,11 +85,11 @@ class AddressSection extends FormSectionView {
     };
 
     const inputFieldComponent = new BaseComponent(inputFieldAttrs);
-    const selectComponent = new BaseComponent({ tag: 'select' });
+    this.selectComponent = new BaseComponent({ tag: 'select' });
     const labelComponent = new LabelComponent(labelAttrs);
     labelComponent.removeClass('active');
 
-    inputFieldComponent.appendChild(selectComponent);
+    inputFieldComponent.appendChild(this.selectComponent);
     inputFieldComponent.appendChild(labelComponent);
 
     const options = ['Russia', 'United Kingdom', 'Belarus'];
@@ -90,20 +101,17 @@ class AddressSection extends FormSectionView {
       selected: true,
     };
     const placeholderOption = new OptionComponent(placeholderOptionAttrs);
-    selectComponent.appendChild(placeholderOption);
+    this.selectComponent.appendChild(placeholderOption);
     options.forEach((value, index) => {
       const optionAttrs: IOptionAttributes = {
         content: value,
         value: `${index + 1}`,
       };
       const optionComponent = new OptionComponent(optionAttrs);
-      selectComponent.appendChild(optionComponent);
+      this.selectComponent.appendChild(optionComponent);
     });
     this.countryInput = inputFieldComponent;
     this.appendChild(this.countryInput);
-    document.addEventListener('DOMContentLoaded', () => {
-      this.countrySelector = FormSelect.init(selectComponent.node, {});
-    });
   }
 
   private addPostalCodeInput() {
@@ -116,6 +124,38 @@ class AddressSection extends FormSectionView {
     };
     this.postalCodeInput = createInputField(attrs);
     this.appendChild(this.postalCodeInput);
+  }
+
+  addSetDefaultCheckbox() {
+    const attrs: ICheckboxAttributes = {
+      onClick: () => {
+        this.toggleisDefault();
+      },
+      content: 'Set Default',
+    };
+    this.defaultCheckbox = new CheckboxComponent(attrs);
+    this.appendChild(this.defaultCheckbox);
+  }
+
+  toggleisDefault() {
+    this.isDefault = !this.isDefault;
+  }
+
+  set isDefault(value: boolean) {
+    this.defaultCheckbox.checked = value;
+    this._isDefault = value;
+  }
+
+  get isDefault() {
+    return this._isDefault;
+  }
+
+  setDefault(value: boolean) {
+    this.isDefault = value;
+  }
+
+  setEnable(value: boolean) {
+    this.isEnable = value;
   }
 
   private postalCodeValidator: IValidator = {
@@ -157,8 +197,16 @@ class AddressSection extends FormSectionView {
       country: this.countryCode,
       postalCode: this.postalCodeInput.input.value,
     };
-
     return addressData;
+  }
+
+  get htmlElement() {
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        this.countrySelector = FormSelect.init(this.selectComponent.node, {});
+      } catch {}
+    });
+    return super.htmlElement;
   }
 }
 

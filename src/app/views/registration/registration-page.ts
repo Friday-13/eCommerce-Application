@@ -20,8 +20,10 @@ import View from '@views/view';
 import { Datepicker } from 'materialize-css';
 import emailValidator from '@utils/validators/email-validator';
 import { passwordValidator } from '@utils/validators/password-validator';
-import { FormSectionView } from './form-section';
+import { CheckboxComponent } from '@components/checkbox-component';
+import FormSectionView from './form-section';
 import AddressSection from './address';
+import styles from './registration-page.module.scss';
 
 export default class RegistrationView extends View {
   private form = new FormComponent({});
@@ -45,6 +47,10 @@ export default class RegistrationView extends View {
   private birthdayInput = new InputFieldComponent({}, {}, {});
 
   private submitButton = new ButtonComponent({});
+
+  private selectLikeBillingCheckBox = new CheckboxComponent({});
+
+  private selectLikeShippingCheckBox = new CheckboxComponent({});
 
   constructor() {
     const attrs: IAttributes = {
@@ -93,11 +99,25 @@ export default class RegistrationView extends View {
 
   private addShippingAddress() {
     this.shippingAddressSection = new AddressSection('Shipping Address');
+    this.selectLikeBillingCheckBox = new CheckboxComponent({
+      content: 'Select like billing',
+      onClick: () => {
+        RegistrationView.toggleAddressSection(this.billingAddressSection);
+      },
+    });
+    this.shippingAddressSection.appendChild(this.selectLikeBillingCheckBox);
     this.form.node.appendChild(this.shippingAddressSection.htmlElement);
   }
 
   private addBillingAddress() {
     this.billingAddressSection = new AddressSection('Billing Address');
+    this.selectLikeShippingCheckBox = new CheckboxComponent({
+      content: 'Select like shipping',
+      onClick: () => {
+        RegistrationView.toggleAddressSection(this.shippingAddressSection);
+      },
+    });
+    this.billingAddressSection.appendChild(this.selectLikeShippingCheckBox);
     this.form.node.appendChild(this.billingAddressSection.htmlElement);
   }
 
@@ -184,7 +204,6 @@ export default class RegistrationView extends View {
       type: 'button',
       content: 'Sign Up',
       tag: 'button',
-      disabled: true,
       onClick: () => {
         this.submitForm();
       },
@@ -210,9 +229,6 @@ export default class RegistrationView extends View {
       (result, value) => result && value.isValid(),
       true
     );
-    if (isValid) {
-      this.submitButton.disabled = false;
-    }
     return isValid;
   }
 
@@ -222,12 +238,29 @@ export default class RegistrationView extends View {
       return;
     }
     const addresses = [];
+    let defaultShipping;
+    let defaultBilling;
+
     if (this.shippingAddressSection.isEnable) {
       addresses.push(this.shippingAddressSection.address);
+      if (this.shippingAddressSection.isDefault) {
+        defaultShipping = addresses.length - 1;
+        if (!this.billingAddressSection.isEnable) {
+          defaultBilling = defaultShipping;
+        }
+      }
     }
+
     if (this.billingAddressSection.isEnable) {
       addresses.push(this.billingAddressSection.address);
+      if (this.billingAddressSection.isDefault) {
+        defaultBilling = addresses.length - 1;
+        if (!this.shippingAddressSection.isEnable) {
+          defaultShipping = defaultBilling;
+        }
+      }
     }
+
     const customerData: CustomerDraft = {
       email: this.emailInput.input.value,
       password: this.passwordInput.input.value,
@@ -235,6 +268,8 @@ export default class RegistrationView extends View {
       lastName: this.secondNameInput.input.value,
       dateOfBirth: this.birthdayInput.input.value,
       addresses,
+      defaultShippingAddress: defaultShipping,
+      defaultBillingAddress: defaultBilling,
     };
     /* TODO: add login and redirect */
     registration(
@@ -242,6 +277,12 @@ export default class RegistrationView extends View {
       RegistrationView.showSucessMessage,
       RegistrationView.showErrorMessage
     );
+  }
+
+  static toggleAddressSection(addressSection: AddressSection) {
+    addressSection.htmlElement.classList.toggle(styles.hidden);
+    addressSection.setEnable(!addressSection.isEnable);
+    addressSection.setDefault(false);
   }
 
   static showSucessMessage(message: string) {
