@@ -50,7 +50,7 @@ export default class RegistrationView extends View {
 
   private submitButton = new ButtonComponent({});
 
-  private countrySelector: FormSelect;
+  private countrySelector!: FormSelect;
 
   constructor() {
     const attrs: IAttributes = {
@@ -294,5 +294,9 @@ export default class RegistrationView extends View {
       this.submitButton.disabled = false;
     }
     return isValid;
+  }
+
+  public clearContent(): void {
+    document.body.removeChild(this.htmlElement);
   }
 }

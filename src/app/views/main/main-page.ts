@@ -26,15 +26,18 @@ export default class MainView extends View {
     const mainContainer = new BaseComponent(mainContainerAttrs);
     this.appendChild(mainContainer);
 
-    // Инициализируем и добавляем header
     this.headerView.initializeHeader();
     document.body.appendChild(this.headerView.htmlElement);
 
-    // Добавляем main
     document.body.appendChild(this.htmlElement);
 
-    // Инициализируем и добавляем footer
     this.footerView.initializeFooter();
     document.body.appendChild(this.footerView.htmlElement);
+  }
+
+  public clearContent(): void {
+    document.body.removeChild(this.headerView.htmlElement);
+    document.body.removeChild(this.htmlElement);
+    document.body.removeChild(this.footerView.htmlElement);
   }
 }
