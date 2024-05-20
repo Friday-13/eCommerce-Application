@@ -9,6 +9,7 @@ export default {
         main: 'index.html',
       },
     },
+    plugins: ['vite-plugin-environment'],
   },
   plugins: [tsconfigPaths()],
   css: {
