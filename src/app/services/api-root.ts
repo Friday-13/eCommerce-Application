@@ -11,33 +11,4 @@ const getProject = () => {
 
 getProject().then(console.log).catch(console.error);
 
-// apiRoot
-//   .login()
-//   .post({
-//     body: {
-//       email: 'hehehe@example.com',
-//       password: 'examplePassword',
-//     },
-//   })
-//   .execute()
-//
-//   .then(({ body }) => {
-//     console.log(body.customer);
-//   })
-//   .catch(console.error);
-
-// apiRoot
-//   .customers()
-//   .post({
-//     body: {
-//       email: 'hehehe@example.com',
-//       password: 'examplePassword',
-//     },
-//   })
-//   .execute()
-//   .then(({ body }) => {
-//     console.log(body.customer);
-//   })
-//   .catch(console.error);
-//
 export default apiRoot;

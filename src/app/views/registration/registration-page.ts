@@ -80,10 +80,6 @@ export default class RegistrationView extends View {
       onInput: () => {
         this.isValid();
       },
-      onSubmit: () => {
-        // console.log('form submit');
-        // this.submitForm();
-      },
       noValidate: true,
     };
     this.form = new FormComponent(attrs);
@@ -310,7 +306,10 @@ export default class RegistrationView extends View {
   }
 
   submitForm() {
-    if (!this.isValid()) return;
+    if (!this.isValid()) {
+      RegistrationView.showErrorMessage('Form invalid');
+      return;
+    }
     const customerData: CustomerDraft = {
       email: this.emailInput.input.value,
       password: this.passwordInput.input.value,
