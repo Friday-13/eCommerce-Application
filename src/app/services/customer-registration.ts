@@ -1,7 +1,10 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import apiRoot from './api-root';
 
-const SUCSESS_MSG = 'Ready to login!';
+const SUCSESS_MSG = 'You have successfully registered';
+const EMAIL_EXIST_ADD_MSG = 'Use another email or try to login';
+const EMAIL_EXIST_DEF_MSG =
+  'There is already an existing customer with the provided email.';
 
 const registration = (
   customer: CustomerDraft,
@@ -18,7 +21,11 @@ const registration = (
       sucessCallback(SUCSESS_MSG);
     })
     .catch((reason) => {
-      errorCallback(reason.message);
+      if (reason.message === EMAIL_EXIST_DEF_MSG) {
+        errorCallback(`${reason.message}; ${EMAIL_EXIST_ADD_MSG}`);
+      } else {
+        errorCallback(reason.message);
+      }
     });
 };
 
