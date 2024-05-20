@@ -1,7 +1,7 @@
 import { clientConfig, ctpClient } from '@services/client';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 
-export const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
+const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
   projectKey: clientConfig.VITE_CTP_PROJECT_KEY,
 });
 
@@ -40,3 +40,4 @@ getProject().then(console.log).catch(console.error);
 //   })
 //   .catch(console.error);
 //
+export default apiRoot;

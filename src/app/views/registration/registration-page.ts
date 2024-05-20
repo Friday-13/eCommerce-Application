@@ -15,7 +15,7 @@ import {
   IOptionAttributes,
   OptionComponent,
 } from '@components/option-component';
-import { apiRoot } from '@services/api-root';
+import registration from '@services/customer-registration';
 import { IFormInputField, createInputField } from '@utils/create-input-field';
 import birthdayLimitation from '@utils/validators/age-validator';
 import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
@@ -52,7 +52,7 @@ export default class RegistrationView extends View {
 
   private submitButton = new ButtonComponent({});
 
-  private countrySelector: FormSelect;
+  private countrySelector: FormSelect = {} as FormSelect;
 
   private countryCode: string = '';
 
@@ -169,7 +169,7 @@ export default class RegistrationView extends View {
       onClose: () => {
         this.birthdayInput.isValid();
       },
-      format: "yyyy-mm-dd",
+      format: 'yyyy-mm-dd',
     });
   }
 
@@ -310,8 +310,8 @@ export default class RegistrationView extends View {
   }
 
   submitForm() {
-    if (!this.isValid()) return false;
-    const cutomerData: CustomerDraft = {
+    if (!this.isValid()) return;
+    const customerData: CustomerDraft = {
       email: this.emailInput.input.value,
       password: this.passwordInput.input.value,
       firstName: this.firstNameInput.input.value,
@@ -326,19 +326,22 @@ export default class RegistrationView extends View {
         },
       ],
     };
-    apiRoot
-      .customers()
-      .post({
-        body: cutomerData,
-      })
-      .execute()
-      .then(({ body, statusCode, headers }) => {
-        /*TODO: add login and redirect*/
-        M.toast({html: 'ready to login!', classes: 'lime accent-2 black-text'})
-      })
-      .catch((reason) => {
-        M.toast({html: reason.message})
-      });
-    return false;
+    /* TODO: add login and redirect */
+    registration(
+      customerData,
+      RegistrationView.showSucessMessage,
+      RegistrationView.showErrorMessage
+    );
+  }
+
+  static showSucessMessage(message: string) {
+    M.toast({
+      html: message,
+      classes: 'lime accent-2 black-text',
+    });
+  }
+
+  static showErrorMessage(message: string) {
+    M.toast({ html: message });
   }
 }
