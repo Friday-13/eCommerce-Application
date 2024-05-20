@@ -53,7 +53,7 @@ export default class HeaderView extends View {
 
       link.node.addEventListener('click', (event) => {
         event.preventDefault();
-        Router.navigateTo(href); 
+        Router.navigateTo(href);
       });
 
       item.appendChild(link);
@@ -74,4 +74,3 @@ export default class HeaderView extends View {
     this.appendChild(nav);
   }
 }
-

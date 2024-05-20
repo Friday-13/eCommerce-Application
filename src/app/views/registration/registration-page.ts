@@ -298,5 +298,5 @@ export default class RegistrationView extends View {
 
   public clearContent(): void {
     document.body.removeChild(this.htmlElement);
-  }  
+  }
 }

@@ -134,5 +134,5 @@ export default class LoginView extends View {
 
   public clearContent(): void {
     document.body.removeChild(this.htmlElement);
-  } 
+  }
 }
