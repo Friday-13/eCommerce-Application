@@ -1,18 +1,18 @@
+import { IValidator } from '@utils/validators/validator';
 import { BaseComponent, IAttributes } from './base-component';
 import { IInputAttributes, InputComponent } from './input-component';
 import { ILabelAttriubutes, LabelComponent } from './label-component';
-import { IValidator } from './validator';
 
 export interface IInputFieldAttributes extends IAttributes {
   customValidators?: Array<IValidator>;
 }
 
 export class InputFieldComponent extends BaseComponent {
-  #input: InputComponent = new InputComponent({});
+  protected _input: InputComponent = new InputComponent({});
 
-  #label: LabelComponent = new LabelComponent({});
+  protected _label: LabelComponent = new LabelComponent({});
 
-  #helper: BaseComponent = new BaseComponent({});
+  protected _helper: BaseComponent = new BaseComponent({});
 
   validators?: Array<IValidator>;
 
@@ -39,31 +39,31 @@ export class InputFieldComponent extends BaseComponent {
   }
 
   protected addInputComponent(attrs: IInputAttributes) {
-    this.#input = new InputComponent(attrs);
-    this.appendChild(this.#input);
+    this._input = new InputComponent(attrs);
+    this.appendChild(this._input);
   }
 
   protected addLabelComponent(attrs: ILabelAttriubutes) {
-    this.#label = new LabelComponent(attrs);
-    this.appendChild(this.#label);
+    this._label = new LabelComponent(attrs);
+    this.appendChild(this._label);
   }
 
   protected addHelperComponent() {
     const attrs: IAttributes = {
-      tag: 'span',
-      classList: 'helper-text',
+      tag: 'div',
+      classList: 'red-text',
       content: '',
     };
-    this.#helper = new BaseComponent(attrs);
-    this.appendChild(this.#helper);
+    this._helper = new BaseComponent(attrs);
+    this.appendChild(this._helper);
   }
 
   get input() {
-    return this.#input;
+    return this._input;
   }
 
   get label() {
-    return this.#label;
+    return this._label;
   }
 
   setValidators(validators: Array<IValidator>) {
@@ -84,7 +84,7 @@ export class InputFieldComponent extends BaseComponent {
   }
 
   checkValidator(validator: IValidator): boolean {
-    const isValid = validator.validateFunction(this.#input.node.value);
+    const isValid = validator.validateFunction(this._input.node.value);
     if (!isValid) {
       this.pushMessage(validator.invalidMessage);
     }
@@ -93,15 +93,27 @@ export class InputFieldComponent extends BaseComponent {
 
   pushMessage(message: string) {
     this.validationMessages.push(message);
-    if (this.#helper.textContent === '') {
-      this.#helper.textContent = message;
+    if (this._helper.textContent === '') {
+      this._helper.textContent = message;
     } else {
-      this.#helper.textContent += `; ${message}`;
+      this._helper.textContent += `; ${message}`;
     }
   }
 
   clearMessages() {
     this.validationMessages = [];
-    this.#helper.textContent = '';
+    this._helper.textContent = '';
+  }
+
+  togglePasswordVisibility() {
+    if (this.#input.node.getAttribute('type') === 'password') {
+      this.#input.node.setAttribute('type', 'text');
+    } else {
+      this.#input.node.setAttribute('type', 'password');
+    }
+  }
+
+  getValue(): string {
+    return this.#input.value;
   }
 }
