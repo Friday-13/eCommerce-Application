@@ -8,60 +8,60 @@ export interface IAttributes {
 }
 
 export class BaseComponent<T extends HTMLElement = HTMLElement> {
-  #node: T;
+  protected _node: T;
 
   constructor(attributes: IAttributes = {}) {
-    this.#node = document.createElement(attributes.tag ?? 'div') as T;
+    this._node = document.createElement(attributes.tag ?? 'div') as T;
     if (attributes.id) {
       this.id = attributes.id;
     }
 
     if (attributes.classList) {
       if (attributes.classList instanceof Array) {
-        this.#node.classList.value = attributes.classList.join(' ');
+        this._node.classList.value = attributes.classList.join(' ');
       } else {
-        this.#node.classList.value = attributes.classList;
+        this._node.classList.value = attributes.classList;
       }
     }
 
     if (attributes.content) {
-      this.#node.textContent = attributes.content;
+      this._node.textContent = attributes.content;
     }
-    AutoInit(this.#node);
+    AutoInit(this._node);
   }
 
   get node() {
-    return this.#node;
+    return this._node;
   }
 
   get id() {
-    return this.#node.id;
+    return this._node.id;
   }
 
   set id(id: string) {
-    this.#node.id = id;
+    this._node.id = id;
   }
 
   appendChild(child: BaseComponent) {
-    this.#node.appendChild(child.#node);
+    this._node.appendChild(child._node);
   }
 
   get lastChild(): Node | null {
-    return this.#node.lastChild;
+    return this._node.lastChild;
   }
 
   removeChild(child?: Node | undefined) {
     if (!child) {
       if (this.lastChild) {
-        this.#node.removeChild(this.lastChild);
+        this._node.removeChild(this.lastChild);
       }
     } else {
-      this.#node.removeChild(child);
+      this._node.removeChild(child);
     }
   }
 
   get textContent(): string {
-    const text = this.#node.textContent;
+    const text = this._node.textContent;
     if (text) {
       return text;
     }
@@ -69,14 +69,14 @@ export class BaseComponent<T extends HTMLElement = HTMLElement> {
   }
 
   set textContent(newText: string) {
-    this.#node.textContent = newText;
+    this._node.textContent = newText;
   }
 
   addClass(className: string) {
-    this.#node.classList.add(className);
+    this._node.classList.add(className);
   }
 
   removeClass(className: string) {
-    this.#node.classList.remove(className);
+    this._node.classList.remove(className);
   }
 }
