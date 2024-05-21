@@ -1,4 +1,5 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
+import { customerTokenResponse, saveCustomerToken } from '@models/customer';
 import apiRoot from './api-root';
 
 const SUCSESS_MSG = 'You have successfully registered';
@@ -17,7 +18,11 @@ const registration = (
       body: customer,
     })
     .execute()
-    .then(() => {
+    .then((response) => {
+      const customerToken = customerTokenResponse(response.body.customer);
+      if (customerToken) {
+        saveCustomerToken(customerToken);
+      }
       sucessCallback(SUCSESS_MSG);
     })
     .catch((reason) => {
