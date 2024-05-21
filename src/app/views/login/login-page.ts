@@ -17,6 +17,7 @@ import {
   passwordValidator,
   specialCharValidator,
 } from '@utils/validators/password-validator';
+import Router from '@utils/router';
 
 export default class LoginView extends View {
   private form = new FormComponent({});
@@ -111,7 +112,7 @@ export default class LoginView extends View {
   public addLoginButton() {
     const attrs: IButtonAttributes = {
       type: 'button',
-      content: 'Login',
+      content: 'Sign in',
       onClick: async () => {
         const email = this.emailField.getValue();
         const password = this.passwordField.getValue();
@@ -130,6 +131,11 @@ export default class LoginView extends View {
     this.button.addClass('col');
     this.button.addClass('s6');
     this.form.appendChild(this.button);
+
+    this.button.node.addEventListener('click', (event) => {
+      event.preventDefault();
+      Router.navigateTo('#main');
+    });
   }
 
   public clearContent(): void {

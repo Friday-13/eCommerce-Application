@@ -1,43 +1,31 @@
 import View from '@views/view';
 import { BaseComponent, IAttributes } from '@components/base-component';
-import FooterView from '@views/footer/footer';
-import HeaderView from '@views/header/header';
+import { IImageAttributes, ImageComponent } from '@components/image-component';
 
-export default class MainView extends View {
-  private headerView: HeaderView;
-
-  private footerView: FooterView;
+export default class MainPageView extends View {
+  private mainContainer!: BaseComponent; // добавлять разные блоки сюда
 
   constructor() {
-    const attrs: IAttributes = {
-      tag: 'main',
-      classList: ['main'],
-    };
+    const attrs: IAttributes = {};
     super(attrs);
-    this.headerView = new HeaderView();
-    this.footerView = new FooterView();
-    this.initializeContent();
+    this.initializeMainContent();
   }
 
-  private initializeContent(): void {
+  private initializeMainContent(): void {
     const mainContainerAttrs: IAttributes = {
       classList: ['main__container'],
     };
-    const mainContainer = new BaseComponent(mainContainerAttrs);
-    this.appendChild(mainContainer);
+    this.mainContainer = new BaseComponent(mainContainerAttrs);
 
-    this.headerView.initializeHeader();
-    document.body.appendChild(this.headerView.htmlElement);
+    const mainImgAttrs: IImageAttributes = {
+      src: '/src/assets/main-image.webp',
+      alt: 'Car',
+      classList: ['main-image', 'responsive-img'],
+    };
+    const mainImg = new ImageComponent(mainImgAttrs);
 
+    this.mainContainer.appendChild(mainImg);
+    this.appendChild(this.mainContainer);
     document.body.appendChild(this.htmlElement);
-
-    this.footerView.initializeFooter();
-    document.body.appendChild(this.footerView.htmlElement);
-  }
-
-  public clearContent(): void {
-    document.body.removeChild(this.headerView.htmlElement);
-    document.body.removeChild(this.htmlElement);
-    document.body.removeChild(this.footerView.htmlElement);
   }
 }

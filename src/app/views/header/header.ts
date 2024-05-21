@@ -5,15 +5,23 @@ import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
 
 export default class HeaderView extends View {
+  private headerInitialized: boolean;
+
   constructor() {
     const attrs: IAttributes = {
       tag: 'header',
       classList: ['header'],
     };
     super(attrs);
+    this.headerInitialized = false;
   }
 
   public initializeHeader() {
+    this.htmlElement.innerHTML = '';
+
+    if (this.headerInitialized) {
+      return;
+    }
     const navAttrs: IAttributes = {
       tag: 'nav',
     };
@@ -30,6 +38,11 @@ export default class HeaderView extends View {
       classList: ['logo'],
     };
     const logoImg = new ImageComponent(logoImgAttrs);
+
+    logoImg.node.addEventListener('click', (event) => {
+      event.preventDefault();
+      Router.navigateTo('#main');
+    });
 
     const menuListAttrs: IAttributes = {
       tag: 'ul',
@@ -63,7 +76,7 @@ export default class HeaderView extends View {
     const menuItems = [
       createMenuItem('#login', 'Sign in'),
       createMenuItem('#registration', 'Sign up'),
-      createMenuItem('#signout', 'Sign out'),
+      createMenuItem('#login', 'Sign out'),
     ];
 
     menuItems.forEach((item) => menuListUl.appendChild(item));
