@@ -3,6 +3,7 @@ import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
+import { customerClear } from '@models/customer';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
@@ -51,7 +52,11 @@ export default class HeaderView extends View {
     };
     const menuListUl = new BaseComponent(menuListAttrs);
 
-    const createMenuItem = (href: string, content: string): BaseComponent => {
+    const createMenuItem = (
+      href: string,
+      content: string,
+      callback?: () => void
+    ): BaseComponent => {
       const itemAttrs: IAttributes = {
         tag: 'li',
       };
@@ -66,6 +71,9 @@ export default class HeaderView extends View {
 
       link.node.addEventListener('click', (event) => {
         event.preventDefault();
+        if (callback) {
+          callback();
+        }
         Router.navigateTo(href);
       });
 
@@ -76,7 +84,7 @@ export default class HeaderView extends View {
     const menuItems = [
       createMenuItem('#login', 'Sign in'),
       createMenuItem('#registration', 'Sign up'),
-      createMenuItem('#login', 'Sign out'),
+      createMenuItem('#login', 'Sign out', customerClear),
     ];
 
     menuItems.forEach((item) => menuListUl.appendChild(item));

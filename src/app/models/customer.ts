@@ -35,3 +35,7 @@ export const customerTokenResponse = (
   };
   return customerToken;
 };
+
+export const customerClear = () => {
+  localStorage.removeItem(CUSTOMER_KEY);
+};
