@@ -1,5 +1,5 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
-import { IAttributes } from '@components/base-component';
+import { BaseComponent, IAttributes } from '@components/base-component';
 import {
   ButtonComponent,
   IButtonAttributes,
@@ -21,6 +21,7 @@ import { Datepicker } from 'materialize-css';
 import emailValidator from '@utils/validators/email-validator';
 import { passwordValidator } from '@utils/validators/password-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
+import Router from '@utils/router';
 import FormSectionView from './form-section';
 import AddressSection from './address';
 import styles from './registration-page.module.scss';
@@ -48,7 +49,7 @@ export default class RegistrationView extends View {
 
   private submitButton = new ButtonComponent({});
 
-  // private loginRedirectButton = new ButtonComponent({});
+  private loginRedirectButton = new ButtonComponent({});
 
   private selectLikeBillingCheckBox = new CheckboxComponent({});
 
@@ -65,7 +66,7 @@ export default class RegistrationView extends View {
     this.addShippingAddress();
     this.addBillingAddress();
     this.addSubmitButton();
-    // this.addLoginRedirectButton();
+    this.addLoginRedirectButton();
   }
 
   private addForm() {
@@ -202,9 +203,21 @@ export default class RegistrationView extends View {
     });
   }
 
-  // private addLoginredirectButton() {
-  //   const attrs: IButtonAttributes = {};
-  // }
+  private addLoginRedirectButton() {
+    const attrs: IButtonAttributes = {
+      content: 'I already have an account',
+      onClick: () => {
+        Router.navigateTo('login');
+      },
+    };
+    this.loginRedirectButton = new ButtonComponent(attrs);
+    this.loginRedirectButton.addClass('col');
+    this.loginRedirectButton.addClass('s4');
+    this.loginRedirectButton.addClass('offset-s8');
+    const row = new BaseComponent({ classList: 'row col s12' });
+    row.appendChild(this.loginRedirectButton);
+    this.form.appendChild(row);
+  }
 
   private addSubmitButton() {
     const attrs: IButtonAttributes = {
@@ -219,7 +232,9 @@ export default class RegistrationView extends View {
     this.submitButton.addClass('col');
     this.submitButton.addClass('s6');
     this.submitButton.addClass('offset-s3');
-    this.form.appendChild(this.submitButton);
+    const row = new BaseComponent({ classList: 'row col s12' });
+    row.appendChild(this.submitButton);
+    this.form.appendChild(row);
   }
 
   isValid() {

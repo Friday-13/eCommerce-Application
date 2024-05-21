@@ -202,9 +202,7 @@ class AddressSection extends FormSectionView {
 
   get htmlElement() {
     document.addEventListener('DOMContentLoaded', () => {
-      try {
-        this.countrySelector = FormSelect.init(this.selectComponent.node, {});
-      } catch {}
+      this.countrySelector = FormSelect.init(this.selectComponent.node, {});
     });
     return super.htmlElement;
   }
