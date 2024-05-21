@@ -27,12 +27,10 @@ class App {
 
   private addHeader(): void {
     if (window.location.hash !== '#error') {
-      this.headerView.initializeHeader();      
-      document.body.appendChild(this.headerView.htmlElement);     
+      this.headerView.initializeHeader();
+      document.body.appendChild(this.headerView.htmlElement);
     }
   }
-
- 
 
   private route = (): void => {
     this.addHeader();
@@ -72,13 +70,13 @@ class App {
 
   private addFooter(): void {
     if (window.location.hash !== '#error') {
-      this.footerView.initializeFooter();      
-      document.body.appendChild(this.footerView.htmlElement);     
+      this.footerView.initializeFooter();
+      document.body.appendChild(this.footerView.htmlElement);
     }
   }
 
-  public start(): void {   
-    this.route();    
+  public start(): void {
+    this.route();
   }
 }
 

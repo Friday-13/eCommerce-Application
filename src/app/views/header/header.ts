@@ -17,8 +17,8 @@ export default class HeaderView extends View {
   }
 
   public initializeHeader() {
-    this.htmlElement.innerHTML = '';  
-    
+    this.htmlElement.innerHTML = '';
+
     if (this.headerInitialized) {
       return; // Если хедер уже инициализирован, просто возвращаемся
     }

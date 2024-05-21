@@ -15,7 +15,7 @@ export default class FooterView extends View {
   }
 
   public initializeFooter() {
-    this.htmlElement.innerHTML = '';   
+    this.htmlElement.innerHTML = '';
 
     if (this.footerInitialized) {
       return; // Если футер уже инициализирован, просто возвращаемся
