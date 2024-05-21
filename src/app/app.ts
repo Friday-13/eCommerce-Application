@@ -1,3 +1,4 @@
+import isPageAccessable from '@utils/access-control';
 import Error404 from '@views/404/404';
 import FooterView from '@views/footer/footer';
 import HeaderView from '@views/header/header';
@@ -64,12 +65,16 @@ class App {
         this.mainView.page = new MainPageView();
         break;
       case '#registration':
-        this.hideFooterHeader = false;
-        this.mainView.page = new RegistrationView();
+        if (isPageAccessable('none-authorized')) {
+          this.hideFooterHeader = false;
+          this.mainView.page = new RegistrationView();
+        }
         break;
       case '#login':
-        this.hideFooterHeader = false;
-        this.mainView.page = new LoginView();
+        if (isPageAccessable('none-authorized')) {
+          this.hideFooterHeader = false;
+          this.mainView.page = new LoginView();
+        }
         break;
       case '#error':
         this.hideFooterHeader = true;

@@ -23,7 +23,6 @@ import { passwordValidator } from '@utils/validators/password-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
-import isPageAccessable from '@utils/access-control';
 import FormSectionView from './form-section';
 import AddressSection from './address';
 import styles from './registration-page.module.scss';
@@ -62,15 +61,13 @@ export default class RegistrationView extends View {
       classList: 'row',
     };
     super(attrs);
-    if (isPageAccessable('none-authorized')) {
-      this.addForm();
-      this.addCredentials();
-      this.addPersonalInformation();
-      this.addShippingAddress();
-      this.addBillingAddress();
-      this.addSubmitButton();
-      this.addLoginRedirectButton();
-    }
+    this.addForm();
+    this.addCredentials();
+    this.addPersonalInformation();
+    this.addShippingAddress();
+    this.addBillingAddress();
+    this.addSubmitButton();
+    this.addLoginRedirectButton();
   }
 
   private addForm() {
