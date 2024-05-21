@@ -61,8 +61,8 @@ export default class HeaderView extends View {
     };
 
     const menuItems = [
-      createMenuItem('#registration', 'Sign in'),
-      createMenuItem('#login', 'Sign up'),
+      createMenuItem('#login', 'Sign in'),
+      createMenuItem('#registration', 'Sign up'),
       createMenuItem('#signout', 'Sign out'),
     ];
 
