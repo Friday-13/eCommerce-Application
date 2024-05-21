@@ -48,6 +48,8 @@ export default class RegistrationView extends View {
 
   private submitButton = new ButtonComponent({});
 
+  // private loginRedirectButton = new ButtonComponent({});
+
   private selectLikeBillingCheckBox = new CheckboxComponent({});
 
   private selectLikeShippingCheckBox = new CheckboxComponent({});
@@ -63,6 +65,7 @@ export default class RegistrationView extends View {
     this.addShippingAddress();
     this.addBillingAddress();
     this.addSubmitButton();
+    // this.addLoginRedirectButton();
   }
 
   private addForm() {
@@ -199,6 +202,10 @@ export default class RegistrationView extends View {
     });
   }
 
+  // private addLoginredirectButton() {
+  //   const attrs: IButtonAttributes = {};
+  // }
+
   private addSubmitButton() {
     const attrs: IButtonAttributes = {
       type: 'button',
@@ -294,5 +301,9 @@ export default class RegistrationView extends View {
 
   static showErrorMessage(message: string) {
     M.toast({ html: message });
+  }
+
+  public clearContent(): void {
+    document.body.removeChild(this.htmlElement);
   }
 }

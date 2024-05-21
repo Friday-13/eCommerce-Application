@@ -1,7 +1,4 @@
-.logo {
-  width: 100px;
-  height: 100px;
-}
+@import "node_modules/materialize-css/sass/materialize";
 
 .page-footer {
   padding-top: 0;
@@ -28,4 +25,57 @@ body {
 
 main {
   flex: 1 0 auto;
+}
+
+.error {
+  width: 100%;
+  height: 100vh;
+  background-image: url("/src/assets/404/backgroung-image.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+
+  @media (max-width: $large-screen) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.page-image {
+  display: flex;
+  gap: 100px;
+  padding: 50px;
+
+  @media (max-width: $large-screen) {
+    flex-direction: column;
+  }
+}
+
+.page-image-man {
+  max-width: 100%;
+  height: auto;
+
+  @media (max-width: $large-screen) {
+    display: none;
+  }
+}
+
+.page-image-body {
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+
+  > *:not(:last-child) {
+    margin-bottom: 50px;
+  }
+}
+
+.page-image-title {
+  font-size: clamp(2rem, 1.752rem + 1.24vw, 4rem);
+}
+
+.hide-on-med-and-down {
+  display: block !important;
 }
