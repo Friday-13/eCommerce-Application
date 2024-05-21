@@ -1,13 +1,13 @@
 import Error404 from '@views/404/404';
 import LoginView from '@views/login/login-page';
 import MainView from '@views/main/main-page';
-import RegistrationView from '@views/registration/registration-page';
+import RegistrationPageView from '@views/registration/registration-page';
 
 class App {
   private currentView:
     | Error404
     | MainView
-    | RegistrationView
+    | RegistrationPageView
     | LoginView
     | null = null;
 
@@ -30,7 +30,7 @@ class App {
         this.currentView = new MainView();
         break;
       case '#registration':
-        this.currentView = new RegistrationView();
+        this.currentView = new RegistrationPageView();
         document.body.appendChild(this.currentView.htmlElement);
         break;
       case '#login':
