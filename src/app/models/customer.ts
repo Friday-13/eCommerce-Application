@@ -23,6 +23,10 @@ export const getCustomerToken = (): ICustomerBase => {
   return customer;
 };
 
+export const isCustomerAuthorized = (): boolean => {
+  return Boolean(getCustomerToken());
+};
+
 export const customerTokenResponse = (
   customer: Customer
 ): ICustomerBase | undefined => {

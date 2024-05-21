@@ -3,7 +3,7 @@ import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
-import { customerClear } from '@models/customer';
+import { customerClear, isCustomerAuthorized } from '@models/customer';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
@@ -81,11 +81,16 @@ export default class HeaderView extends View {
       return item;
     };
 
-    const menuItems = [
-      createMenuItem('#login', 'Sign in'),
-      createMenuItem('#registration', 'Sign up'),
-      createMenuItem('#login', 'Sign out', customerClear),
-    ];
+    const menuItems = [];
+
+    if (isCustomerAuthorized()) {
+      menuItems.push(createMenuItem('#login', 'Sign out', customerClear));
+    } else {
+      menuItems.push(
+        createMenuItem('#login', 'Sign in'),
+        createMenuItem('#registration', 'Sign up')
+      );
+    }
 
     menuItems.forEach((item) => menuListUl.appendChild(item));
 
