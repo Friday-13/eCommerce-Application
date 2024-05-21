@@ -13,14 +13,14 @@ export default class HeaderView extends View {
       classList: ['header'],
     };
     super(attrs);
-    this.headerInitialized = false; // Изначально хедер не инициализирован
+    this.headerInitialized = false;
   }
 
   public initializeHeader() {
     this.htmlElement.innerHTML = '';
 
     if (this.headerInitialized) {
-      return; // Если хедер уже инициализирован, просто возвращаемся
+      return;
     }
     const navAttrs: IAttributes = {
       tag: 'nav',
@@ -38,6 +38,11 @@ export default class HeaderView extends View {
       classList: ['logo'],
     };
     const logoImg = new ImageComponent(logoImgAttrs);
+
+    logoImg.node.addEventListener('click', (event) => {
+      event.preventDefault();
+      Router.navigateTo('#main');
+    });
 
     const menuListAttrs: IAttributes = {
       tag: 'ul',

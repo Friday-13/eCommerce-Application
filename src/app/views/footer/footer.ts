@@ -11,14 +11,14 @@ export default class FooterView extends View {
       classList: ['page-footer'],
     };
     super(attrs);
-    this.footerInitialized = false; // Изначально футер не инициализирован
+    this.footerInitialized = false;
   }
 
   public initializeFooter() {
     this.htmlElement.innerHTML = '';
 
     if (this.footerInitialized) {
-      return; // Если футер уже инициализирован, просто возвращаемся
+      return;
     }
 
     const containerAttrs: IAttributes = {
