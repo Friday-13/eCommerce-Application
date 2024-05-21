@@ -5,15 +5,23 @@ import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
 
 export default class HeaderView extends View {
+  private headerInitialized: boolean;
+
   constructor() {
     const attrs: IAttributes = {
       tag: 'header',
       classList: ['header'],
     };
     super(attrs);
+    this.headerInitialized = false; // Изначально хедер не инициализирован
   }
 
   public initializeHeader() {
+    this.htmlElement.innerHTML = '';  
+    
+    if (this.headerInitialized) {
+      return; // Если хедер уже инициализирован, просто возвращаемся
+    }
     const navAttrs: IAttributes = {
       tag: 'nav',
     };

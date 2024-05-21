@@ -3,15 +3,24 @@ import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 
 export default class FooterView extends View {
+  private footerInitialized: boolean;
+
   constructor() {
     const attrs: IAttributes = {
       tag: 'footer',
       classList: ['page-footer'],
     };
     super(attrs);
+    this.footerInitialized = false; // Изначально футер не инициализирован
   }
 
   public initializeFooter() {
+    this.htmlElement.innerHTML = '';   
+
+    if (this.footerInitialized) {
+      return; // Если футер уже инициализирован, просто возвращаемся
+    }
+
     const containerAttrs: IAttributes = {
       tag: 'div',
       classList: ['footer-container'],

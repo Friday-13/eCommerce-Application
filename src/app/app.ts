@@ -27,19 +27,15 @@ class App {
 
   private addHeader(): void {
     if (window.location.hash !== '#error') {
-      this.headerView.initializeHeader();
-      document.body.appendChild(this.headerView.htmlElement);
+      this.headerView.initializeHeader();      
+      document.body.appendChild(this.headerView.htmlElement);     
     }
   }
 
-  private addFooter(): void {
-    if (window.location.hash !== '#error') {
-      this.footerView.initializeFooter();
-      document.body.appendChild(this.footerView.htmlElement);
-    }
-  }
+ 
 
   private route = (): void => {
+    this.addHeader();
     if (!window.location.hash) {
       window.location.hash = '#registration';
       return;
@@ -71,12 +67,18 @@ class App {
     if (this.currentView) {
       document.body.appendChild(this.currentView.htmlElement);
     }
+    this.addFooter();
   };
 
-  public start(): void {
-    this.addHeader();
-    this.route();
-    this.addFooter();
+  private addFooter(): void {
+    if (window.location.hash !== '#error') {
+      this.footerView.initializeFooter();      
+      document.body.appendChild(this.footerView.htmlElement);     
+    }
+  }
+
+  public start(): void {   
+    this.route();    
   }
 }
 
