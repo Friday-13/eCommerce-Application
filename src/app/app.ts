@@ -50,7 +50,7 @@ class App {
 
   private route = (): void => {
     if (!window.location.hash) {
-      window.location.hash = '#registration';
+      window.location.hash = '#main';
       return;
     }
     if (this.currentPage) {

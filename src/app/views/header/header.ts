@@ -76,7 +76,7 @@ export default class HeaderView extends View {
     const menuItems = [
       createMenuItem('#login', 'Sign in'),
       createMenuItem('#registration', 'Sign up'),
-      createMenuItem('#signout', 'Sign out'),
+      createMenuItem('#login', 'Sign out'),
     ];
 
     menuItems.forEach((item) => menuListUl.appendChild(item));
