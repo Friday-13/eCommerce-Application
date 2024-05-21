@@ -257,7 +257,7 @@ export default class RegistrationView extends View {
 
   submitForm() {
     if (!this.isValid()) {
-      RegistrationView.showErrorMessage('Form invalid');
+      showErrorMessage('Form invalid');
       return;
     }
     const addresses = [];
