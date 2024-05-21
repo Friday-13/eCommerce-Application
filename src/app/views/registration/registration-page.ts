@@ -1,4 +1,5 @@
-import { BaseComponent, IAttributes } from '@components/base-component';
+import { CustomerDraft } from '@commercetools/platform-sdk';
+import { IAttributes } from '@components/base-component';
 import {
   ButtonComponent,
   IButtonAttributes,
@@ -9,26 +10,31 @@ import {
   IInputFieldAttributes,
   InputFieldComponent,
 } from '@components/input-field-component';
-import { ILabelAttriubutes, LabelComponent } from '@components/label-component';
-import {
-  IOptionAttributes,
-  OptionComponent,
-} from '@components/option-component';
+import { ILabelAttriubutes } from '@components/label-component';
+import registration from '@services/customer-registration';
 import { IFormInputField, createInputField } from '@utils/create-input-field';
 import birthdayLimitation from '@utils/validators/age-validator';
 import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
 import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
-import {
-  postalCodeNoCountryValidator,
-  postalCodeUKValidator,
-  postalCodeUSSRValidator,
-} from '@utils/validators/post-code-validator';
-import { IValidator } from '@utils/validators/validator';
 import View from '@views/view';
-import { Datepicker, FormSelect } from 'materialize-css';
+import { Datepicker } from 'materialize-css';
+import emailValidator from '@utils/validators/email-validator';
+import { passwordValidator } from '@utils/validators/password-validator';
+import { CheckboxComponent } from '@components/checkbox-component';
+import FormSectionView from './form-section';
+import AddressSection from './address';
+import styles from './registration-page.module.scss';
 
 export default class RegistrationView extends View {
   private form = new FormComponent({});
+
+  private credentialsSection = new FormSectionView();
+
+  private pesonalSection = new FormSectionView();
+
+  private shippingAddressSection = new AddressSection('');
+
+  private billingAddressSection = new AddressSection('');
 
   private emailInput = new InputFieldComponent({}, {}, {});
 
@@ -40,17 +46,11 @@ export default class RegistrationView extends View {
 
   private birthdayInput = new InputFieldComponent({}, {}, {});
 
-  private streetInput = new InputFieldComponent({}, {}, {});
-
-  private cityInput = new InputFieldComponent({}, {}, {});
-
-  private postalCodeInput = new InputFieldComponent({}, {}, {});
-
-  private countryInput = new BaseComponent({});
-
   private submitButton = new ButtonComponent({});
 
-  private countrySelector: FormSelect;
+  private selectLikeBillingCheckBox = new CheckboxComponent({});
+
+  private selectLikeShippingCheckBox = new CheckboxComponent({});
 
   constructor() {
     const attrs: IAttributes = {
@@ -58,15 +58,10 @@ export default class RegistrationView extends View {
     };
     super(attrs);
     this.addForm();
-    this.addEmailInput();
-    this.addPasswordInput();
-    this.addFirstNameInput();
-    this.addSecondNameInput();
-    this.addBirthdateInput();
-    this.addStreetInput();
-    this.addCityInput();
-    this.addCountryInput();
-    this.addPostalCodeInput();
+    this.addCredentials();
+    this.addPersonalInformation();
+    this.addShippingAddress();
+    this.addBillingAddress();
     this.addSubmitButton();
   }
 
@@ -76,13 +71,54 @@ export default class RegistrationView extends View {
       onInput: () => {
         this.isValid();
       },
-      onSubmit: () => {
-        console.log('form submit');
-      },
       noValidate: true,
     };
     this.form = new FormComponent(attrs);
     this.appendChild(this.form);
+  }
+
+  private addCredentials() {
+    this.credentialsSection = new FormSectionView('Credentials');
+    this.addEmailInput();
+    this.addPasswordInput();
+    this.credentialsSection.appendChild(this.emailInput);
+    this.credentialsSection.appendChild(this.passwordInput);
+    this.form.node.appendChild(this.credentialsSection.htmlElement);
+  }
+
+  private addPersonalInformation() {
+    this.pesonalSection = new FormSectionView('Personal Information');
+    this.addFirstNameInput();
+    this.addSecondNameInput();
+    this.addBirthdateInput();
+    this.pesonalSection.appendChild(this.firstNameInput);
+    this.pesonalSection.appendChild(this.secondNameInput);
+    this.pesonalSection.appendChild(this.birthdayInput);
+    this.form.node.appendChild(this.pesonalSection.htmlElement);
+  }
+
+  private addShippingAddress() {
+    this.shippingAddressSection = new AddressSection('Shipping Address');
+    this.selectLikeBillingCheckBox = new CheckboxComponent({
+      content: 'Select like billing',
+      onClick: () => {
+        RegistrationView.toggleAddressSection(this.billingAddressSection);
+      },
+    });
+    this.shippingAddressSection.appendChild(this.selectLikeBillingCheckBox);
+    this.form.node.appendChild(this.shippingAddressSection.htmlElement);
+  }
+
+  private addBillingAddress() {
+    this.billingAddressSection = new AddressSection('Billing Address');
+    this.selectLikeShippingCheckBox = new CheckboxComponent({
+      content: 'Select like shipping',
+      onClick: () => {
+        RegistrationView.toggleAddressSection(this.shippingAddressSection);
+      },
+    });
+    this.billingAddressSection.appendChild(this.selectLikeShippingCheckBox);
+    this.form.node.appendChild(this.billingAddressSection.htmlElement);
   }
 
   private addEmailInput() {
@@ -91,10 +127,9 @@ export default class RegistrationView extends View {
       id: 'email',
       placeholder: 'Ivan@mail.com',
       type: 'email',
-      customValidators: [],
+      customValidators: [emailValidator],
     };
     this.emailInput = createInputField(fieldAttrs);
-    this.form.appendChild(this.emailInput);
   }
 
   private addPasswordInput() {
@@ -103,10 +138,9 @@ export default class RegistrationView extends View {
       id: 'pass',
       placeholder: 'Super secret password',
       type: 'password',
-      customValidators: [],
+      customValidators: [passwordValidator],
     };
     this.passwordInput = createInputField(fieldAttrs);
-    this.form.appendChild(this.passwordInput);
   }
 
   private addFirstNameInput() {
@@ -118,7 +152,6 @@ export default class RegistrationView extends View {
       customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
     };
     this.firstNameInput = createInputField(fieldAttrs);
-    this.form.appendChild(this.firstNameInput);
   }
 
   private addSecondNameInput() {
@@ -130,7 +163,6 @@ export default class RegistrationView extends View {
       customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
     };
     this.secondNameInput = createInputField(fieldAttrs);
-    this.form.appendChild(this.secondNameInput);
   }
 
   private addBirthdateInput() {
@@ -155,119 +187,26 @@ export default class RegistrationView extends View {
     };
 
     this.birthdayInput = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
-    this.form.appendChild(this.birthdayInput);
     Datepicker.init(this.birthdayInput.input.node, {
       minDate: new Date('1900-01-01T00:00:00'),
       maxDate: new Date(),
+      defaultDate: new Date('1984-11-01'),
       yearRange: 100,
       onClose: () => {
         this.birthdayInput.isValid();
       },
+      format: 'yyyy-mm-dd',
     });
-  }
-
-  addStreetInput() {
-    const attrs: IFormInputField = {
-      id: 'street',
-      type: 'text',
-      label: 'Street',
-      placeholder: 'Dan Crescent',
-      customValidators: [atLeastOneCharacter],
-    };
-    this.streetInput = createInputField(attrs);
-    this.form.appendChild(this.streetInput);
-  }
-
-  private addCityInput() {
-    const attrs: IFormInputField = {
-      id: 'city',
-      type: 'text',
-      label: 'City',
-      placeholder: 'Lake Jeremyville',
-      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
-    };
-    this.cityInput = createInputField(attrs);
-    this.form.appendChild(this.cityInput);
-  }
-
-  private addCountryInput() {
-    const inputFieldAttrs: IAttributes = {
-      classList: ['input-field', 'col', 's6'],
-    };
-    const labelAttrs: ILabelAttriubutes = {
-      content: 'Country',
-    };
-
-    const inputFieldComponent = new BaseComponent(inputFieldAttrs);
-    const selectComponent = new BaseComponent({ tag: 'select' });
-    const labelComponent = new LabelComponent(labelAttrs);
-    labelComponent.removeClass('active');
-
-    inputFieldComponent.appendChild(selectComponent);
-    inputFieldComponent.appendChild(labelComponent);
-
-    const options = ['Russia', 'United Kingdom', 'Belarus'];
-
-    const placeholderOptionAttrs: IOptionAttributes = {
-      content: 'Select country',
-      value: '',
-      disable: true,
-      selected: true,
-    };
-    const placeholderOption = new OptionComponent(placeholderOptionAttrs);
-    selectComponent.appendChild(placeholderOption);
-    options.forEach((value, index) => {
-      const optionAttrs: IOptionAttributes = {
-        content: value,
-        value: `${index + 1}`,
-      };
-      const optionComponent = new OptionComponent(optionAttrs);
-      selectComponent.appendChild(optionComponent);
-    });
-    this.countryInput = inputFieldComponent;
-    this.form.appendChild(this.countryInput);
-    document.addEventListener('DOMContentLoaded', () => {
-      this.countrySelector = FormSelect.init(selectComponent.node, {});
-    });
-  }
-
-  private addPostalCodeInput() {
-    const attrs: IFormInputField = {
-      id: 'postal-code',
-      type: 'text',
-      label: 'Postal code',
-      placeholder: '2154',
-      customValidators: [this.postalCodeValidator],
-    };
-    this.postalCodeInput = createInputField(attrs);
-    this.form.appendChild(this.postalCodeInput);
-  }
-
-  private postalCodeValidator: IValidator = {
-    invalidMessage: 'incorrect postal code',
-    validateFunction: this.postalCodeValidateFunction.bind(this),
-  };
-
-  private postalCodeValidateFunction(value: string): boolean {
-    const country = this.countrySelector.input.value;
-    switch (country) {
-      case 'Russia':
-        return postalCodeUSSRValidator.validateFunction(value);
-      case 'United Kingdom':
-        return postalCodeUKValidator.validateFunction(value);
-      case 'Belarus':
-        return postalCodeUSSRValidator.validateFunction(value);
-      default:
-        return postalCodeNoCountryValidator.validateFunction(value);
-    }
   }
 
   private addSubmitButton() {
     const attrs: IButtonAttributes = {
-      type: 'submit',
+      type: 'button',
       content: 'Sign Up',
       tag: 'button',
-      disabled: true,
+      onClick: () => {
+        this.submitForm();
+      },
     };
     this.submitButton = new ButtonComponent(attrs);
     this.submitButton.addClass('col');
@@ -283,16 +222,77 @@ export default class RegistrationView extends View {
       this.firstNameInput,
       this.secondNameInput,
       this.birthdayInput,
-      this.cityInput,
-      this.postalCodeInput,
+      this.shippingAddressSection,
+      this.billingAddressSection,
     ];
     const isValid = inputs.reduce(
       (result, value) => result && value.isValid(),
       true
     );
-    if (isValid) {
-      this.submitButton.disabled = false;
-    }
     return isValid;
+  }
+
+  submitForm() {
+    if (!this.isValid()) {
+      RegistrationView.showErrorMessage('Form invalid');
+      return;
+    }
+    const addresses = [];
+    let defaultShipping;
+    let defaultBilling;
+
+    if (this.shippingAddressSection.isEnable) {
+      addresses.push(this.shippingAddressSection.address);
+      if (this.shippingAddressSection.isDefault) {
+        defaultShipping = addresses.length - 1;
+        if (!this.billingAddressSection.isEnable) {
+          defaultBilling = defaultShipping;
+        }
+      }
+    }
+
+    if (this.billingAddressSection.isEnable) {
+      addresses.push(this.billingAddressSection.address);
+      if (this.billingAddressSection.isDefault) {
+        defaultBilling = addresses.length - 1;
+        if (!this.shippingAddressSection.isEnable) {
+          defaultShipping = defaultBilling;
+        }
+      }
+    }
+
+    const customerData: CustomerDraft = {
+      email: this.emailInput.input.value,
+      password: this.passwordInput.input.value,
+      firstName: this.firstNameInput.input.value,
+      lastName: this.secondNameInput.input.value,
+      dateOfBirth: this.birthdayInput.input.value,
+      addresses,
+      defaultShippingAddress: defaultShipping,
+      defaultBillingAddress: defaultBilling,
+    };
+    /* TODO: add login and redirect */
+    registration(
+      customerData,
+      RegistrationView.showSucessMessage,
+      RegistrationView.showErrorMessage
+    );
+  }
+
+  static toggleAddressSection(addressSection: AddressSection) {
+    addressSection.htmlElement.classList.toggle(styles.hidden);
+    addressSection.setEnable(!addressSection.isEnable);
+    addressSection.setDefault(false);
+  }
+
+  static showSucessMessage(message: string) {
+    M.toast({
+      html: message,
+      classes: 'lime accent-2 black-text',
+    });
+  }
+
+  static showErrorMessage(message: string) {
+    M.toast({ html: message });
   }
 }
