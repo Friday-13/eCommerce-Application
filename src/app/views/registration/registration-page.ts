@@ -71,7 +71,7 @@ export default class RegistrationView extends View {
 
   private addForm() {
     const attrs: IFormAttributes = {
-      classList: 'col s6',
+      classList: 'col s6 offset-s3',
       onInput: () => {
         this.isValid();
       },
