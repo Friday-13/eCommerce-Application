@@ -125,6 +125,7 @@ export default class LoginView extends View {
     this.button = new ButtonComponent(attrs);
     this.button.addClass('col');
     this.button.addClass('s3');
+    this.button.addClass('login-sign-in');
     this.form.appendChild(this.button);
   }
 
@@ -133,7 +134,7 @@ export default class LoginView extends View {
       type: 'button',
       content: 'Sign up',
       onClick: () => {
-        Router.navigateTo('registration');
+        Router.navigateTo('#registration');
       },
     };
     this.button = new ButtonComponent(attrs);
