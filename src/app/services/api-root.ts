@@ -5,10 +5,4 @@ const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
   projectKey: clientConfig.VITE_CTP_PROJECT_KEY,
 });
 
-const getProject = () => {
-  return apiRoot.get().execute();
-};
-
-getProject().then(console.log).catch(console.error);
-
 export default apiRoot;
