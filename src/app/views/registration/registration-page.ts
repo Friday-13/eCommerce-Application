@@ -19,7 +19,10 @@ import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-
 import View from '@views/view';
 import { Datepicker } from 'materialize-css';
 import emailValidator from '@utils/validators/email-validator';
-import { passwordValidator } from '@utils/validators/password-validator';
+import {
+  passwordValidator,
+  specialCharValidator,
+} from '@utils/validators/password-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
@@ -143,7 +146,7 @@ export default class RegistrationView extends View {
       id: 'pass',
       placeholder: 'Super secret password',
       type: 'password',
-      customValidators: [passwordValidator],
+      customValidators: [passwordValidator, specialCharValidator],
     };
     this.passwordInput = createInputField(fieldAttrs);
   }

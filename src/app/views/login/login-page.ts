@@ -115,9 +115,11 @@ export default class LoginView extends View {
       type: 'button',
       content: 'Sign in',
       onClick: () => {
-        const email = this.emailField.getValue();
-        const password = this.passwordField.getValue();
-        login({ email, password }, LoginView.sucessLogin, showErrorMessage);
+        if (this.emailField.isValid() && this.passwordField.isValid()) {
+          const email = this.emailField.getValue();
+          const password = this.passwordField.getValue();
+          login({ email, password }, LoginView.sucessLogin, showErrorMessage);
+        }
       },
     };
     this.button = new ButtonComponent(attrs);
