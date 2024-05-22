@@ -27,6 +27,10 @@ main {
   flex: 1 0 auto;
 }
 
+.logo {
+  cursor: pointer;
+}
+
 .error {
   width: 100%;
   height: 100vh;
@@ -56,6 +60,7 @@ main {
 .page-image-man {
   max-width: 100%;
   height: auto;
+  max-height: calc(100vh - 50px * 2);
 
   @media (max-width: $large-screen) {
     display: none;
@@ -78,4 +83,52 @@ main {
 
 .hide-on-med-and-down {
   display: block !important;
+}
+
+.hidden {
+  display: none;
+}
+
+#login-section {
+  margin: 10% 30% 0;
+}
+
+#create-account {
+  margin-left: 25%;
+}
+
+.main-image {
+  max-width: 100%;
+  max-height: 100vh;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.main__container {
+  background: linear-gradient(
+    270deg,
+    #f0f0f0,
+    #fde5e5,
+    #e5f9fd,
+    #e5fde7,
+    #fdfde5,
+    #f0f0f0
+  );
+  background-size: 800% 800%;
+  animation: gradientBackgroundLight 15s ease infinite;
+}
+
+@keyframes gradientBackgroundLight {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }

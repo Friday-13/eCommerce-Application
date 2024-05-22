@@ -1,19 +1,51 @@
 import Error404 from '@views/404/404';
+import FooterView from '@views/footer/footer';
+import HeaderView from '@views/header/header';
 import LoginView from '@views/login/login-page';
-import MainView from '@views/main/main-page';
+import MainView from '@views/main-view';
+import MainPageView from '@views/main/main-page';
 import RegistrationView from '@views/registration/registration-page';
 
 class App {
-  private currentView:
+  private headerView: HeaderView;
+
+  private mainView: MainView;
+
+  private footerView: FooterView;
+
+  private currentPage:
     | Error404
-    | MainView
+    | MainPageView
     | RegistrationView
     | LoginView
     | null = null;
 
   constructor() {
+    this.headerView = new HeaderView();
+    this.mainView = new MainView();
+    this.footerView = new FooterView();
+
     window.addEventListener('hashchange', this.route);
     window.addEventListener('load', this.route);
+  }
+
+  private addHeader(): void {
+    if (window.location.hash !== '#error') {
+      this.headerView.initializeHeader();
+      document.body.appendChild(this.headerView.htmlElement);
+    }
+  }
+
+  private addMain(): void {
+    this.mainView = new MainView();
+    document.body.appendChild(this.mainView.htmlElement);
+  }
+
+  private addFooter(): void {
+    if (window.location.hash !== '#error') {
+      this.footerView.initializeFooter();
+      document.body.appendChild(this.footerView.htmlElement);
+    }
   }
 
   private route = (): void => {
@@ -21,34 +53,52 @@ class App {
       window.location.hash = '#main';
       return;
     }
-    if (this.currentView) {
-      this.currentView.clearContent();
+    if (this.currentPage) {
+      document.body.removeChild(this.currentPage.htmlElement);
+      this.currentPage = null;
     }
 
     switch (window.location.hash) {
       case '#main':
-        this.currentView = new MainView();
+        this.hideFooterHeader = false;
+        this.mainView.page = new MainPageView();
         break;
       case '#registration':
-        this.currentView = new RegistrationView();
-        document.body.appendChild(this.currentView.htmlElement);
+        this.hideFooterHeader = false;
+        this.mainView.page = new RegistrationView();
         break;
       case '#login':
-        this.currentView = new LoginView();
-        document.body.appendChild(this.currentView.htmlElement);
+        this.hideFooterHeader = false;
+        this.mainView.page = new LoginView();
         break;
       case '#error':
-        this.currentView = new Error404();
-        document.body.appendChild(this.currentView.htmlElement);
+        this.hideFooterHeader = true;
+        this.mainView.page = new Error404();
         break;
       default:
-        this.currentView = new Error404();
-        document.body.appendChild(this.currentView.htmlElement);
+        this.hideFooterHeader = true;
+        this.mainView.page = new Error404();
     }
+
+    // if (this.currentPage) {
+    //   document.body.appendChild(this.currentPage.htmlElement);
+    // }
   };
 
   public start(): void {
-    this.route();
+    this.addHeader();
+    this.addMain();
+    this.addFooter();
+  }
+
+  set hideFooterHeader(state: boolean) {
+    if (state) {
+      this.headerView.htmlElement.classList.add('hidden');
+      this.footerView.htmlElement.classList.add('hidden');
+    } else {
+      this.headerView.htmlElement.classList.remove('hidden');
+      this.footerView.htmlElement.classList.remove('hidden');
+    }
   }
 }
 
