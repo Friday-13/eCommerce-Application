@@ -8,6 +8,8 @@ import { customerClear, isCustomerAuthorized } from '@models/customer';
 export default class HeaderView extends View {
   private headerInitialized: boolean;
 
+  private menuListUl = new BaseComponent({});
+
   constructor() {
     const attrs: IAttributes = {
       tag: 'header',
@@ -50,8 +52,17 @@ export default class HeaderView extends View {
       id: 'nav-mobile',
       classList: ['right', 'hide-on-med-and-down'],
     };
-    const menuListUl = new BaseComponent(menuListAttrs);
+    this.menuListUl = new BaseComponent(menuListAttrs);
+    this.updateMenu();
 
+    navContainer.appendChild(logoImg);
+    navContainer.appendChild(this.menuListUl);
+    nav.appendChild(navContainer);
+    this.appendChild(nav);
+  }
+
+  updateMenu() {
+    this.menuListUl.node.innerHTML = '';
     const createMenuItem = (
       href: string,
       content: string,
@@ -91,12 +102,6 @@ export default class HeaderView extends View {
         createMenuItem('#registration', 'Sign up')
       );
     }
-
-    menuItems.forEach((item) => menuListUl.appendChild(item));
-
-    navContainer.appendChild(logoImg);
-    navContainer.appendChild(menuListUl);
-    nav.appendChild(navContainer);
-    this.appendChild(nav);
+    menuItems.forEach((item) => this.menuListUl.appendChild(item));
   }
 }
