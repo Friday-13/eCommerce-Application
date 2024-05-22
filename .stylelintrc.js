@@ -17,12 +17,7 @@ export default {
     'stylelint-order',
     'stylelint-declaration-block-no-ignored-properties',
   ],
-  "ignoreFiles": [
-    "node_modules/materialize-css/**/*"
-  ],
   rules: {
-    "no-duplicate-selectors": false,
-    "no-descending-specificity": false,
     'order/order': [
       [
         'custom-properties',
