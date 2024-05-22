@@ -18,6 +18,7 @@ import {
   specialCharValidator,
 } from '@utils/validators/password-validator';
 import Router from '@utils/router';
+import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 
 export default class LoginView extends View {
   private form = new FormComponent({});
@@ -113,17 +114,11 @@ export default class LoginView extends View {
     const attrs: IButtonAttributes = {
       type: 'button',
       content: 'Sign in',
-      onClick: async () => {
-        const email = this.emailField.getValue();
-        const password = this.passwordField.getValue();
-
-        try {
-          const response = await login(email, password);
-          if (response && response.customer) {
-            // console.log('Login successful');
-          }
-        } catch (error) {
-          // console.error('Login failed:(', error);
+      onClick: () => {
+        if (this.emailField.isValid() && this.passwordField.isValid()) {
+          const email = this.emailField.getValue();
+          const password = this.passwordField.getValue();
+          login({ email, password }, LoginView.sucessLogin, showErrorMessage);
         }
       },
     };
@@ -131,11 +126,12 @@ export default class LoginView extends View {
     this.button.addClass('col');
     this.button.addClass('s6');
     this.form.appendChild(this.button);
+  }
 
-    this.button.node.addEventListener('click', (event) => {
-      event.preventDefault();
-      Router.navigateTo('#main');
-    });
+  static sucessLogin() {
+    const SUCSESS_MSG = 'You have successfully logged in';
+    Router.navigateTo('#main');
+    showSucessMessage(SUCSESS_MSG);
   }
 
   public clearContent(): void {

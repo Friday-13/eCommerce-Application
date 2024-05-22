@@ -3,9 +3,12 @@ import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
+import { customerClear, isCustomerAuthorized } from '@models/customer';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
+
+  private menuListUl = new BaseComponent({});
 
   constructor() {
     const attrs: IAttributes = {
@@ -49,9 +52,22 @@ export default class HeaderView extends View {
       id: 'nav-mobile',
       classList: ['right', 'hide-on-med-and-down'],
     };
-    const menuListUl = new BaseComponent(menuListAttrs);
+    this.menuListUl = new BaseComponent(menuListAttrs);
+    this.updateMenu();
 
-    const createMenuItem = (href: string, content: string): BaseComponent => {
+    navContainer.appendChild(logoImg);
+    navContainer.appendChild(this.menuListUl);
+    nav.appendChild(navContainer);
+    this.appendChild(nav);
+  }
+
+  updateMenu() {
+    this.menuListUl.node.innerHTML = '';
+    const createMenuItem = (
+      href: string,
+      content: string,
+      callback?: () => void
+    ): BaseComponent => {
       const itemAttrs: IAttributes = {
         tag: 'li',
       };
@@ -66,6 +82,9 @@ export default class HeaderView extends View {
 
       link.node.addEventListener('click', (event) => {
         event.preventDefault();
+        if (callback) {
+          callback();
+        }
         Router.navigateTo(href);
       });
 
@@ -73,17 +92,16 @@ export default class HeaderView extends View {
       return item;
     };
 
-    const menuItems = [
-      createMenuItem('#login', 'Sign in'),
-      createMenuItem('#registration', 'Sign up'),
-      createMenuItem('#login', 'Sign out'),
-    ];
+    const menuItems = [];
 
-    menuItems.forEach((item) => menuListUl.appendChild(item));
-
-    navContainer.appendChild(logoImg);
-    navContainer.appendChild(menuListUl);
-    nav.appendChild(navContainer);
-    this.appendChild(nav);
+    if (isCustomerAuthorized()) {
+      menuItems.push(createMenuItem('#login', 'Sign out', customerClear));
+    } else {
+      menuItems.push(
+        createMenuItem('#login', 'Sign in'),
+        createMenuItem('#registration', 'Sign up')
+      );
+    }
+    menuItems.forEach((item) => this.menuListUl.appendChild(item));
   }
 }

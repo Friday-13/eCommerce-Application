@@ -19,9 +19,13 @@ import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-
 import View from '@views/view';
 import { Datepicker } from 'materialize-css';
 import emailValidator from '@utils/validators/email-validator';
-import { passwordValidator } from '@utils/validators/password-validator';
+import {
+  passwordValidator,
+  specialCharValidator,
+} from '@utils/validators/password-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
+import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 import FormSectionView from './form-section';
 import AddressSection from './address';
 import styles from './registration-page.module.scss';
@@ -71,7 +75,7 @@ export default class RegistrationView extends View {
 
   private addForm() {
     const attrs: IFormAttributes = {
-      classList: 'col s6',
+      classList: 'col s6 offset-s3',
       onInput: () => {
         this.isValid();
       },
@@ -142,7 +146,7 @@ export default class RegistrationView extends View {
       id: 'pass',
       placeholder: 'Super secret password',
       type: 'password',
-      customValidators: [passwordValidator],
+      customValidators: [passwordValidator, specialCharValidator],
     };
     this.passwordInput = createInputField(fieldAttrs);
   }
@@ -256,7 +260,7 @@ export default class RegistrationView extends View {
 
   submitForm() {
     if (!this.isValid()) {
-      RegistrationView.showErrorMessage('Form invalid');
+      showErrorMessage('Form invalid');
       return;
     }
     const addresses = [];
@@ -293,11 +297,10 @@ export default class RegistrationView extends View {
       defaultShippingAddress: defaultShipping,
       defaultBillingAddress: defaultBilling,
     };
-    /* TODO: add login and redirect */
     registration(
       customerData,
-      RegistrationView.showSucessMessage,
-      RegistrationView.showErrorMessage
+      RegistrationView.sucessRegister,
+      showErrorMessage
     );
   }
 
@@ -307,15 +310,10 @@ export default class RegistrationView extends View {
     addressSection.setDefault(false);
   }
 
-  static showSucessMessage(message: string) {
-    M.toast({
-      html: message,
-      classes: 'lime accent-2 black-text',
-    });
-  }
-
-  static showErrorMessage(message: string) {
-    M.toast({ html: message });
+  static sucessRegister() {
+    const SUCSESS_MSG = 'You have successfully registered';
+    Router.navigateTo('#main');
+    showSucessMessage(SUCSESS_MSG);
   }
 
   public clearContent(): void {

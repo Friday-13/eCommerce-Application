@@ -112,6 +112,18 @@ class AddressSection extends FormSectionView {
     });
     this.countryInput = inputFieldComponent;
     this.appendChild(this.countryInput);
+    const waitSelectLoaded = setInterval(() => {
+      if (inputFieldComponent.node.querySelector('select')) {
+        clearInterval(waitSelectLoaded);
+        try {
+          this.countrySelector = FormSelect.init(this.selectComponent.node);
+        } catch (e) {
+          if (!(e instanceof TypeError)) {
+            console.error(e);
+          }
+        }
+      }
+    }, 500);
   }
 
   private addPostalCodeInput() {
@@ -201,9 +213,6 @@ class AddressSection extends FormSectionView {
   }
 
   get htmlElement() {
-    document.addEventListener('DOMContentLoaded', () => {
-      this.countrySelector = FormSelect.init(this.selectComponent.node, {});
-    });
     return super.htmlElement;
   }
 }
