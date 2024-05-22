@@ -31,7 +31,7 @@
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
     "paths": {
       "@baseStyles/": ["./src/styles/style.scss"],
-      "@assets/": ["./src/assets/*"],
+      "@assets/*": ["./src/assets/*"],
       "@utils/*": ["./src/app/utils/*"],
       "@views/*": ["./src/app/views/*"],
       "@controllers/*": ["./src/app/controllers/*"],

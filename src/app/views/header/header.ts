@@ -4,6 +4,7 @@ import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
 import { customerClear, isCustomerAuthorized } from '@models/customer';
+import logoUrl from '@assets/logo.webp';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
@@ -36,7 +37,7 @@ export default class HeaderView extends View {
     const navContainer = new BaseComponent(divAttrs);
 
     const logoImgAttrs: IImageAttributes = {
-      src: '/src/assets/logo.webp',
+      src: logoUrl,
       alt: 'Logo',
       classList: ['logo'],
     };

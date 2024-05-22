@@ -3,6 +3,7 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
 import View from '@views/view';
+import legoMan from '@assets/404/lego-man.png';
 
 export default class Error404 extends View {
   constructor() {
@@ -35,7 +36,7 @@ export default class Error404 extends View {
     const pageBody404 = new BaseComponent(pageBody404Attrs);
 
     const image404Attrs: IImageAttributes = {
-      src: '/src/assets/404/lego-man.png',
+      src: legoMan,
       alt: 'lego-man',
       classList: ['page-image-man', 'responsive-img'],
     };
