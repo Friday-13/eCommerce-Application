@@ -105,7 +105,7 @@ main {
   margin: 0 auto;
 }
 
-.main__container {
+.main-container {
   background: linear-gradient(
     270deg,
     #f0f0f0,
@@ -116,10 +116,10 @@ main {
     #f0f0f0
   );
   background-size: 800% 800%;
-  animation: gradientBackgroundLight 15s ease infinite;
+  animation: gradient-background-light 15s ease infinite;
 }
 
-@keyframes gradientBackgroundLight {
+@keyframes gradient-background-light {
   0% {
     background-position: 0% 50%;
   }

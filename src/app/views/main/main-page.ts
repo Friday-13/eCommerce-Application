@@ -13,7 +13,7 @@ export default class MainPageView extends View {
 
   private initializeMainContent(): void {
     const mainContainerAttrs: IAttributes = {
-      classList: ['main__container'],
+      classList: ['main-container'],
     };
     this.mainContainer = new BaseComponent(mainContainerAttrs);
 

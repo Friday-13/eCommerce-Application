@@ -42,6 +42,7 @@ export default class LoginView extends View {
     this.addEmailField();
     this.addPasswordField();
     this.addLoginButton();
+    this.addSignUpButton();
   }
 
   public addForm() {
@@ -62,7 +63,6 @@ export default class LoginView extends View {
   public addEmailField() {
     const attrs: IInputFieldAttributes = {
       customValidators: [emailValidator],
-      // classList: 'red-text'
     };
     const labelAttrs: ILabelAttriubutes = {
       content: 'Enter your email',
@@ -120,6 +120,20 @@ export default class LoginView extends View {
           const password = this.passwordField.getValue();
           login({ email, password }, LoginView.sucessLogin, showErrorMessage);
         }
+      },
+    };
+    this.button = new ButtonComponent(attrs);
+    this.button.addClass('col');
+    this.button.addClass('s3');
+    this.form.appendChild(this.button);
+  }
+
+  public addSignUpButton() {
+    const attrs: IButtonAttributes = {
+      type: 'button',
+      content: 'Sign up',
+      onClick: () => {
+        Router.navigateTo('registration');
       },
     };
     this.button = new ButtonComponent(attrs);
