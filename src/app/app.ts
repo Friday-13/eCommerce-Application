@@ -84,11 +84,7 @@ class App {
         this.hideFooterHeader = true;
         this.mainView.page = new Error404();
     }
-    this.headerView.updateMenu();
-
-    // if (this.currentPage) {
-    //   document.body.appendChild(this.currentPage.htmlElement);
-    // }
+    this.headerView.updateMenu();   
   };
 
   public start(): void {
