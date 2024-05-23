@@ -20,11 +20,13 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
+    "@testing-library/jest-dom": "^6.4.5",
     "@types/isomorphic-fetch": "^0.0.39",
     "@types/jest": "^29.5.12",
     "@types/materialize-css": "^1.0.14",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
+    "babel-jest": "^29.7.0",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^16.4.5",
