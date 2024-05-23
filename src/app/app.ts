@@ -84,7 +84,7 @@ class App {
         this.hideFooterHeader = true;
         this.mainView.page = new Error404();
     }
-    this.headerView.updateMenu();   
+    this.headerView.updateMenu();
   };
 
   public start(): void {
