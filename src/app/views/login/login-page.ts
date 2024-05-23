@@ -107,6 +107,7 @@ export default class LoginView extends View {
     };
 
     this.showPasswordButton = new ButtonComponent(toggleButtonAttrs);
+    this.showPasswordButton.addClass('show-hide');
     this.passwordField.appendChild(this.showPasswordButton);
   }
 

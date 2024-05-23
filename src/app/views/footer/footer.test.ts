@@ -26,14 +26,16 @@ describe('FooterView', () => {
 
     const itemTeam = itemList!.querySelector('.footer__item');
     expect(itemTeam).not.toBeNull();
-    const linkTeam = itemTeam!.querySelector('a');
+    const linkTeam = itemTeam!.querySelector('a.footer-link-team');
     expect(linkTeam).not.toBeNull();
-    expect(linkTeam!.getAttribute('href')).toBe('#team');
+    expect(linkTeam!.getAttribute('href')).toBe(
+      'https://github.com/rolling-scopes-school/tasks/tree/master/stage2/modules/final-task'
+    );
     expect(linkTeam!.textContent).toBe('CodeCraft');
 
     const itemSchool = itemList!.querySelectorAll('.footer__item')[1];
     expect(itemSchool).not.toBeNull();
-    const linkSchool = itemSchool.querySelector('a');
+    const linkSchool = itemSchool.querySelector('a.footer-link-school');
     expect(linkSchool).not.toBeNull();
     expect(linkSchool!.getAttribute('href')).toBe('https://rs.school/');
     expect(linkSchool!.textContent).toBe('RS School');

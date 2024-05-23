@@ -1,80 +1,14 @@
 @import "node_modules/materialize-css/sass/materialize";
 
-.page-footer {
-  padding-top: 0;
-}
-
-.footer-items {
-  display: flex;
-  gap: 10rem;
-  align-items: center;
-  justify-content: center;
-  min-height: 2rem;
-}
-
-.no-text-transform {
-  font-size: 24px;
-  text-transform: none;
-}
+@import "../app/views/header/header";
+@import "../app/views/main/main";
+@import "../app/views/footer/footer";
+@import "../app/views/404/404";
 
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.logo {
-  cursor: pointer;
-}
-
-.error {
-  width: 100%;
-  height: 100vh;
-  background-image: url("/src/assets/404/backgroung-image.jpg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-
-  @media (max-width: $large-screen) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.page-image {
-  display: flex;
-  gap: 100px;
-  padding: 50px;
-
-  @media (max-width: $large-screen) {
-    flex-direction: column;
-  }
-}
-
-.page-image-man {
-  max-width: 100%;
-  height: auto;
-  max-height: calc(100vh - 50px * 2);
-
-  @media (max-width: $large-screen) {
-    display: none;
-  }
-}
-
-.page-image-body {
-  padding: 20px;
-  color: #fff;
-  text-align: center;
-
-  > *:not(:last-child) {
-    margin-bottom: 50px;
-  }
-}
-
-.page-image-title {
-  font-size: clamp(2rem, 1.752rem + 1.24vw, 4rem);
 }
 
 .hide-on-med-and-down {
@@ -91,14 +25,6 @@ body {
 
 #create-account {
   margin-left: 25%;
-}
-
-.main-image {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  max-height: 100vh;
-  margin: 0 auto;
 }
 
 main {
@@ -130,4 +56,18 @@ main {
   100% {
     background-position: 0% 50%;
   }
+}
+
+.login-sign-in {
+  margin-right: 30px;
+}
+
+.show-hide {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.input-field > label {
+  font-weight: 600;
+  color: black;
 }

@@ -46,8 +46,9 @@ export default class FooterView extends View {
     };
     const itemTeam = new BaseComponent(itemTeamAttrs);
     const linkTeamAttrs: IAnchorAttrs = {
-      href: '#team',
+      href: 'https://github.com/rolling-scopes-school/tasks/tree/master/stage2/modules/final-task',
       content: 'CodeCraft',
+      classList: ['footer-link-team'],
       target: '_blank',
     };
     const linkTeam = new AnchorComponent(linkTeamAttrs);
@@ -61,6 +62,7 @@ export default class FooterView extends View {
     const linkSchoolAttrs: IAnchorAttrs = {
       href: 'https://rs.school/',
       content: 'RS School',
+      classList: ['footer-link-school'],
       target: '_blank',
     };
     const linkSchool = new AnchorComponent(linkSchoolAttrs);

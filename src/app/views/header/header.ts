@@ -51,7 +51,7 @@ export default class HeaderView extends View {
     const menuListAttrs: IAttributes = {
       tag: 'ul',
       id: 'nav-mobile',
-      classList: ['right', 'hide-on-med-and-down'],
+      classList: ['right', 'nav-list-button'],
     };
     this.menuListUl = new BaseComponent(menuListAttrs);
     this.updateMenu();
@@ -71,6 +71,7 @@ export default class HeaderView extends View {
     ): BaseComponent => {
       const itemAttrs: IAttributes = {
         tag: 'li',
+        classList: ['list-item-nav'],
       };
       const item = new BaseComponent(itemAttrs);
 

@@ -15,6 +15,6 @@ module.exports = {
     '^@controllers/(.*)$': '<rootDir>/src/app/controllers/$1',
     '^@models/(.*)$': '<rootDir>/src/app/models/$1',
     '^@services/(.*)$': '<rootDir>/src/app/services/$1',
-    '^@components/(.*)$': '<rootDir>/src/app/components/$1',
+    '^@components/(.*)$': '<rootDir>/src/app/components/$1',    
   },
 };
