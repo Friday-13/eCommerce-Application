@@ -117,7 +117,7 @@ export default class LoginView extends View {
       content: 'Sign in',
       onClick: () => {
         if (this.emailField.isValid() && this.passwordField.isValid()) {
-          const email = this.emailField.getValue();
+          const email = this.emailField.getValue().trim();
           const password = this.passwordField.getValue();
           login({ email, password }, LoginView.sucessLogin, showErrorMessage);
         }

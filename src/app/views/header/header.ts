@@ -5,6 +5,7 @@ import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
 import { customerClear, isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
+import storeUrl from '@assets/store.png'
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
@@ -81,6 +82,7 @@ export default class HeaderView extends View {
         classList: ['waves-effect waves-light no-text-transform'],
       };
       const link = new AnchorComponent(linkAttrs);
+      
 
       link.node.addEventListener('click', (event) => {
         event.preventDefault();
@@ -101,7 +103,8 @@ export default class HeaderView extends View {
         createMenuItem('#catalogue', 'Catalogue'),
         createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign out', customerClear),
-        createMenuItem('#profile', 'Profile')
+        createMenuItem('#profile', 'Profile'),
+        createMenuItem('#cart', 'Cart')
       );
     } else {
       menuItems.push(
@@ -109,6 +112,7 @@ export default class HeaderView extends View {
         createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign in'),
         createMenuItem('#registration', 'Sign up'),
+        createMenuItem('#cart', 'Cart')
       );
     }
     menuItems.forEach((item) => this.menuListUl.appendChild(item));
