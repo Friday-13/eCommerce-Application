@@ -12,13 +12,13 @@ import {
   IButtonAttributes,
 } from '@components/button-component';
 import login from '@services/login-authorization';
-import emailValidator from '@utils/validators/email-validator';
 import {
   passwordValidator,
   specialCharValidator,
 } from '@utils/validators/password-validator';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
+import createEmailInput from '@utils/create-email-input';
 
 export default class LoginView extends View {
   private form = new FormComponent({});
@@ -61,21 +61,7 @@ export default class LoginView extends View {
   }
 
   public addEmailField() {
-    const attrs: IInputFieldAttributes = {
-      customValidators: [emailValidator],
-    };
-    const labelAttrs: ILabelAttriubutes = {
-      content: 'Enter your email',
-      for: 'email',
-    };
-    const inputAttrs: IInputAttributes = {
-      placeholder: 'example@mail.com',
-      id: 'email',
-      type: 'email',
-      required: true,
-    };
-
-    this.emailField = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
+    this.emailField = createEmailInput();
     this.form.appendChild(this.emailField);
   }
 
