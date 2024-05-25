@@ -71,7 +71,7 @@ export default class LoginView extends View {
     const inputAttrs: IInputAttributes = {
       placeholder: 'example@mail.com',
       id: 'email',
-      type: 'email',
+      type: 'text',
       required: true,
     };
 
@@ -117,7 +117,7 @@ export default class LoginView extends View {
       content: 'Sign in',
       onClick: () => {
         if (this.emailField.isValid() && this.passwordField.isValid()) {
-          const email = this.emailField.getValue();
+          const email = this.emailField.getValue().trim();
           const password = this.passwordField.getValue();
           login({ email, password }, LoginView.sucessLogin, showErrorMessage);
         }

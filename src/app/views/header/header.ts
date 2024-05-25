@@ -6,6 +6,7 @@ import Router from '@utils/router';
 import { customerClear, isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
 
+
 export default class HeaderView extends View {
   private headerInitialized: boolean;
 
@@ -97,11 +98,20 @@ export default class HeaderView extends View {
     const menuItems = [];
 
     if (isCustomerAuthorized()) {
-      menuItems.push(createMenuItem('#login', 'Sign out', customerClear));
+      menuItems.push(
+        createMenuItem('#catalogue', 'Catalogue'),
+        createMenuItem('#about-us', 'About Us'),
+        createMenuItem('#login', 'Sign out', customerClear),
+        createMenuItem('#profile', 'Profile'),
+        createMenuItem('#cart', 'Cart')
+      );
     } else {
       menuItems.push(
+        createMenuItem('#catalogue', 'Catalogue'),
+        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign in'),
-        createMenuItem('#registration', 'Sign up')
+        createMenuItem('#registration', 'Sign up'),
+        createMenuItem('#cart', 'Cart')
       );
     }
     menuItems.forEach((item) => this.menuListUl.appendChild(item));
