@@ -8,6 +8,8 @@ export default class ProductPageView extends View {
 
   private productContainer!: BaseComponent;
 
+  private titlesContainer!: BaseComponent;
+
   constructor() {
     const attrs: IAttributes = {
       classList: ['main-container'],
@@ -53,6 +55,8 @@ export default class ProductPageView extends View {
     };
     this.productContainer = new BaseComponent(productContainerAttrs);
     detailsProduct.appendChild(this.productContainer);
+
+    this.initializeProductTitle(this.productContainer);
   }
 
   // private setupGallerySlider(parentComponent: BaseComponent) {
@@ -62,4 +66,29 @@ export default class ProductPageView extends View {
   // private setupAdditionalDivs(parentComponent: BaseComponent) {
   // Создание дополнительных divs
   // }
+
+  private initializeProductTitle(detailsProduct: BaseComponent) {
+    const titlesAttrs: IAttributes = {
+      classList: ['product-titles'],
+    };
+    this.titlesContainer = new BaseComponent(titlesAttrs);
+
+    const productTitleAttrs: IAttributes = {
+      tag: 'h1',
+      classList: ['product-title'],
+      content: '',
+    };
+    const productTitle = new BaseComponent(productTitleAttrs);
+    this.titlesContainer.appendChild(productTitle);
+
+    const productCategotyAttrs: IAttributes = {
+      classList: ['product-category'],
+    };
+    const productCategory = new BaseComponent(productCategotyAttrs);
+    this.titlesContainer.appendChild(productCategory);
+
+    this.titlesContainer.appendChild(productTitle);
+    this.titlesContainer.appendChild(productCategory);
+    detailsProduct.appendChild(this.titlesContainer);
+  }
 }
