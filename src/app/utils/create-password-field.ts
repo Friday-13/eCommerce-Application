@@ -5,7 +5,7 @@ import {
 } from './validators/password-validator';
 
 export default function createPasswordField(attrs?: IFormInputField) {
-  let defaultAttrs;
+  let defaultAttrs: IFormInputField;
   if (attrs) {
     defaultAttrs = attrs;
   } else {

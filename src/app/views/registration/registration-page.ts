@@ -12,17 +12,16 @@ import {
 } from '@components/input-field-component';
 import { ILabelAttriubutes } from '@components/label-component';
 import registration from '@services/customer-registration';
-import { IFormInputField, createInputField } from '@utils/create-input-field';
+import { IFormInputField } from '@utils/create-input-field';
 import birthdayLimitation from '@utils/validators/age-validator';
-import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
-import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import View from '@views/view';
 import { Datepicker } from 'materialize-css';
 import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
-import createEmailInput from '@utils/create-email-input';
+import createEmailField from '@utils/create-email-field';
 import createPasswordField from '@utils/create-password-field';
+import createNameField from '@utils/create-name-field';
 import FormSectionView from './form-section';
 import AddressSection from './address';
 import styles from './registration-page.module.scss';
@@ -84,7 +83,7 @@ export default class RegistrationView extends View {
 
   private addCredentials() {
     this.credentialsSection = new FormSectionView('Credentials');
-    this.emailInput = createEmailInput();
+    this.emailInput = createEmailField();
     this.passwordInput = createPasswordField();
     this.credentialsSection.appendChild(this.emailInput);
     this.credentialsSection.appendChild(this.passwordInput);
@@ -93,8 +92,8 @@ export default class RegistrationView extends View {
 
   private addPersonalInformation() {
     this.pesonalSection = new FormSectionView('Personal Information');
-    this.addFirstNameInput();
-    this.addSecondNameInput();
+    this.firstNameInput = createNameField('First name', 'first-name', 'John');
+    this.secondNameInput = createNameField('Second name', 'second-name', 'Doe');
     this.addBirthdateInput();
     this.pesonalSection.appendChild(this.firstNameInput);
     this.pesonalSection.appendChild(this.secondNameInput);
@@ -124,28 +123,6 @@ export default class RegistrationView extends View {
     });
     this.billingAddressSection.appendChild(this.selectLikeShippingCheckBox);
     this.form.node.appendChild(this.billingAddressSection.htmlElement);
-  }
-
-  private addFirstNameInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'First Name',
-      id: 'first-name',
-      type: 'text',
-      placeholder: 'John',
-      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
-    };
-    this.firstNameInput = createInputField(fieldAttrs);
-  }
-
-  private addSecondNameInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'Second Name',
-      id: 'second-name',
-      type: 'text',
-      placeholder: 'Doe',
-      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
-    };
-    this.secondNameInput = createInputField(fieldAttrs);
   }
 
   private addBirthdateInput() {

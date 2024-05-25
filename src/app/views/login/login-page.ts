@@ -9,7 +9,6 @@ import {
 import login from '@services/login-authorization';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
-import createEmailInput from '@utils/create-email-input';
 import createPasswordField from '@utils/create-password-field';
 
 export default class LoginView extends View {
@@ -53,7 +52,7 @@ export default class LoginView extends View {
   }
 
   public addEmailField() {
-    this.emailField = createEmailInput();
+    this.emailField = createEmailField();
     this.form.appendChild(this.emailField);
   }
 
