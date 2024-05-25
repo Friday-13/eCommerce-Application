@@ -2,9 +2,9 @@ import { IFormInputField, createInputField } from '@utils/create-input-field';
 import emailValidator from '@utils/validators/email-validator';
 
 export default function createEmailInput(attrs?: IFormInputField) {
-  let fieldAttrs;
+  let defaultAttrs;
   if (!attrs) {
-    fieldAttrs = {
+    defaultAttrs = {
       label: 'E-mail',
       id: 'email',
       placeholder: 'example@mail.com',
@@ -13,7 +13,7 @@ export default function createEmailInput(attrs?: IFormInputField) {
       required: true,
     };
   } else {
-    fieldAttrs = attrs;
+    defaultAttrs = attrs;
   }
-  return createInputField(fieldAttrs);
+  return createInputField(defaultAttrs);
 }

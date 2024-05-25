@@ -18,14 +18,11 @@ import atLeastOneCharacter from '@utils/validators/at-least-one-character-valida
 import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import View from '@views/view';
 import { Datepicker } from 'materialize-css';
-import {
-  passwordValidator,
-  specialCharValidator,
-} from '@utils/validators/password-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 import createEmailInput from '@utils/create-email-input';
+import createPasswordField from '@utils/create-password-field';
 import FormSectionView from './form-section';
 import AddressSection from './address';
 import styles from './registration-page.module.scss';
@@ -88,7 +85,7 @@ export default class RegistrationView extends View {
   private addCredentials() {
     this.credentialsSection = new FormSectionView('Credentials');
     this.emailInput = createEmailInput();
-    this.addPasswordInput();
+    this.passwordInput = createPasswordField();
     this.credentialsSection.appendChild(this.emailInput);
     this.credentialsSection.appendChild(this.passwordInput);
     this.form.node.appendChild(this.credentialsSection.htmlElement);
@@ -127,17 +124,6 @@ export default class RegistrationView extends View {
     });
     this.billingAddressSection.appendChild(this.selectLikeShippingCheckBox);
     this.form.node.appendChild(this.billingAddressSection.htmlElement);
-  }
-
-  private addPasswordInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'Password',
-      id: 'pass',
-      placeholder: 'Super secret password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    };
-    this.passwordInput = createInputField(fieldAttrs);
   }
 
   private addFirstNameInput() {
