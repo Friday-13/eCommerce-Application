@@ -71,7 +71,7 @@ export default class LoginView extends View {
     const inputAttrs: IInputAttributes = {
       placeholder: 'example@mail.com',
       id: 'email',
-      type: 'email',
+      type: 'text',
       required: true,
     };
 
