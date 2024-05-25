@@ -174,6 +174,14 @@ export default class RegistrationView extends View {
       showErrorMessage('Form invalid');
       return;
     }
+    registration(
+      this.collectFormData(),
+      RegistrationView.sucessRegister,
+      showErrorMessage
+    );
+  }
+
+  private collectFormData() {
     const addresses = [];
     let defaultShipping;
     let defaultBilling;
@@ -208,11 +216,8 @@ export default class RegistrationView extends View {
       defaultShippingAddress: defaultShipping,
       defaultBillingAddress: defaultBilling,
     };
-    registration(
-      customerData,
-      RegistrationView.sucessRegister,
-      showErrorMessage
-    );
+
+    return customerData;
   }
 
   static toggleAddressSection(addressSection: AddressSection) {
