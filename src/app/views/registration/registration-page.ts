@@ -5,23 +5,16 @@ import {
   IButtonAttributes,
 } from '@components/button-component';
 import { FormComponent, IFormAttributes } from '@components/form-component';
-import { IInputAttributes } from '@components/input-component';
-import {
-  IInputFieldAttributes,
-  InputFieldComponent,
-} from '@components/input-field-component';
-import { ILabelAttriubutes } from '@components/label-component';
+import { InputFieldComponent } from '@components/input-field-component';
 import registration from '@services/customer-registration';
-import { IFormInputField } from '@utils/create-input-field';
-import birthdayLimitation from '@utils/validators/age-validator';
 import View from '@views/view';
-import { Datepicker } from 'materialize-css';
 import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 import createEmailField from '@utils/create-email-field';
 import createPasswordField from '@utils/create-password-field';
 import createNameField from '@utils/create-name-field';
+import createDateField from '@utils/create-date-field';
 import FormSectionView from './form-section';
 import AddressSection from './address';
 import styles from './registration-page.module.scss';
@@ -94,7 +87,7 @@ export default class RegistrationView extends View {
     this.pesonalSection = new FormSectionView('Personal Information');
     this.firstNameInput = createNameField('First name', 'first-name', 'John');
     this.secondNameInput = createNameField('Second name', 'second-name', 'Doe');
-    this.addBirthdateInput();
+    this.birthdayInput = createDateField('Birthday', 'Birthday', 'birthday');
     this.pesonalSection.appendChild(this.firstNameInput);
     this.pesonalSection.appendChild(this.secondNameInput);
     this.pesonalSection.appendChild(this.birthdayInput);
@@ -123,40 +116,6 @@ export default class RegistrationView extends View {
     });
     this.billingAddressSection.appendChild(this.selectLikeShippingCheckBox);
     this.form.node.appendChild(this.billingAddressSection.htmlElement);
-  }
-
-  private addBirthdateInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'Birthdate',
-      id: 'birthdate',
-      type: 'text',
-      placeholder: 'Birthday',
-      customValidators: [birthdayLimitation],
-    };
-    const attrs: IInputFieldAttributes = {
-      customValidators: fieldAttrs.customValidators,
-    };
-    const inputAttrs: IInputAttributes = {
-      type: fieldAttrs.type,
-      placeholder: fieldAttrs.placeholder,
-      classList: 'datepicker',
-    };
-    const labelAttrs: ILabelAttriubutes = {
-      for: fieldAttrs.id,
-      content: fieldAttrs.label,
-    };
-
-    this.birthdayInput = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
-    Datepicker.init(this.birthdayInput.input.node, {
-      minDate: new Date('1900-01-01T00:00:00'),
-      maxDate: new Date(),
-      defaultDate: new Date('1984-11-01'),
-      yearRange: 100,
-      onClose: () => {
-        this.birthdayInput.isValid();
-      },
-      format: 'yyyy-mm-dd',
-    });
   }
 
   private addLoginRedirectButton() {
@@ -266,9 +225,5 @@ export default class RegistrationView extends View {
     const SUCSESS_MSG = 'You have successfully registered';
     Router.navigateTo('#main');
     showSucessMessage(SUCSESS_MSG);
-  }
-
-  public clearContent(): void {
-    document.body.removeChild(this.htmlElement);
   }
 }
