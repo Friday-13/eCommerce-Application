@@ -5,27 +5,16 @@ import {
   IButtonAttributes,
 } from '@components/button-component';
 import { FormComponent, IFormAttributes } from '@components/form-component';
-import { IInputAttributes } from '@components/input-component';
-import {
-  IInputFieldAttributes,
-  InputFieldComponent,
-} from '@components/input-field-component';
-import { ILabelAttriubutes } from '@components/label-component';
+import { InputFieldComponent } from '@components/input-field-component';
 import registration from '@services/customer-registration';
-import { IFormInputField, createInputField } from '@utils/create-input-field';
-import birthdayLimitation from '@utils/validators/age-validator';
-import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
-import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import View from '@views/view';
-import { Datepicker } from 'materialize-css';
-import emailValidator from '@utils/validators/email-validator';
-import {
-  passwordValidator,
-  specialCharValidator,
-} from '@utils/validators/password-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
+import createEmailField from '@utils/create-email-field';
+import createPasswordField from '@utils/create-password-field';
+import createNameField from '@utils/create-name-field';
+import createDateField from '@utils/create-date-field';
 import FormSectionView from './form-section';
 import AddressSection from './address';
 import styles from './registration-page.module.scss';
@@ -87,8 +76,8 @@ export default class RegistrationView extends View {
 
   private addCredentials() {
     this.credentialsSection = new FormSectionView('Credentials');
-    this.addEmailInput();
-    this.addPasswordInput();
+    this.emailInput = createEmailField();
+    this.passwordInput = createPasswordField();
     this.credentialsSection.appendChild(this.emailInput);
     this.credentialsSection.appendChild(this.passwordInput);
     this.form.node.appendChild(this.credentialsSection.htmlElement);
@@ -96,9 +85,9 @@ export default class RegistrationView extends View {
 
   private addPersonalInformation() {
     this.pesonalSection = new FormSectionView('Personal Information');
-    this.addFirstNameInput();
-    this.addSecondNameInput();
-    this.addBirthdateInput();
+    this.firstNameInput = createNameField('First name', 'first-name', 'John');
+    this.secondNameInput = createNameField('Second name', 'second-name', 'Doe');
+    this.birthdayInput = createDateField('Birthday', 'Birthday', 'birthday');
     this.pesonalSection.appendChild(this.firstNameInput);
     this.pesonalSection.appendChild(this.secondNameInput);
     this.pesonalSection.appendChild(this.birthdayInput);
@@ -127,84 +116,6 @@ export default class RegistrationView extends View {
     });
     this.billingAddressSection.appendChild(this.selectLikeShippingCheckBox);
     this.form.node.appendChild(this.billingAddressSection.htmlElement);
-  }
-
-  private addEmailInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'E-mail',
-      id: 'email',
-      placeholder: 'Ivan@mail.com',
-      type: 'email',
-      customValidators: [emailValidator],
-    };
-    this.emailInput = createInputField(fieldAttrs);
-  }
-
-  private addPasswordInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'Password',
-      id: 'pass',
-      placeholder: 'Super secret password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    };
-    this.passwordInput = createInputField(fieldAttrs);
-  }
-
-  private addFirstNameInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'First Name',
-      id: 'first-name',
-      type: 'text',
-      placeholder: 'John',
-      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
-    };
-    this.firstNameInput = createInputField(fieldAttrs);
-  }
-
-  private addSecondNameInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'Second Name',
-      id: 'second-name',
-      type: 'text',
-      placeholder: 'Doe',
-      customValidators: [atLeastOneCharacter, noSpecialCharacterOrNumber],
-    };
-    this.secondNameInput = createInputField(fieldAttrs);
-  }
-
-  private addBirthdateInput() {
-    const fieldAttrs: IFormInputField = {
-      label: 'Birthdate',
-      id: 'birthdate',
-      type: 'text',
-      placeholder: 'Birthday',
-      customValidators: [birthdayLimitation],
-    };
-    const attrs: IInputFieldAttributes = {
-      customValidators: fieldAttrs.customValidators,
-    };
-    const inputAttrs: IInputAttributes = {
-      type: fieldAttrs.type,
-      placeholder: fieldAttrs.placeholder,
-      classList: 'datepicker',
-    };
-    const labelAttrs: ILabelAttriubutes = {
-      for: fieldAttrs.id,
-      content: fieldAttrs.label,
-    };
-
-    this.birthdayInput = new InputFieldComponent(attrs, labelAttrs, inputAttrs);
-    Datepicker.init(this.birthdayInput.input.node, {
-      minDate: new Date('1900-01-01T00:00:00'),
-      maxDate: new Date(),
-      defaultDate: new Date('1984-11-01'),
-      yearRange: 100,
-      onClose: () => {
-        this.birthdayInput.isValid();
-      },
-      format: 'yyyy-mm-dd',
-    });
   }
 
   private addLoginRedirectButton() {
@@ -263,6 +174,14 @@ export default class RegistrationView extends View {
       showErrorMessage('Form invalid');
       return;
     }
+    registration(
+      this.collectFormData(),
+      RegistrationView.sucessRegister,
+      showErrorMessage
+    );
+  }
+
+  private collectFormData() {
     const addresses = [];
     let defaultShipping;
     let defaultBilling;
@@ -297,11 +216,8 @@ export default class RegistrationView extends View {
       defaultShippingAddress: defaultShipping,
       defaultBillingAddress: defaultBilling,
     };
-    registration(
-      customerData,
-      RegistrationView.sucessRegister,
-      showErrorMessage
-    );
+
+    return customerData;
   }
 
   static toggleAddressSection(addressSection: AddressSection) {
@@ -314,9 +230,5 @@ export default class RegistrationView extends View {
     const SUCSESS_MSG = 'You have successfully registered';
     Router.navigateTo('#main');
     showSucessMessage(SUCSESS_MSG);
-  }
-
-  public clearContent(): void {
-    document.body.removeChild(this.htmlElement);
   }
 }
