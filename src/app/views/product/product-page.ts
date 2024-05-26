@@ -13,7 +13,7 @@ export default class ProductPageView extends View {
 
   constructor(productId: string) {
     const attrs: IAttributes = {
-      classList: ['main-container'],
+      classList: ['main-container-product'],
     };
     super(attrs);
     this.productId = productId;
@@ -61,9 +61,7 @@ export default class ProductPageView extends View {
     this.initializeProductTitle(this.productContainer);
   }
 
-  // private setupGallerySlider(parentComponent: BaseComponent) {
-  // Создание и конфигурация слайдера
-  // }
+  // private setupGallerySlider(detailsProduct: BaseComponent) {}
 
   // private setupAdditionalDivs(parentComponent: BaseComponent) {
   // Создание дополнительных divs
