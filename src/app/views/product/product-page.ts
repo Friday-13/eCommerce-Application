@@ -1,20 +1,22 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
+import { getProductById, ProductData } from '@services/product-data';
 import View from '@views/view';
 
 export default class ProductPageView extends View {
-  // private detailsProduct: BaseComponent;
-
   private galleryWrapper!: BaseComponent;
 
   private productContainer!: BaseComponent;
 
   private titlesContainer!: BaseComponent;
 
-  constructor() {
+  private productId: string;
+
+  constructor(productId: string) {
     const attrs: IAttributes = {
       classList: ['main-container'],
     };
     super(attrs);
+    this.productId = productId;
     this.initializeContentProductPage();
   }
 
@@ -89,6 +91,17 @@ export default class ProductPageView extends View {
 
     this.titlesContainer.appendChild(productTitle);
     this.titlesContainer.appendChild(productCategory);
+
+    getProductById(
+      this.productId,
+      (productData: ProductData) => {
+        productTitle.textContent = productData.productName;
+      },
+      (errorMsg: string) => {
+        console.error('Error fetching product details:', errorMsg);
+      }
+    );
+
     detailsProduct.appendChild(this.titlesContainer);
   }
 }
