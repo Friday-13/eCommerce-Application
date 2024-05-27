@@ -1,4 +1,4 @@
-import { ProductData, AttributeProducts } from '@models/products';
+import { ProductData, AttributeProducts, Current } from '@models/products';
 import apiRoot from './api-root';
 
 // Функция для извлечения значения атрибута из списка атрибутов
@@ -8,6 +8,30 @@ const attributeValue = (
 ): string | number => {
   const attribute = attributes.find((attr) => attr.name === attrName);
   return attribute ? attribute.value : 'Не указано';
+};
+
+const createProductData = (current: Current): ProductData => {
+  const productName = current.name['en-GB'];
+  const productDescription = current.description?.['en-GB'] || '';
+  const images = current.masterVariant.images?.map((image) => image.url) || [];
+  const { prices, attributes } = current.masterVariant;
+
+  const price = prices && prices[0] ? prices[0].value.centAmount / 100 : null;
+  const discountedPrice =
+    prices && prices[0]?.discounted
+      ? prices[0].discounted.value.centAmount / 100
+      : null;
+
+  return {
+    productName,
+    description: productDescription,
+    price,
+    discountedPrice,
+    imageUrls: images,
+    ageRange: attributeValue(attributes || [], 'age-range').toString(),
+    pieceCount: Number(attributeValue(attributes || [], 'piece-count')),
+    theme: attributeValue(attributes || [], 'theme').toString(),
+  };
 };
 
 export const getProductById = (
@@ -26,30 +50,7 @@ export const getProductById = (
           masterData: { current },
         },
       }) => {
-        const { name, description, masterVariant } = current;
-        const productName = name['en-GB'];
-        const productDescription = description?.['en-GB'] || '';
-        const images = masterVariant.images?.map((image) => image.url) || [];
-        const { prices, attributes } = masterVariant;
-
-        const price =
-          prices && prices[0] ? prices[0].value.centAmount / 100 : null;
-        const discountedPrice =
-          prices && prices[0]?.discounted
-            ? prices[0].discounted.value.centAmount / 100
-            : null;
-
-        const productData: ProductData = {
-          productName,
-          description: productDescription,
-          price,
-          discountedPrice,
-          imageUrls: images,
-          ageRange: attributeValue(attributes || [], 'age-range').toString(),
-          pieceCount: Number(attributeValue(attributes || [], 'piece-count')),
-          theme: attributeValue(attributes || [], 'theme').toString(),
-        };
-
+        const productData = createProductData(current);
         successCallback(productData);
       }
     )
