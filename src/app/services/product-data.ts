@@ -1,15 +1,14 @@
+import { ProductData, AttributeProducts } from '@models/products';
 import apiRoot from './api-root';
 
-export interface ProductData {
-  productName: string;
-  description: string;
-  price: number | null;
-  discountedPrice: number | null;
-  imageUrls: string[];
-  ageRange: string;
-  pieceCount: number;
-  theme: string;
-}
+// Функция для извлечения значения атрибута из списка атрибутов
+const attributeValue = (
+  attributes: AttributeProducts[],
+  attrName: string
+): string | number => {
+  const attribute = attributes.find((attr) => attr.name === attrName);
+  return attribute ? attribute.value : 'Не указано';
+};
 
 export const getProductById = (
   productId: string,
@@ -21,47 +20,42 @@ export const getProductById = (
     .withId({ ID: productId })
     .get()
     .execute()
-    .then((response) => {
-      const product = response.body.masterData.current;
-      const productName = product.name['en-GB'];
-      const description = product.description
-        ? product.description['en-GB']
-        : '';
-      const { prices } = product.masterVariant;
-      const price =
-        prices && prices[0] ? prices[0].value.centAmount / 100 : null;
-      const discountedPrice =
-        prices && prices[0] && prices[0].discounted
-          ? prices[0].discounted.value.centAmount / 100
-          : null;
-      const imageUrls =
-        product.masterVariant.images?.map((image) => image.url) || [];
-      const ageRange =
-        product.masterVariant.attributes?.find(
-          (attr) => attr.name === 'age-range'
-        )?.value || 'Не указано';
+    .then(
+      ({
+        body: {
+          masterData: { current },
+        },
+      }) => {
+        const { name, description, masterVariant } = current;
+        const productName = name['en-GB'];
+        const productDescription = description?.['en-GB'] || '';
+        const images = masterVariant.images?.map((image) => image.url) || [];
+        const { prices, attributes } = masterVariant;
 
-      const pieceCount =
-        product.masterVariant.attributes?.find(
-          (attr) => attr.name === 'piece-count'
-        )?.value || 0;
-      const theme =
-        product.masterVariant.attributes?.find((attr) => attr.name === 'theme')
-          ?.value || 'Не указано';
+        const price =
+          prices && prices[0] ? prices[0].value.centAmount / 100 : null;
+        const discountedPrice =
+          prices && prices[0]?.discounted
+            ? prices[0].discounted.value.centAmount / 100
+            : null;
 
-      const productData: ProductData = {
-        productName,
-        description,
-        price,
-        discountedPrice,
-        imageUrls,
-        ageRange: ageRange || 'Не указано',
-        pieceCount: pieceCount || 0,
-        theme: theme || 'Не указано',
-      };
-      successCallback(productData);
-    })
-    .catch((reason) => {
-      errorCallback(reason.body.message);
+        const productData: ProductData = {
+          productName,
+          description: productDescription,
+          price,
+          discountedPrice,
+          imageUrls: images,
+          ageRange: attributeValue(attributes || [], 'age-range').toString(),
+          pieceCount: Number(attributeValue(attributes || [], 'piece-count')),
+          theme: attributeValue(attributes || [], 'theme').toString(),
+        };
+
+        successCallback(productData);
+      }
+    )
+    .catch(({ body }) => {
+      errorCallback(body.message);
     });
 };
+
+export default getProductById;

@@ -1,5 +1,7 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
-import { getProductById, ProductData } from '@services/product-data';
+import { ProductData } from '@models/products';
+import { getProductById } from '@services/product-data';
+import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
 
 export default class ProductPageView extends View {
@@ -96,7 +98,7 @@ export default class ProductPageView extends View {
         productTitle.textContent = productData.productName;
       },
       (errorMsg: string) => {
-        console.error('Error fetching product details:', errorMsg);
+        showErrorMessage(`Error fetching product details: ${errorMsg}`);
       }
     );
 
