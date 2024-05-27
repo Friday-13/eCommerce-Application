@@ -1,6 +1,6 @@
 import isPageAccessable from '@utils/access-control';
 import Error404 from '@views/404/404';
-import { CatalogPageView } from '@views/catalog/catalog-page';
+import CatalogPageView from '@views/catalog/catalog-page';
 import FooterView from '@views/footer/footer';
 import HeaderView from '@views/header/header';
 import LoginView from '@views/login/login-page';
