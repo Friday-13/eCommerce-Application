@@ -14,15 +14,20 @@ export interface AttributeProducts {
   value: string | number;
 }
 
+interface LocalizedString {
+  [key: string]: string;
+}
+
 export interface Current {
-  name: { 'en-GB': string };
-  description?: { 'en-GB': string };
+  name: LocalizedString;
+  description?: LocalizedString;
   masterVariant: {
-    images: { url: string }[];
-    prices: {
+    images?: { url: string }[];
+    prices?: {
+      // Обновлено: prices могут быть undefined
       value: { centAmount: number };
       discounted?: { value: { centAmount: number } };
     }[];
-    attributes: { name: string; value: string | number }[];
+    attributes?: { name: string; value: string | number }[];
   };
 }
