@@ -24,7 +24,6 @@ export interface Current {
   masterVariant: {
     images?: { url: string }[];
     prices?: {
-      // Обновлено: prices могут быть undefined
       value: { centAmount: number };
       discounted?: { value: { centAmount: number } };
     }[];

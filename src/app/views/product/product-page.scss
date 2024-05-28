@@ -1,12 +1,29 @@
 .main-container-product {
+  width: 100%; /* Используйте всю доступную ширину по умолчанию */
+  padding: 1rem; /* Меньший отступ для меньших экранов */
+}
+
+@media (width >= 768px) {
+  .main-container-product {
+    padding: 1rem 1.5rem; /* Больший отступ для экранов начиная с 768 пикселей */
+  }
+}
+
+@media (width >= 1200px) {
+  .main-container-product {
+    padding: 1rem 2rem; /* Ещё больший отступ для широких экранов */
+  }
 }
 
 .product-details {
   display: flex;
+  gap: 20px;
   padding: 5px;
 }
 
 .gallery-wrapper {
+  overflow: hidden;
+  display: flex;
   flex: 1 1 60%;
 }
 
@@ -15,7 +32,19 @@
 }
 
 .product-titles {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0.5rem 5rem;
 }
 
-.product-category {
+
+
+.product-title {
+  font-weight: 700;
+}
+
+.brend-image {
+  max-width: 7.1875rem;
+  max-height: 3.75rem;
 }

@@ -1,8 +1,10 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
+import { IImageAttributes, ImageComponent } from '@components/image-component';
 import { ProductData } from '@models/products';
 import { getProductById } from '@services/product-data';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
+import brendDisney from '@assets/brend/disney.png';
 
 export default class ProductPageView extends View {
   private galleryWrapper!: BaseComponent;
@@ -10,6 +12,8 @@ export default class ProductPageView extends View {
   private productContainer!: BaseComponent;
 
   private titlesContainer!: BaseComponent;
+
+  private productDescription!: BaseComponent;
 
   private productId: string;
 
@@ -47,7 +51,7 @@ export default class ProductPageView extends View {
     this.galleryWrapper = new BaseComponent(galleryAttrs);
     detailsProduct.appendChild(this.galleryWrapper);
 
-    // this.setupGallerySlider(galleryWrapper);
+    this.setupGallerySlider(this.galleryWrapper);
     // this.setupAdditionalDivs(galleryWrapper);
   }
 
@@ -61,9 +65,32 @@ export default class ProductPageView extends View {
     detailsProduct.appendChild(this.productContainer);
 
     this.initializeProductTitle(this.productContainer);
+    this.initializeProductDescription(this.productContainer);
   }
 
-  // private setupGallerySlider(detailsProduct: BaseComponent) {}
+  private setupGallerySlider(detailsProduct: BaseComponent) {
+    const addImages = (imageUrls: string[]) => {
+      imageUrls.forEach((url) => {
+        const productImageAttrs: IImageAttributes = {
+          src: url,
+          alt: 'Image-product',
+          classList: ['slider-image'],
+        };
+        const productImage = new ImageComponent(productImageAttrs);
+        detailsProduct.appendChild(productImage);
+      });
+    };
+
+    getProductById(
+      this.productId,
+      (productData: ProductData) => {
+        addImages(productData.imageUrls);
+      },
+      (errorMsg: string) => {
+        showErrorMessage(`Error fetching product details: ${errorMsg}`);
+      }
+    );
+  }
 
   // private setupAdditionalDivs(parentComponent: BaseComponent) {
   // Создание дополнительных divs
@@ -81,16 +108,22 @@ export default class ProductPageView extends View {
       content: '',
     };
     const productTitle = new BaseComponent(productTitleAttrs);
-    this.titlesContainer.appendChild(productTitle);
 
     const productCategotyAttrs: IAttributes = {
       classList: ['product-category'],
     };
     const productCategory = new BaseComponent(productCategotyAttrs);
-    this.titlesContainer.appendChild(productCategory);
+
+    const productBrendImageAttrs: IImageAttributes = {
+      src: brendDisney,
+      alt: 'Image-product-brend',
+      classList: ['brend-image'],
+    };
+    const productBrendImage = new ImageComponent(productBrendImageAttrs);
 
     this.titlesContainer.appendChild(productTitle);
     this.titlesContainer.appendChild(productCategory);
+    productCategory.appendChild(productBrendImage);
 
     getProductById(
       this.productId,
@@ -103,5 +136,24 @@ export default class ProductPageView extends View {
     );
 
     detailsProduct.appendChild(this.titlesContainer);
+  }
+
+  private initializeProductDescription(detailsProduct: BaseComponent) {
+    const productDescriptionAttrs: IAttributes = {
+      classList: ['product-description'],
+      content: '',
+    };
+    this.productDescription = new BaseComponent(productDescriptionAttrs);
+    detailsProduct.appendChild(this.productDescription);
+
+    getProductById(
+      this.productId,
+      (productData: ProductData) => {
+        this.productDescription.textContent = productData.description;
+      },
+      (errorMsg: string) => {
+        showErrorMessage(`Error fetching product details: ${errorMsg}`);
+      }
+    );
   }
 }
