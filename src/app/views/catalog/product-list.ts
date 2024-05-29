@@ -13,7 +13,7 @@ export default class ProductListView extends View {
 
   setProducts() {
     for (let i = 0; i < 14; i += 1) {
-      const card = new ProductCardView();
+      const card = new ProductCardView({});
       this.appendChild(card);
     }
   }
