@@ -1,17 +1,17 @@
 .main-container-product {
-  width: 100%; /* Используйте всю доступную ширину по умолчанию */
-  padding: 1rem; /* Меньший отступ для меньших экранов */
+  width: 100%;
+  padding: 1rem;
 }
 
 @media (width >= 768px) {
   .main-container-product {
-    padding: 1rem 1.5rem; /* Больший отступ для экранов начиная с 768 пикселей */
+    padding: 1rem 1.5rem;
   }
 }
 
 @media (width >= 1200px) {
   .main-container-product {
-    padding: 1rem 2rem; /* Ещё больший отступ для широких экранов */
+    padding: 1rem 2rem;
   }
 }
 
@@ -29,6 +29,7 @@
 
 .product-container {
   flex: 1 1 40%;
+  padding: 0.8rem;
 }
 
 .product-titles {
@@ -38,7 +39,11 @@
   padding: 0.5rem 5rem;
 }
 
-
+.product-description {
+  text-align: justify;
+  line-height: 2;
+  color: rgb(5, 5, 40);
+}
 
 .product-title {
   font-weight: 700;

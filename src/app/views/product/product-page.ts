@@ -149,7 +149,7 @@ export default class ProductPageView extends View {
     getProductById(
       this.productId,
       (productData: ProductData) => {
-        this.productDescription.textContent = productData.description;
+        this.productDescription.node.innerHTML = productData.description;
       },
       (errorMsg: string) => {
         showErrorMessage(`Error fetching product details: ${errorMsg}`);
