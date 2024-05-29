@@ -2,14 +2,9 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import View from '@views/view';
 import getRandomDefaultImage from '@utils/get-random-default-image';
+import { IProductData } from '@models/products';
 import CardTitleView from './card-title';
 import styles from './card-style.module.scss';
-
-interface IProductCard {
-  imgSrc?: string;
-  title?: string;
-  description?: string;
-}
 
 const DEFAULT_TITLE = 'Card Title';
 const DEFAULT_DESCRIPTION = 'Card Description';
@@ -19,15 +14,15 @@ export default class ProductCardView extends View {
 
   private _image = new ImageComponent({});
 
-  constructor(content: IProductCard) {
+  constructor(content: IProductData) {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm6', 'l4'],
     };
     super(attrs);
     this.addCardContiner();
-    this.addImage(content.imgSrc);
-    this.addContent(content.title);
-    this.addDescription(content.title, content.description);
+    this.addImage(content.imageUrls[0]);
+    this.addContent(content.productName);
+    this.addDescription(content.productName, content.description);
   }
 
   addCardContiner() {
@@ -78,7 +73,7 @@ export default class ProductCardView extends View {
       tag: 'p',
     };
     const discription = new BaseComponent(discriptionAttrs);
-    discription.textContent = content;
+    discription.node.innerHTML = content;
 
     container.node.appendChild(titleView.htmlElement);
     container.appendChild(discription);

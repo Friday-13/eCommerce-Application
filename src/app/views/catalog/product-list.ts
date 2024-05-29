@@ -1,5 +1,6 @@
 import { IAttributes } from '@components/base-component';
 import View from '@views/view';
+import { IProductData } from '@models/products';
 import ProductCardView from './product-card';
 
 export default class ProductListView extends View {
@@ -8,13 +9,12 @@ export default class ProductListView extends View {
       classList: 'col s12 m10 offset-m1',
     };
     super(attrs);
-    this.setProducts();
   }
 
-  setProducts() {
-    for (let i = 0; i < 14; i += 1) {
-      const card = new ProductCardView({});
+  setProducts(products: Array<IProductData>) {
+    products.forEach((product) => {
+      const card = new ProductCardView(product);
       this.appendChild(card);
-    }
+    });
   }
 }
