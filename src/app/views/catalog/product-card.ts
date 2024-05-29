@@ -3,6 +3,7 @@ import { IImageAttributes, ImageComponent } from '@components/image-component';
 import View from '@views/view';
 import getRandomDefaultImage from '@utils/get-random-default-image';
 import { IProductData } from '@models/products';
+import createPriceComponent from '@utils/create-price-component';
 import CardTitleView from './card-title';
 import styles from './card-style.module.scss';
 
@@ -14,6 +15,8 @@ export default class ProductCardView extends View {
 
   private _image = new ImageComponent({});
 
+  private _content = new BaseComponent({});
+
   constructor(content: IProductData) {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm6', 'l4'],
@@ -23,6 +26,7 @@ export default class ProductCardView extends View {
     this.addImage(content.imageUrls[0]);
     this.addContent(content.productName);
     this.addDescription(content.productName, content.description);
+    this.addPriceBlock(content.price, content.discountedPrice);
   }
 
   addCardContiner() {
@@ -50,12 +54,12 @@ export default class ProductCardView extends View {
     const containerAttrs: IAttributes = {
       classList: 'card-content',
     };
-    const container = new BaseComponent(containerAttrs);
+    this._content = new BaseComponent(containerAttrs);
 
     const titleView = new CardTitleView(title, 'more_vert');
 
-    container.node.appendChild(titleView.htmlElement);
-    this._container.appendChild(container);
+    this._content.node.appendChild(titleView.htmlElement);
+    this._container.appendChild(this._content);
   }
 
   addDescription(
@@ -78,5 +82,22 @@ export default class ProductCardView extends View {
     container.node.appendChild(titleView.htmlElement);
     container.appendChild(discription);
     this._container.appendChild(container);
+  }
+
+  addPriceBlock(price: number | null, discountedPrice: number | null) {
+    if (price === null) return;
+    const attrs: IAttributes = {};
+    const priceBlock = new BaseComponent(attrs);
+    const productPrice = createPriceComponent(price);
+    priceBlock.appendChild(productPrice);
+    this._content.appendChild(priceBlock);
+
+    if (discountedPrice === null) return;
+    productPrice.addClass(styles.priceBlockOldPrice);
+    const productDuscountedPrice = createPriceComponent(
+      discountedPrice,
+      styles.priceBlockNewPrice
+    );
+    priceBlock.appendChild(productDuscountedPrice);
   }
 }

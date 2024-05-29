@@ -1,8 +1,29 @@
 .product-card {
-  height: 500px;
+  height: 700px;
 
   .card-image {
     overflow: hidden;
     height: 75%;
+  }
+}
+
+.price-block {
+  @mixin price {
+    padding: 5px;
+    font-size: 20px;
+  }
+
+  &__old-price {
+    @include price;
+
+    font-size: 16px;
+    color: #90a4ae;
+    text-decoration: line-through;
+  }
+
+  &__new-price {
+    @include price;
+
+    color: #bf360c;
   }
 }
