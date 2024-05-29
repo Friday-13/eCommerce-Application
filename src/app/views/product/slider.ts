@@ -1,10 +1,5 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
 import View from '@views/view';
-import Swiper from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 
 export default class ImageSliderProducts extends View {
@@ -21,18 +16,8 @@ export default class ImageSliderProducts extends View {
 
   public initializeSlider(images: string[]) {
     this.initializeSliderDetails(images);
-    // eslint-disable-next-line no-new
-    new Swiper('.swiper', {
-      modules: [Navigation, Pagination],
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-    });
+    this.initializeSliderNavigation();
+    this.initializeSliderPagination();
   }
 
   private initializeSliderDetails(images: string[]) {
@@ -58,6 +43,28 @@ export default class ImageSliderProducts extends View {
 
       detailsSlider.appendChild(containerSlide);
     });
+  }
+
+  private initializeSliderNavigation() {
+    const navigationSliderNextAttrs: IAttributes = {
+      classList: ['swiper-button-next'],
+    };
+    const navigationSliderNext = new BaseComponent(navigationSliderNextAttrs);
+    this.container.appendChild(navigationSliderNext);
+
+    const navigationSliderPrevAttrs: IAttributes = {
+      classList: ['swiper-button-prev'],
+    };
+    const navigationSliderPrev = new BaseComponent(navigationSliderPrevAttrs);
+    this.container.appendChild(navigationSliderPrev);
+  }
+
+  private initializeSliderPagination() {
+    const paginationSliderAttrs: IAttributes = {
+      classList: ['swiper-pagination'],
+    };
+    const paginationSlider = new BaseComponent(paginationSliderAttrs);
+    this.container.appendChild(paginationSlider);
   }
 
   public get htmlElement() {

@@ -5,6 +5,11 @@ import { getProductById } from '@services/product-data';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
 import brendDisney from '@assets/brend/disney.png';
+import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import ImageSliderProducts from './slider';
 
 export default class ProductPageView extends View {
@@ -31,6 +36,22 @@ export default class ProductPageView extends View {
 
   public initializeContentProductPage() {
     this.initializeDetailsProduct();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public initializeSwiper() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const swiper = new Swiper('.swiper', {
+      modules: [Navigation, Pagination],
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+    });
   }
 
   private initializeDetailsProduct() {
@@ -75,9 +96,10 @@ export default class ProductPageView extends View {
     const addImagesToSlider = (imageUrls: string[]) => {
       const imageSlider = new ImageSliderProducts(imageUrls);
       detailsProduct.node.appendChild(imageSlider.htmlElement);
+      setTimeout(() => {
+        this.initializeSwiper();
+      }, 0);
     };
-
-    // detailsProduct.appendChild(productImage); вот тут добавляется тег img в section gallery-wrapper
 
     getProductById(
       this.productId,
