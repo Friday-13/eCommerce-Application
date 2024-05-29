@@ -5,6 +5,7 @@ import { getProductById } from '@services/product-data';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
 import brendDisney from '@assets/brend/disney.png';
+import ImageSliderProducts from './slider';
 
 export default class ProductPageView extends View {
   private galleryWrapper!: BaseComponent;
@@ -71,22 +72,18 @@ export default class ProductPageView extends View {
   }
 
   private setupGallerySlider(detailsProduct: BaseComponent) {
-    const addImages = (imageUrls: string[]) => {
-      imageUrls.forEach((url) => {
-        const productImageAttrs: IImageAttributes = {
-          src: url,
-          alt: 'Image-product',
-          classList: ['slider-image'],
-        };
-        const productImage = new ImageComponent(productImageAttrs);
-        detailsProduct.appendChild(productImage);
-      });
+    const addImagesToSlider = (imageUrls: string[]) => {
+      const imageSlider = new ImageSliderProducts(imageUrls);
+      detailsProduct.node.appendChild(imageSlider.htmlElement);
     };
+
+    // detailsProduct.appendChild(productImage); вот тут добавляется тег img в section gallery-wrapper
 
     getProductById(
       this.productId,
       (productData: IProductData) => {
-        addImages(productData.imageUrls);
+        addImagesToSlider(productData.imageUrls);
+        //  this.setupGallerySlider(productData.imageUrls);
       },
       (errorMsg: string) => {
         showErrorMessage(`Error fetching product details: ${errorMsg}`);

@@ -27,25 +27,6 @@
   grid-area: 1 / 1 / 2 / 2;
 }
 
-/* временные стили */
-.gallery-wrapper {
-  position: relative;
-  overflow: hidden; /* скрывает части изображений, выходящие за пределы контейнера */
-  width: 670px; /* или любая другая ширина */
-  height: 500px; /* высота в соответствии с вашими потребностями */
-}
-
-.gallery-wrapper img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%; /* чтобы изображения занимали весь контейнер */
-  height: 100%; /* адаптация к размеру контейнера */
-  object-fit: cover; /* чтобы изображения сохраняли пропорции и покрывали весь контейнер */
-}
-
-/* временные стили */
-
 .product-container {
   grid-area: 1 / 2 / 2 / 3;
   padding: 0.8rem;
@@ -78,13 +59,14 @@
   padding-left: 1.875rem;
 }
 
+.product-description li {
+  padding-bottom: 1.5625rem;
+}
+
 .product-description ul:not(.browser-default) > li {
   list-style-type: circle;
 }
 
-.product-description li {
-  padding-bottom: 1.5625rem;
-}
 
 .product-title {
   font-weight: 700;
