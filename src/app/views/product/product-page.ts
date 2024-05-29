@@ -1,6 +1,6 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
-import { ProductData } from '@models/products';
+import { IProductData } from '@models/products';
 import { getProductById } from '@services/product-data';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
@@ -12,6 +12,8 @@ export default class ProductPageView extends View {
   private productContainer!: BaseComponent;
 
   private titlesContainer!: BaseComponent;
+
+  private productDescriptionContainer!: BaseComponent;
 
   private productDescription!: BaseComponent;
 
@@ -40,6 +42,7 @@ export default class ProductPageView extends View {
 
     this.initializeGalleryWrapper(detailsProduct);
     this.initializeProductContainer(detailsProduct);
+    this.initializeProductDescription(detailsProduct);
   }
 
   // Секция для картинок и слайдера
@@ -65,7 +68,6 @@ export default class ProductPageView extends View {
     detailsProduct.appendChild(this.productContainer);
 
     this.initializeProductTitle(this.productContainer);
-    this.initializeProductDescription(this.productContainer);
   }
 
   private setupGallerySlider(detailsProduct: BaseComponent) {
@@ -83,7 +85,7 @@ export default class ProductPageView extends View {
 
     getProductById(
       this.productId,
-      (productData: ProductData) => {
+      (productData: IProductData) => {
         addImages(productData.imageUrls);
       },
       (errorMsg: string) => {
@@ -127,7 +129,7 @@ export default class ProductPageView extends View {
 
     getProductById(
       this.productId,
-      (productData: ProductData) => {
+      (productData: IProductData) => {
         productTitle.textContent = productData.productName;
       },
       (errorMsg: string) => {
@@ -139,16 +141,26 @@ export default class ProductPageView extends View {
   }
 
   private initializeProductDescription(detailsProduct: BaseComponent) {
+    const productDescriptionContainerAttrs: IAttributes = {
+      tag: 'section',
+      classList: ['product-description-container'],
+      content: '',
+    };
+    this.productDescriptionContainer = new BaseComponent(
+      productDescriptionContainerAttrs
+    );
+    detailsProduct.appendChild(this.productDescriptionContainer);
+
     const productDescriptionAttrs: IAttributes = {
       classList: ['product-description'],
       content: '',
     };
     this.productDescription = new BaseComponent(productDescriptionAttrs);
-    detailsProduct.appendChild(this.productDescription);
+    this.productDescriptionContainer.appendChild(this.productDescription);
 
     getProductById(
       this.productId,
-      (productData: ProductData) => {
+      (productData: IProductData) => {
         this.productDescription.node.innerHTML = productData.description;
       },
       (errorMsg: string) => {

@@ -1,4 +1,4 @@
-export interface ProductData {
+export interface IProductData {
   productName: string;
   description: string;
   price: number | null;
@@ -9,18 +9,18 @@ export interface ProductData {
   theme: string;
 }
 
-export interface AttributeProducts {
+export interface IAttributeProducts {
   name: string;
   value: string | number;
 }
 
-interface LocalizedString {
+interface ILocalizedString {
   [key: string]: string;
 }
 
-export interface Current {
-  name: LocalizedString;
-  description?: LocalizedString;
+export interface ICurrent {
+  name: ILocalizedString;
+  description?: ILocalizedString;
   masterVariant: {
     images?: { url: string }[];
     prices?: {
