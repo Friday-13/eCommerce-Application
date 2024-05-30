@@ -1,11 +1,12 @@
 import isPageAccessable from '@utils/access-control';
 import Error404 from '@views/404/404';
-import { CatalogPageView } from '@views/catalog/catalog-page';
+import CatalogPageView from '@views/catalog/catalog-page';
 import FooterView from '@views/footer/footer';
 import HeaderView from '@views/header/header';
 import LoginView from '@views/login/login-page';
 import MainView from '@views/main-view';
 import MainPageView from '@views/main/main-page';
+import ProductPageView from '@views/product/product-page';
 import RegistrationView from '@views/registration/registration-page';
 
 class App {
@@ -61,10 +62,13 @@ class App {
       this.currentPage = null;
     }
 
+    const productId = 'f305c4c8-9993-420a-a59d-4937e994c3da';
+
     switch (window.location.hash) {
       case '#main':
         this.hideFooterHeader = false;
-        this.mainView.page = new MainPageView();
+        // this.mainView.page = new MainPageView();
+        this.mainView.page = new ProductPageView(productId);
         break;
       case '#registration':
         if (isPageAccessable('none-authorized')) {

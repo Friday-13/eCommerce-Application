@@ -106,7 +106,7 @@ export default class HeaderView extends View {
       );
     } else {
       menuItems.push(
-        createMenuItem('#catalogue', 'Catalogue'),
+        createMenuItem('#catalog', 'Catalog'),
         createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign in'),
         createMenuItem('#registration', 'Sign up'),
