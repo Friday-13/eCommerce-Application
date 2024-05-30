@@ -69,6 +69,7 @@
     "@types/node-fetch": "^2.6.11",
     "dotenv": "^16.4.5",
     "isomorphic-fetch": "^3.0.0",
-    "materialize-css": "^1.0.0-rc.2"
+    "materialize-css": "^1.0.0-rc.2",
+    "swiper": "^11.1.3"
   }
 }
