@@ -6,7 +6,6 @@ import Router from '@utils/router';
 import { customerClear, isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
 
-
 export default class HeaderView extends View {
   private headerInitialized: boolean;
 
@@ -99,7 +98,7 @@ export default class HeaderView extends View {
 
     if (isCustomerAuthorized()) {
       menuItems.push(
-        createMenuItem('#catalogue', 'Catalogue'),
+        createMenuItem('#catalog', 'Catalog'),
         createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign out', customerClear),
         createMenuItem('#profile', 'Profile'),
@@ -107,7 +106,7 @@ export default class HeaderView extends View {
       );
     } else {
       menuItems.push(
-        createMenuItem('#catalogue', 'Catalogue'),
+        createMenuItem('#catalog', 'Catalog'),
         createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign in'),
         createMenuItem('#registration', 'Sign up'),

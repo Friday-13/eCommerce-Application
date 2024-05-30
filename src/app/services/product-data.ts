@@ -10,7 +10,7 @@ const attributeValue = (
   return attribute ? attribute.value : 'Не указано';
 };
 
-const createProductData = (current: ICurrent): IProductData => {
+export const createProductData = (current: ICurrent): IProductData => {
   const productName = current.name['en-GB'];
   const productDescription = current.description?.['en-GB'] || '';
   const images = current.masterVariant.images?.map((image) => image.url) || [];
@@ -22,7 +22,10 @@ const createProductData = (current: ICurrent): IProductData => {
       ? prices[0].discounted.value.centAmount / 100
       : null;
 
+  const { id } = current;
+
   return {
+    id,
     productName,
     description: productDescription,
     price,

@@ -10,6 +10,7 @@ import login from '@services/login-authorization';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 import createPasswordField from '@utils/create-password-field';
+import createEmailField from '@utils/create-email-field';
 
 export default class LoginView extends View {
   private form = new FormComponent({});
