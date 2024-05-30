@@ -5,6 +5,7 @@ import { IProductData } from '@models/products';
 import { showErrorMessage } from '@utils/toast-messages';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
+import CatalogFiltersView from './catalog-filters-modal';
 
 export default class CatalogPageView extends View {
   private _pageWrapper = new BaseComponent({});
@@ -18,6 +19,7 @@ export default class CatalogPageView extends View {
     super(attrs);
     this.addWrapper();
     this.addControls();
+    this.addFiltersModal();
     this.addProductList();
   }
 
@@ -46,5 +48,10 @@ export default class CatalogPageView extends View {
   addControls() {
     const controlsBlock = new CatalogControls();
     this._pageWrapper.node.appendChild(controlsBlock.htmlElement);
+  }
+
+  addFiltersModal() {
+    const filtersModal = new CatalogFiltersView();
+    this.appendChild(filtersModal);
   }
 }

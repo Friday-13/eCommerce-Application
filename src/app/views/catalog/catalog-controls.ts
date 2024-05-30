@@ -20,6 +20,8 @@ export default class CatalogControls extends View {
 
   addFilterButton() {
     this._filterBtn = createIconControl('filter_list');
+    this._filterBtn.node.setAttribute('data-target', 'modal-filter');
+    this._filterBtn.addClass('modal-trigger');
     this.appendChild(this._filterBtn);
   }
 
