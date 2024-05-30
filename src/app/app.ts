@@ -5,6 +5,7 @@ import HeaderView from '@views/header/header';
 import LoginView from '@views/login/login-page';
 import MainView from '@views/main-view';
 import MainPageView from '@views/main/main-page';
+import ProductPageView from '@views/product/product-page';
 import RegistrationView from '@views/registration/registration-page';
 
 class App {
@@ -59,10 +60,13 @@ class App {
       this.currentPage = null;
     }
 
+    const productId = 'c5d24020-3337-4860-8cce-d12959e4d5be';
+
     switch (window.location.hash) {
       case '#main':
         this.hideFooterHeader = false;
-        this.mainView.page = new MainPageView();
+        // this.mainView.page = new MainPageView();
+        this.mainView.page = new ProductPageView(productId);
         break;
       case '#registration':
         if (isPageAccessable('none-authorized')) {
