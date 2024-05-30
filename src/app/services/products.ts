@@ -20,14 +20,17 @@ const getProducts = (
 ) => {
   apiRoot
     .productProjections()
+    .search()
     .get({
       queryArgs: {
         limit,
+        // filter: 'variants.price.centAmount:range (9000 to 20000)'
       },
     })
     .execute()
     .then((response) => {
       const { results } = response.body;
+      console.log(results);
       const products = parseProductProjectionResults(results);
       sucessCallback(products);
     })
