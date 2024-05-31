@@ -62,7 +62,7 @@ class App {
       this.currentPage = null;
     }
 
-    const productId = 'c5d24020-3337-4860-8cce-d12959e4d5be';
+    const productId = 'f305c4c8-9993-420a-a59d-4937e994c3da';
 
     switch (window.location.hash) {
       case '#main':
