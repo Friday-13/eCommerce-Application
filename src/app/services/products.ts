@@ -25,13 +25,21 @@ const getProducts = (
       queryArgs: {
         limit,
         // filter: 'variants.price.centAmount:range (9000 to 20000)'
+        // filter: 'variants.price.centAmount:range (9000 to 20000)'
+        // facet: 'variants.price.centAmount:range (0 to 100000)',
+        // facet: 'variants.attributes.piece-count:range (0 to 100000)',
       },
     })
     .execute()
     .then((response) => {
       const { results } = response.body;
       console.log(results);
+      console.log(response.body.facets);
       const products = parseProductProjectionResults(results);
+      console.log(Math.min(...products.map((p) => p.price)));
+      console.log(Math.max(...products.map((p) => p.price)));
+      console.log(Math.min(...products.map((p) => p.pieceCount)));
+      console.log(Math.max(...products.map((p) => p.pieceCount)));
       sucessCallback(products);
     })
     .catch((error) => {
