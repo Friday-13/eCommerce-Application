@@ -7,9 +7,6 @@ import View from '@views/view';
 import brendDisney from '@assets/brend/disney.png';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import ImageSliderProducts from './slider';
 
 export default class ProductPageView extends View {

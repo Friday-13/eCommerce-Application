@@ -15,15 +15,18 @@
   }
 }
 
-/*сетка*/
+/* сетка */
 
+/* общий блок */
 .product-details {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-columns: minmax(250px, 900px) 2fr;
+  grid-template-rows: minmax(200px, auto) auto;
   gap: 10px;
+  padding: 20px;
 }
 
+/* блок со слайдером */
 .gallery-wrapper {
   grid-column: 1 / 2;
   grid-row: 1;
@@ -40,27 +43,49 @@
   grid-row: 2 / 3;
 }
 
-/*сетка*/
+/* сетка */
 
-.swiper-wrapper {
-  width: 100%;
-  height: auto;
+/* слайдер */
+
+.swiper {
+  width: 900px;
+  height: 600px;
 }
 
 .swiper-slide {
+  overflow: hidden;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: auto;
+  justify-content: center;
+  border-radius: 20px;
 }
 
 .swiper-slide img {
   display: block;
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px; /* Пример закругленных углов */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  /* max-width: 100%; */
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
 }
+
+@media (width <= 768px) {
+  .swiper-slide img {
+    height: auto;
+  }
+}
+
+@media (width <= 480px) {
+  .swiper-slide img {
+    height: 300px;
+  }
+}
+
+.swiper-pagination {
+  bottom: 5px;
+}
+
+/* слайдер */
 
 .product-titles {
   display: flex;
@@ -100,28 +125,4 @@
 .brend-image {
   max-width: 7.1875rem;
   max-height: 3.75rem;
-}
-
-.swiper-slide .swiper-slide-active {
-  display: flex;
-  align-items: center; /* Центрирует содержимое по вертикали */
-  justify-content: center;
-  height: 100%;
-}
-
-.swiper-slide img {
-  max-height: 900px;
-  object-fit: contain;
-}
-
-@media (max-width: 768px) {
-  .swiper-slide img {
-    height: auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .swiper-slide img {
-    height: 300px;
-  }
 }
