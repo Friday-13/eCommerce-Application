@@ -6,13 +6,16 @@ import { showErrorMessage } from '@utils/toast-messages';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
+import ChipsBlockView from './chips-block';
 
 export default class CatalogPageView extends View {
   private _pageWrapper = new BaseComponent({});
 
   private _productList = new ProductListView();
 
-  private _filtersModal = new CatalogFiltersView();
+  private _filtersModal = new CatalogFiltersView(() => {});
+
+  private _chipsBlock = new ChipsBlockView();
 
   constructor() {
     const attrs: IAttributes = {
@@ -21,6 +24,7 @@ export default class CatalogPageView extends View {
     super(attrs);
     this.addWrapper();
     this.addControls();
+    this.addChipsBlock();
     this.addFiltersModal();
     this.addProductList();
   }
@@ -52,6 +56,11 @@ export default class CatalogPageView extends View {
     this._pageWrapper.node.appendChild(controlsBlock.htmlElement);
   }
 
+  addChipsBlock() {
+    this._chipsBlock = new ChipsBlockView();
+    this._pageWrapper.node.appendChild(this._chipsBlock.htmlElement);
+  }
+
   addFiltersModal() {
     this._filtersModal = new CatalogFiltersView(
       this.updateProductList.bind(this)
@@ -61,7 +70,15 @@ export default class CatalogPageView extends View {
 
   updateProductList() {
     this._productList.removeContent();
+    this._chipsBlock.clearChips();
     const { filters } = this._filtersModal;
-    getProducts(this.setProductList.bind(this), showErrorMessage, 100, filters);
+    const filtersRequest = filters.map((filter) => filter.filter);
+    filters.forEach((filter) => this._chipsBlock.addChip(filter.description));
+    getProducts(
+      this.setProductList.bind(this),
+      showErrorMessage,
+      100,
+      filtersRequest
+    );
   }
 }

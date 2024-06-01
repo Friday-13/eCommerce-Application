@@ -8,7 +8,12 @@ import {
   IButtonWithIconAttributes,
 } from '@components/button-with-icons';
 import createPairRangeField from '@utils/create-pair-range-field';
-import { filterAttributeRange, filterPriceRange } from '@utils/query-args';
+import {
+  filterAttributeRange,
+  filterPriceRange,
+  isRangeFilterActual,
+  prepareRangeFilter,
+} from '@utils/query-args';
 import FormSectionView from '@views/registration/form-section';
 import View from '@views/view';
 import { Modal } from 'materialize-css';
@@ -105,16 +110,20 @@ export default class CatalogFiltersView extends View {
 
   get filters() {
     const filters = [];
-    filters.push(
-      filterPriceRange(this.priceRanges.minValue, this.priceRanges.maxValue)
-    );
-    filters.push(
-      filterAttributeRange(
-        'piece-count',
-        this.pieceCountRanges.minValue,
-        this.pieceCountRanges.maxValue
-      )
-    );
+    if (isRangeFilterActual(this.priceRanges)) {
+      const { preparedMinValue, preparedMaxValue } = prepareRangeFilter(
+        this.priceRanges
+      );
+      filters.push(filterPriceRange(preparedMinValue, preparedMaxValue));
+    }
+    if (isRangeFilterActual(this.pieceCountRanges)) {
+      const { preparedMinValue, preparedMaxValue } = prepareRangeFilter(
+        this.pieceCountRanges
+      );
+      filters.push(
+        filterAttributeRange('piece-count', preparedMinValue, preparedMaxValue)
+      );
+    }
     return filters;
   }
 
