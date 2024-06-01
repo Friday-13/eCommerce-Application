@@ -4,6 +4,7 @@ import {
   IButtonAttributes,
 } from '@components/button-component';
 import createPairRangeField from '@utils/create-pair-range-field';
+import { filterAttributeRange, filterPriceRange } from '@utils/query-args';
 import FormSectionView from '@views/registration/form-section';
 import View from '@views/view';
 import { Modal } from 'materialize-css';
@@ -73,10 +74,18 @@ export default class CatalogFiltersView extends View {
     this._content.appendChild(section);
   }
 
-  // applyFilters() {
-  //   const minPrice = this.priceRanges.minValue;
-  //   const maxPrice = this.priceRanges.maxValue;
-  //   const minPieceCount = this.pieceCountRanges.minValue;
-  //   const maxPieceCount = this.pieceCountRanges.maxValue;
-  // }
+  get filters() {
+    const filters = [];
+    filters.push(
+      filterPriceRange(this.priceRanges.minValue, this.priceRanges.maxValue)
+    );
+    filters.push(
+      filterAttributeRange(
+        'piece-count',
+        this.pieceCountRanges.minValue,
+        this.pieceCountRanges.maxValue
+      )
+    );
+    return filters;
+  }
 }

@@ -3,7 +3,6 @@ import View from '@views/view';
 import getProducts from '@services/products';
 import { IProductData } from '@models/products';
 import { showErrorMessage } from '@utils/toast-messages';
-import { filterPriceRange } from '@utils/query-args';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
@@ -61,14 +60,8 @@ export default class CatalogPageView extends View {
   }
 
   updateProductList() {
-    const filters = [];
-    filters.push(
-      filterPriceRange(
-        this._filtersModal.priceRanges.minValue,
-        this._filtersModal.priceRanges.maxValue
-      )
-    );
     this._productList.removeContent();
+    const { filters } = this._filtersModal;
     getProducts(this.setProductList.bind(this), showErrorMessage, 100, filters);
   }
 }

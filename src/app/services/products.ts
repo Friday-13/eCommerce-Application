@@ -48,10 +48,10 @@ const getProducts = (
       // console.log(results);
       // console.log(response.body.facets);
       const products = parseProductProjectionResults(results);
-      console.log(Math.min(...products.map((p) => p.price)));
-      console.log(Math.max(...products.map((p) => p.price)));
-      console.log(Math.min(...products.map((p) => p.discountedPrice)));
-      console.log(Math.max(...products.map((p) => p.discountedPrice)));
+      // console.log(Math.min(...products.map((p) => p.price)));
+      // console.log(Math.max(...products.map((p) => p.price)));
+      // console.log(Math.min(...products.map((p) => p.discountedPrice)));
+      // console.log(Math.max(...products.map((p) => p.discountedPrice)));
       // console.log(Math.min(...products.map((p) => p.pieceCount)));
       // console.log(Math.max(...products.map((p) => p.pieceCount)));
       // products.forEach((product) => console.log(`${product.productName}->${product.pieceCount}`));
