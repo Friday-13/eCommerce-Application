@@ -16,13 +16,24 @@ function parseProductProjectionResults(
 const getProducts = (
   sucessCallback: (products: Array<IProductData>) => void,
   errorCallback: (message: string) => void,
-  limit: number = 30
+  limit: number = 30,
+  filterQuery: Array<string> = []
 ) => {
   apiRoot
     .productProjections()
+    .search()
     .get({
       queryArgs: {
         limit,
+        'filter.query': filterQuery,
+        sort: [
+          // 'name.en-gb asc',
+          // 'price asc',
+          'price desc',
+          // 'variants.attributes.piece-count asc'
+        ],
+        // facet: 'variants.price.centAmount:range (0 to 100000)',
+        // facet: 'variants.attributes.piece-count:range (0 to 100000)',
       },
     })
     .execute()
