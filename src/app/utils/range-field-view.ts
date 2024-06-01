@@ -2,7 +2,7 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import { IRangeAttributes, RangeComponent } from '@components/range-component';
 import View from '@views/view';
 import { Range } from 'materialize-css';
-import { initMaterializeComponent } from './materilalize-js-init';
+import initMaterializeComponent from './materilalize-js-init';
 
 export interface IRangeField {
   fieldAttrs: IAttributes;

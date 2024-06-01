@@ -15,17 +15,19 @@ export default class CatalogFiltersView extends View {
 
   pieceCountRanges = createPairRangeField(0, 1);
 
-  constructor() {
+  _modal: Modal;
+
+  constructor(applyCallback: () => void) {
     const attrs: IAttributes = {
       id: 'modal-filter',
       classList: 'modal',
     };
     super(attrs);
-    this.addContent();
-    Modal.init(this.htmlElement);
+    this.addContent(applyCallback);
+    this._modal = Modal.init(this.htmlElement);
   }
 
-  addContent() {
+  addContent(applyCallback: () => void) {
     const attrs: IAttributes = {
       classList: 'modal-content',
     };
@@ -36,14 +38,14 @@ export default class CatalogFiltersView extends View {
     );
     this.addPriceFilter();
     this.addPieceCountFilter();
-    this.addSubmitButton();
+    this.addSubmitButton(applyCallback);
   }
 
   addPriceFilter() {
     const section = new FormSectionView('Price Range');
     this._content.appendChild(section);
-    const priceRanges = createPairRangeField(5, 500);
-    section.appendChild(priceRanges);
+    this.priceRanges = createPairRangeField(5, 500);
+    section.appendChild(this.priceRanges);
   }
 
   addPieceCountFilter() {
@@ -53,12 +55,13 @@ export default class CatalogFiltersView extends View {
     section.appendChild(this.pieceCountRanges);
   }
 
-  addSubmitButton() {
+  addSubmitButton(applyCallback: () => void) {
     const section = new FormSectionView();
     const attrs: IButtonAttributes = {
       content: 'Apply',
       onClick: () => {
-        // this.applyFilters();
+        applyCallback();
+        this._modal.close();
       },
       type: 'button',
       tag: 'div',

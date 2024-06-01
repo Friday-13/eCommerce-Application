@@ -25,9 +25,17 @@ export default class PairRangeFieldView extends View {
     this.correctMinValue();
   }
 
+  get minValue() {
+    return this.minRangeView.value;
+  }
+
   set maxValue(value: number) {
     this.minRangeView.value = value;
     this.correctMaxValue();
+  }
+
+  get maxValue() {
+    return this.maxRangeView.value;
   }
 
   correctMinValue() {
