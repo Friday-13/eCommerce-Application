@@ -15,7 +15,7 @@
   }
 }
 
-/*сетка*/
+/* сетка */
 
 .product-details {
   display: grid;
@@ -40,7 +40,7 @@
   grid-row: 2 / 3;
 }
 
-/*сетка*/
+/* сетка */
 
 .swiper-wrapper {
   width: 100%;
@@ -49,8 +49,8 @@
 
 .swiper-slide {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: auto;
 }
 
@@ -59,7 +59,7 @@
   max-width: 100%;
   height: auto;
   border-radius: 10px; /* Пример закругленных углов */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
 }
 
 .product-titles {
@@ -114,13 +114,13 @@
   object-fit: contain;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .swiper-slide img {
     height: auto;
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .swiper-slide img {
     height: 300px;
   }
