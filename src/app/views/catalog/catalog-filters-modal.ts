@@ -3,6 +3,10 @@ import {
   ButtonComponent,
   IButtonAttributes,
 } from '@components/button-component';
+import {
+  ButtonWithIconComponent,
+  IButtonWithIconAttributes,
+} from '@components/button-with-icons';
 import createPairRangeField from '@utils/create-pair-range-field';
 import { filterAttributeRange, filterPriceRange } from '@utils/query-args';
 import FormSectionView from '@views/registration/form-section';
@@ -16,7 +20,9 @@ export default class CatalogFiltersView extends View {
 
   pieceCountRanges = createPairRangeField(0, 1);
 
-  _modal: Modal;
+  private _modal: Modal;
+
+  private _buttonSection = new FormSectionView();
 
   constructor(applyCallback: () => void) {
     const attrs: IAttributes = {
@@ -39,7 +45,7 @@ export default class CatalogFiltersView extends View {
     );
     this.addPriceFilter();
     this.addPieceCountFilter();
-    this.addSubmitButton(applyCallback);
+    this.addButtons(applyCallback);
   }
 
   addPriceFilter() {
@@ -56,8 +62,13 @@ export default class CatalogFiltersView extends View {
     section.appendChild(this.pieceCountRanges);
   }
 
+  addButtons(applyCallback: () => void) {
+    this._buttonSection = new FormSectionView();
+    this.addSubmitButton(applyCallback);
+    this.addResetButton(applyCallback);
+  }
+
   addSubmitButton(applyCallback: () => void) {
-    const section = new FormSectionView();
     const attrs: IButtonAttributes = {
       content: 'Apply',
       onClick: () => {
@@ -70,8 +81,26 @@ export default class CatalogFiltersView extends View {
     const applyBtn = new ButtonComponent(attrs);
     applyBtn.addClass('red');
     applyBtn.addClass('lighten-2');
-    section.appendChild(applyBtn);
-    this._content.appendChild(section);
+    this._buttonSection.appendChild(applyBtn);
+    this._content.appendChild(this._buttonSection);
+  }
+
+  addResetButton(applyCallback: () => void) {
+    const attrs: IButtonWithIconAttributes = {
+      onClick: () => {
+        this.resetFilters();
+        applyCallback();
+        this._modal.close();
+      },
+      type: 'button',
+      tag: 'div',
+      icon: 'refresh',
+    };
+    const applyBtn = new ButtonWithIconComponent(attrs);
+    applyBtn.addClass('red');
+    applyBtn.addClass('lighten-2');
+    this._buttonSection.appendChild(applyBtn);
+    this._content.appendChild(this._buttonSection);
   }
 
   get filters() {
@@ -87,5 +116,10 @@ export default class CatalogFiltersView extends View {
       )
     );
     return filters;
+  }
+
+  resetFilters() {
+    this.priceRanges.resetValues();
+    this.pieceCountRanges.resetValues();
   }
 }

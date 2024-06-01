@@ -50,10 +50,10 @@ export class RangeFieldView extends View {
   }
 
   get min() {
-    return this.rangeInput.min;
+    return Number(this.rangeInput.min);
   }
 
   get max() {
-    return this.rangeInput.max;
+    return Number(this.rangeInput.max);
   }
 }

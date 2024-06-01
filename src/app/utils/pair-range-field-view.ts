@@ -30,12 +30,20 @@ export default class PairRangeFieldView extends View {
   }
 
   set maxValue(value: number) {
-    this.minRangeView.value = value;
+    this.maxRangeView.value = value;
     this.correctMaxValue();
   }
 
   get maxValue() {
     return this.maxRangeView.value;
+  }
+
+  get minLimit() {
+    return this.minRangeView.min;
+  }
+
+  get maxLimit() {
+    return this.maxRangeView.max;
   }
 
   correctMinValue() {
@@ -57,5 +65,10 @@ export default class PairRangeFieldView extends View {
     this.minRangeView.htmlElement.onchange = () => {
       this.correctMinValue();
     };
+  }
+
+  resetValues() {
+    this.minValue = this.minLimit;
+    this.maxValue = this.maxLimit;
   }
 }
