@@ -92,6 +92,10 @@
   gap: 10px;
   align-items: center;
   padding: 0.5rem 5rem;
+
+  &:not(:last-child) {
+    margin-bottom: 40px;
+  }
 }
 
 .product-description {
@@ -125,4 +129,23 @@
 .brend-image {
   max-width: 7.1875rem;
   max-height: 3.75rem;
+}
+
+.product-prices {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.product-price {
+  font-size: 1.2em;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.product-price-discount {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #e60023;
 }
