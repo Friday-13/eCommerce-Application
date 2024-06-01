@@ -7,9 +7,6 @@ import View from '@views/view';
 import brendDisney from '@assets/brend/disney.png';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import ImageSliderProducts from './slider';
 
 export default class ProductPageView extends View {
@@ -22,6 +19,8 @@ export default class ProductPageView extends View {
   private productDescriptionContainer!: BaseComponent;
 
   private productDescription!: BaseComponent;
+
+  private pricesContainer!: BaseComponent;
 
   private productId: string;
 
@@ -90,6 +89,7 @@ export default class ProductPageView extends View {
     detailsProduct.appendChild(this.productContainer);
 
     this.initializeProductTitle(this.productContainer);
+    this.initializeProductPrice(this.productContainer);
   }
 
   private setupGallerySlider(detailsProduct: BaseComponent) {
@@ -157,6 +157,41 @@ export default class ProductPageView extends View {
     );
 
     detailsProduct.appendChild(this.titlesContainer);
+  }
+
+  private initializeProductPrice(detailsProduct: BaseComponent) {
+    const pricesProductAttrs: IAttributes = {
+      classList: ['product-prices'],
+    };
+    this.pricesContainer = new BaseComponent(pricesProductAttrs);
+
+    const productPriceAttrs: IAttributes = {
+      classList: ['product-price'],
+      content: '',
+    };
+    const productPrice = new BaseComponent(productPriceAttrs);
+
+    const productDiscountPriceAttrs: IAttributes = {
+      classList: ['product-price-discount'],
+      content: '',
+    };
+    const productDiscountPrice = new BaseComponent(productDiscountPriceAttrs);
+
+    this.pricesContainer.appendChild(productPrice);
+    this.pricesContainer.appendChild(productDiscountPrice);
+
+    getProductById(
+      this.productId,
+      (productData: IProductData) => {
+        productPrice.textContent = `$ ${productData.price}`;
+        productDiscountPrice.textContent = `$ ${productData.discountedPrice}`;
+      },
+      (errorMsg: string) => {
+        showErrorMessage(`Error fetching product details: ${errorMsg}`);
+      }
+    );
+
+    detailsProduct.appendChild(this.pricesContainer);
   }
 
   private initializeProductDescription(detailsProduct: BaseComponent) {
