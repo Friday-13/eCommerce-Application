@@ -5,9 +5,9 @@ import View from '@views/view';
 import styles from './catalog-controls-style.module.scss';
 
 export default class CatalogControls extends View {
-  private _filterBtn = new ButtonWithIconComponent({});
+  filterBtn = new ButtonWithIconComponent({});
 
-  private _sortBtn = new ButtonWithIconComponent({});
+  sortBtn = new ButtonWithIconComponent({});
 
   constructor() {
     const attrs: IAttributes = {
@@ -19,14 +19,16 @@ export default class CatalogControls extends View {
   }
 
   addFilterButton() {
-    this._filterBtn = createIconControl('filter_list');
-    this._filterBtn.node.setAttribute('data-target', 'modal-filter');
-    this._filterBtn.addClass('modal-trigger');
-    this.appendChild(this._filterBtn);
+    this.filterBtn = createIconControl('filter_list');
+    this.filterBtn.node.setAttribute('data-target', 'modal-filter');
+    this.filterBtn.addClass('modal-trigger');
+    this.appendChild(this.filterBtn);
   }
 
   addSortButton() {
-    this._sortBtn = createIconControl('sort');
-    this.appendChild(this._sortBtn);
+    this.sortBtn = createIconControl('sort');
+    this.sortBtn.node.setAttribute('data-target', 'sort-dropdown');
+    this.sortBtn.addClass('dropdown-trigger');
+    this.appendChild(this.sortBtn);
   }
 }
