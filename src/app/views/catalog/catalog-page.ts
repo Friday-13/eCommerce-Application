@@ -6,6 +6,7 @@ import { showErrorMessage } from '@utils/toast-messages';
 import SortDropdownView from '@views/catalog/sort-dropdown';
 import initMaterializeComponent from '@utils/materilalize-js-init';
 import { Dropdown } from 'materialize-css';
+import getCategories from '@services/categories';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
@@ -39,6 +40,7 @@ export default class CatalogPageView extends View {
     this.addSortDropDown();
     this.addFiltersModal();
     this.addProductList();
+    this.addCategoryList();
   }
 
   addWrapper() {
@@ -73,6 +75,10 @@ export default class CatalogPageView extends View {
   addChipsBlock() {
     this._chipsBlock = new ChipsBlockView();
     this._pageWrapper.node.appendChild(this._chipsBlock.htmlElement);
+  }
+
+  addCategoryList() {
+    getCategories(this._categoryDropDown.removeChild, showErrorMessage);
   }
 
   addSortDropDown() {
