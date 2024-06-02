@@ -24,7 +24,8 @@
   grid-template-rows: minmax(200px, auto) auto;
   gap: 10px;
   padding: 20px;
-  @media (max-width: 1024px) {
+
+  @media (width <= 1024px) {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
   }
@@ -35,7 +36,8 @@
   grid-column: 1 / 2;
   grid-row: 1;
   min-width: 0;
-  @media (max-width: 1024px) {
+
+  @media (width <= 1024px) {
     grid-column: 1 / 2;
   }
 }
@@ -44,7 +46,8 @@
   grid-column: 2 / 3;
   grid-row: 1;
   padding: 20px;
-  @media (max-width: 1024px) {
+
+  @media (width <= 1024px) {
     grid-column: 1 / 2; /* Занимает всю ширину */
     grid-row: 2; /* Перемещаем под слайдер */
   }
@@ -53,7 +56,8 @@
 .product-description-container {
   grid-column: 1 / 3;
   grid-row: 2 / 3;
-  @media (max-width: 1024px) {
+
+  @media (width <= 1024px) {
     grid-column: 1 / 2; /* Занимает всю ширину */
     grid-row: 3; /* Перемещаем под блок с ценой и названием */
   }
@@ -64,10 +68,10 @@
 /* слайдер */
 
 .swiper {
-  max-width: 900px;
-  width: 100%;
-  height: auto;
   aspect-ratio: 3 / 2;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
 }
 
 .swiper-slide {
@@ -103,9 +107,10 @@
 .swiper-button-prev,
 .swiper-button-next {
   --swiper-navigation-size: 34px;
+
   height: 24px;
   font-weight: 800;
-  color: rgb(2, 142, 142);
+  color: rgb(2 142 142);
   transition: all 0.4s ease 0s;
 
   @media (any-hover: hover) {
@@ -116,8 +121,9 @@
 }
 
 .swiper-pagination {
-  bottom: 5px;
   --swiper-theme-color: #0ff;
+
+  bottom: 5px;
 }
 
 /* слайдер */
