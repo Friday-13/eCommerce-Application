@@ -45,6 +45,8 @@ export default class ProductPageView extends View {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const swiper = new Swiper('.swiper', {
       modules: [Navigation, Pagination],
+      slidesPerView: 'auto',
+      watchOverflow: true,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',

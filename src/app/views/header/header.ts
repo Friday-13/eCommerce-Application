@@ -5,9 +5,14 @@ import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
 import { customerClear, isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
+import { IButtonAttributes } from '@components/button-component';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
+
+  private navContainer!: BaseComponent;
+
+  private menuContainerList!: BaseComponent;
 
   private menuListUl = new BaseComponent({});
 
@@ -34,7 +39,7 @@ export default class HeaderView extends View {
     const divAttrs: IAttributes = {
       classList: ['nav-wrapper'],
     };
-    const navContainer = new BaseComponent(divAttrs);
+    this.navContainer = new BaseComponent(divAttrs);
 
     const logoImgAttrs: IImageAttributes = {
       src: logoUrl,
@@ -48,18 +53,25 @@ export default class HeaderView extends View {
       Router.navigateTo('#main');
     });
 
+    const menuContainerListAttrs: IAttributes = {
+      classList: ['menu-body'],
+    };
+    this.menuContainerList = new BaseComponent(menuContainerListAttrs);
+
     const menuListAttrs: IAttributes = {
       tag: 'ul',
       id: 'nav-mobile',
       classList: ['right', 'nav-list-button'],
     };
     this.menuListUl = new BaseComponent(menuListAttrs);
+    this.menuContainerList.appendChild(this.menuListUl);
     this.updateMenu();
 
-    navContainer.appendChild(logoImg);
-    navContainer.appendChild(this.menuListUl);
-    nav.appendChild(navContainer);
+    this.navContainer.appendChild(logoImg);
+    this.navContainer.appendChild(this.menuContainerList);
+    nav.appendChild(this.navContainer);
     this.appendChild(nav);
+    this.initializeBurgerMenu();
   }
 
   public updateMenu() {
@@ -116,5 +128,34 @@ export default class HeaderView extends View {
       );
     }
     menuItems.forEach((item) => this.menuListUl.appendChild(item));
+  }
+
+  public initializeBurgerMenu() {
+    const closeButtonBurgerAttrs: IButtonAttributes = {
+      classList: ['button-close-burger'],
+    };
+    const closeButtonBurger = new BaseComponent(closeButtonBurgerAttrs);
+    this.navContainer.appendChild(closeButtonBurger);
+
+    closeButtonBurger.node.addEventListener('click', (event) => {
+      event.preventDefault();
+      document.body.classList.toggle('lock');
+      closeButtonBurger.node.classList.toggle('menu-active');
+      this.menuContainerList.node.classList.toggle('menu-active');
+    });
+
+    const topBarAttrs: IAttributes = {
+      tag: 'span',
+      classList: ['icon-menu-top'],
+    };
+    const topBarBurger = new BaseComponent(topBarAttrs);
+    closeButtonBurger.appendChild(topBarBurger);
+
+    const bottomBarAttrs: IAttributes = {
+      tag: 'span',
+      classList: ['icon-menu-bottom'],
+    };
+    const bottomBarBurger = new BaseComponent(bottomBarAttrs);
+    closeButtonBurger.appendChild(bottomBarBurger);
   }
 }
