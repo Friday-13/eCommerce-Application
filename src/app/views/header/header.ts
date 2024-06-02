@@ -62,7 +62,7 @@ export default class HeaderView extends View {
     this.appendChild(nav);
   }
 
-  updateMenu() {
+  public updateMenu() {
     this.menuListUl.node.innerHTML = '';
     const createMenuItem = (
       href: string,
@@ -71,14 +71,16 @@ export default class HeaderView extends View {
     ): BaseComponent => {
       const itemAttrs: IAttributes = {
         tag: 'li',
-        classList: ['list-item-nav'],
+        classList: [
+          'list-item-nav waves-effect waves-light btn no-text-transform',
+        ],
       };
       const item = new BaseComponent(itemAttrs);
 
       const linkAttrs: IAnchorAttrs = {
         href,
         content,
-        classList: ['waves-effect waves-light no-text-transform'],
+        // classList: ['hgh'],
       };
       const link = new AnchorComponent(linkAttrs);
 
