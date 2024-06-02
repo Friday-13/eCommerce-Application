@@ -16,13 +16,18 @@ function parseProductProjectionResults(
 const getProducts = (
   sucessCallback: (products: Array<IProductData>) => void,
   errorCallback: (message: string) => void,
-  limit: number = 30
+  limit: number = 30,
+  filterQuery: Array<string> = [],
+  sort: Array<string> = []
 ) => {
   apiRoot
     .productProjections()
+    .search()
     .get({
       queryArgs: {
         limit,
+        'filter.query': filterQuery,
+        sort,
       },
     })
     .execute()

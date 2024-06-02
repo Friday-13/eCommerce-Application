@@ -5,9 +5,7 @@ import ProductCardView from './product-card';
 
 export default class ProductListView extends View {
   constructor() {
-    const attrs: IAttributes = {
-      classList: 'col s12 m10 offset-m1',
-    };
+    const attrs: IAttributes = {};
     super(attrs);
   }
 
