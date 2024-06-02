@@ -10,6 +10,7 @@ import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
 import ChipsBlockView from './chips-block';
+import CategoryDropDown from './category-drop-down';
 
 export default class CatalogPageView extends View {
   private _pageWrapper = new BaseComponent({});
@@ -17,6 +18,8 @@ export default class CatalogPageView extends View {
   private _productList = new ProductListView();
 
   private _controlsBlock = new CatalogControls(() => {});
+
+  private _categoryDropDown = new CategoryDropDown(() => {});
 
   private _sortDropDown = new SortDropdownView(() => {});
 
@@ -32,6 +35,7 @@ export default class CatalogPageView extends View {
     this.addWrapper();
     this.addControls();
     this.addChipsBlock();
+    this.addCategoriesDropDown();
     this.addSortDropDown();
     this.addFiltersModal();
     this.addProductList();
@@ -76,14 +80,24 @@ export default class CatalogPageView extends View {
       this.updateProductList.bind(this)
     );
     this.htmlElement.appendChild(this._sortDropDown.htmlElement);
-    initMaterializeComponent('.dropdown-trigger', this.htmlElement, () => {
+    initMaterializeComponent('#sort-btn', this.htmlElement, () => {
       Dropdown.init(this._controlsBlock.sortBtn.node, {
         constrainWidth: false,
       });
     });
   }
 
-  // addCategoriesDropDown() {}
+  addCategoriesDropDown() {
+    this._categoryDropDown = new CategoryDropDown(
+      this.updateProductList.bind(this)
+    );
+    this.htmlElement.appendChild(this._categoryDropDown.htmlElement);
+    initMaterializeComponent('#category-btn', this.htmlElement, () => {
+      Dropdown.init(this._controlsBlock.categoryBtn.node, {
+        constrainWidth: false,
+      });
+    });
+  }
 
   addFiltersModal() {
     this._filtersModal = new CatalogFiltersView(
