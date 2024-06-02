@@ -112,6 +112,7 @@ export default class ProductPageView extends View {
     );
     document.body.appendChild(modalSlider.htmlElement);
     modalSlider.open();
+    document.body.classList.add('lock');
   }
 
   private setupGallerySlider(detailsProduct: BaseComponent) {

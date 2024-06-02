@@ -113,6 +113,7 @@ export default class ModalImageSliderProducts extends View {
         !target.closest('.swiper-pagination')
       ) {
         this.close();
+        document.body.classList.remove('lock');
         document.body.removeChild(this.htmlElement);
       }
     });
