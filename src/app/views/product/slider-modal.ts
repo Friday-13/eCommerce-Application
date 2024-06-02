@@ -105,9 +105,15 @@ export default class ModalImageSliderProducts extends View {
       document.body.removeChild(this.htmlElement);
     });
     this.swiperSliderModal.node.addEventListener('click', (event) => {
-      const target = event.target as Node;
-      if (target && !this.containerSlideModal.node.contains(target)) {
-        // this.close();
+      const target = event.target as HTMLElement;
+      if (
+        !target.closest('.slide-image') &&
+        !target.closest('.swiper-button-next') &&
+        !target.closest('.swiper-button-prev') &&
+        !target.closest('.swiper-pagination')
+      ) {
+        this.close();
+        document.body.removeChild(this.htmlElement);
       }
     });
   }

@@ -256,6 +256,10 @@
   }
 }
 
+.swiper-pagination.pagination-modal {
+  --swiper-theme-color: #00ffff;
+}
+
 .wrapper-modal {
   position: relative;
 }
@@ -264,14 +268,38 @@
   cursor: pointer;
   position: absolute;
   z-index: 10;
-  top: 4px;
-  right: 20%;
-  padding: 5px 10px;
+  top: 1vh;
+  right: 19vw;
   font-size: 54px;
+  font-weight: 700;
+  @media (width <= 900px) {
+    right: 1vw;
+  }
+  @media (width <= 768px) {
+    top: -3vh;
+    right: 35vw;
+  }
+  @media (width <= 615px) {
+    top: -3vh;
+    right: 45vw;
+  }
+  @media (width <= 476px) {
+    top: -3vh;
+    right: 60vw;
+  }
+  @media (width <= 375px) {
+    top: -3vh;
+    right: 70vw;
+  }
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+  transform-origin: 50% 50%;
 
   @media (any-hover: hover) {
     &:hover {
       color: rgb(182 43 43);
+      transform: scale(1.2);
     }
   }
 }
