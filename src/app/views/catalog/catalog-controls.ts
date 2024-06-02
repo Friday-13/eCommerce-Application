@@ -1,10 +1,10 @@
-import { BaseComponent, IAttributes } from '@components/base-component';
+import { IAttributes } from '@components/base-component';
 import { ButtonWithIconComponent } from '@components/button-with-icons';
 import createIconControl from '@utils/create-icon-controls';
 import View from '@views/view';
-import { IInputAttributes, InputComponent } from '@components/input-component';
-import { ILabelAttriubutes, LabelComponent } from '@components/label-component';
+import { InputComponent } from '@components/input-component';
 import styles from './catalog-controls-style.module.scss';
+import SearchInputView from './search-input';
 
 export default class CatalogControls extends View {
   filterBtn = new ButtonWithIconComponent({});
@@ -24,58 +24,9 @@ export default class CatalogControls extends View {
   }
 
   addSearchString(applySearch: () => void) {
-    const formWrapper = new BaseComponent({
-      classList: ['nav-wrapper', styles.narrowWrapper],
-    });
-    const form = new BaseComponent({ tag: 'form' });
-    const searchContainer = new BaseComponent({
-      classList: ['input-field', styles.narrowInput],
-    });
-
-    const inputAttrs: IInputAttributes = {
-      id: 'search',
-      type: 'search',
-    };
-    this.searchInput = new InputComponent(inputAttrs);
-    const labelAttrs: ILabelAttriubutes = {
-      classList: 'label-icon',
-      for: 'search',
-    };
-    const label = new LabelComponent(labelAttrs);
-
-    const searchIcon = new BaseComponent({
-      classList: ['material-icons', styles.searchButton],
-      tag: 'i',
-      content: 'search',
-    });
-
-    const closeIcon = new BaseComponent({
-      classList: ['material-icons'],
-      tag: 'i',
-      content: 'close',
-    });
-
-    this.appendChild(formWrapper);
-    formWrapper.appendChild(form);
-    form.appendChild(searchContainer);
-    searchContainer.appendChild(this.searchInput);
-    searchContainer.appendChild(label);
-    label.appendChild(searchIcon);
-    searchContainer.appendChild(closeIcon);
-
-    form.node.addEventListener('submit', (event) => {
-      event.preventDefault();
-      applySearch();
-    });
-
-    searchIcon.node.onclick = () => {
-      applySearch();
-    };
-
-    closeIcon.node.onclick = () => {
-      this.searchInput.clear();
-      applySearch();
-    };
+    const searchString = new SearchInputView(applySearch);
+    this.searchInput = searchString.searchInput;
+    this.appendChild(searchString);
   }
 
   addFilterButton() {
