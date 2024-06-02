@@ -49,12 +49,19 @@ export default class CatalogControls extends View {
       content: 'search',
     });
 
+    const closeIcon = new BaseComponent({
+      classList: ['material-icons'],
+      tag: 'i',
+      content: 'close',
+    });
+
     this.appendChild(formWrapper);
     formWrapper.appendChild(form);
     form.appendChild(searchContainer);
     searchContainer.appendChild(this.searchInput);
     searchContainer.appendChild(label);
     label.appendChild(searchIcon);
+    searchContainer.appendChild(closeIcon);
 
     form.node.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -62,6 +69,11 @@ export default class CatalogControls extends View {
     });
 
     searchIcon.node.onclick = () => {
+      applySearch();
+    };
+
+    closeIcon.node.onclick = () => {
+      this.searchInput.clear();
       applySearch();
     };
   }

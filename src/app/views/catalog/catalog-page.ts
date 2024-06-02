@@ -16,7 +16,7 @@ export default class CatalogPageView extends View {
 
   private _productList = new ProductListView();
 
-  private _controlsBlock = new CatalogControls();
+  private _controlsBlock = new CatalogControls(() => {});
 
   private _sortDropDown = new SortDropdownView(() => {});
 
