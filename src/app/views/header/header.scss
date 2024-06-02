@@ -28,8 +28,8 @@ nav {
 
 .list-item-nav {
   background-color: #c18183;
+  border: 2px solid #fff;
   box-shadow: 0 4px 8px rgb(0 0 0 / 60%);
-  border: 2px solid #ffffff;
   transition:
     background-color 0.4s ease,
     transform 0.2s ease,
@@ -44,6 +44,7 @@ nav {
     &:hover {
       background-color: #855a5b;
       border: 2px solid #cd4646;
+
       a {
         background-color: #855a5b;
       }
