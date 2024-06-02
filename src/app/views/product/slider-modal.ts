@@ -10,6 +10,8 @@ export default class ModalImageSliderProducts extends View {
 
   private containerSlideModal!: BaseComponent;
 
+  private detailsSliderModal!: BaseComponent;
+
   private initialIndex!: number;
 
   constructor(images: string[], initialIndex: number) {
@@ -25,17 +27,17 @@ export default class ModalImageSliderProducts extends View {
 
   public initializeSliderModal(images: string[]) {
     this.initializeSliderDetailsModal(images);
+    this.initializeSliderCloseModal();
     this.initializeSliderNavigationModal();
     this.initializeSliderPaginationModal();
-    this.initializeSliderCloseModal();
   }
 
   private initializeSliderDetailsModal(images: string[]) {
     const detailsSliderAttrs: IAttributes = {
       classList: ['swiper-wrapper wrapper-modal'],
     };
-    const detailsSliderModal = new BaseComponent(detailsSliderAttrs);
-    this.containerModal.appendChild(detailsSliderModal);
+    this.detailsSliderModal = new BaseComponent(detailsSliderAttrs);
+    this.containerModal.appendChild(this.detailsSliderModal);
 
     images.forEach((imageUrl) => {
       const containerSlideAttrs: IAttributes = {
@@ -51,7 +53,7 @@ export default class ModalImageSliderProducts extends View {
       const imgSlide = new ImageComponent(imgSlideAttrs);
       this.containerSlideModal.appendChild(imgSlide);
 
-      detailsSliderModal.appendChild(this.containerSlideModal);
+      this.detailsSliderModal.appendChild(this.containerSlideModal);
     });
   }
 

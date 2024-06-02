@@ -151,7 +151,7 @@
   color: #e60023;
 }
 
-/* блок со вторым слайдером */
+/* блок со вторым слайдером и модалкой */
 .swiper-modal {
   cursor: pointer;
   position: fixed;
@@ -179,10 +179,13 @@
 }
 
 .button-close-modal {
+  cursor: pointer;
   position: absolute;
-  z-index: 2;
-  top: -2%;
-  left: 68%;
-  font-size: 52px;
-  font-weight: 700;
+  z-index: 10;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  font-size: 54px;
+  background: white;
+  border-radius: 50%;
 }
