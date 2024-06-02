@@ -83,6 +83,8 @@ export default class CatalogPageView extends View {
     });
   }
 
+  // addCategoriesDropDown() {}
+
   addFiltersModal() {
     this._filtersModal = new CatalogFiltersView(
       this.updateProductList.bind(this)

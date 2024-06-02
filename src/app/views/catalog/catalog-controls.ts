@@ -18,6 +18,7 @@ export default class CatalogControls extends View {
       classList: ['card', styles.controlPanel],
     };
     super(attrs);
+    this.addCategoryButton();
     this.addSearchString(applySearch);
     this.addFilterButton();
     this.addSortButton();
@@ -39,6 +40,13 @@ export default class CatalogControls extends View {
   addSortButton() {
     this.sortBtn = createIconControl('sort');
     this.sortBtn.node.setAttribute('data-target', 'sort-dropdown');
+    this.sortBtn.addClass('dropdown-trigger');
+    this.appendChild(this.sortBtn);
+  }
+
+  addCategoryButton() {
+    this.sortBtn = createIconControl('apps');
+    this.sortBtn.node.setAttribute('data-target', 'category-dropdown');
     this.sortBtn.addClass('dropdown-trigger');
     this.appendChild(this.sortBtn);
   }
