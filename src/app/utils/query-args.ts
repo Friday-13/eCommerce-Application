@@ -1,3 +1,4 @@
+import { ICategoryTreeNode } from './category-tree';
 import PairRangeFieldView from './pair-range-field-view';
 
 export type TRangeLimit = number | '*';
@@ -81,4 +82,14 @@ export function isRangeFilterActual(filter: PairRangeFieldView) {
   )
     return false;
   return true;
+}
+
+export function categoryFilter(category: ICategoryTreeNode) {
+  const filter = `categories.id: subtree("${category.id}")`;
+  const discription = `Category: ${category.name}`;
+  const filterData: IFilterData = {
+    filter,
+    description: discription,
+  };
+  return filterData;
 }

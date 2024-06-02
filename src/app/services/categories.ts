@@ -1,8 +1,8 @@
-import { parseCategoryQuery } from '@models/category';
+import { ICategory, parseCategoryQuery } from '@models/category';
 import apiRoot from './api-root';
 
 const getCategories = (
-  sucessCallback: () => void,
+  sucessCallback: (categories: Array<ICategory>) => void,
   errorCallback: (message: string) => void
 ) => {
   apiRoot
@@ -17,8 +17,7 @@ const getCategories = (
     .then((response) => {
       const { results } = response.body;
       const categories = parseCategoryQuery(results);
-      console.log(categories);
-      sucessCallback();
+      sucessCallback(categories);
     })
     .catch((error) => {
       errorCallback(error.message);

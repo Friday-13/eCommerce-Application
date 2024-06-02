@@ -7,6 +7,7 @@ import SortDropdownView from '@views/catalog/sort-dropdown';
 import initMaterializeComponent from '@utils/materilalize-js-init';
 import { Dropdown } from 'materialize-css';
 import getCategories from '@services/categories';
+import { categoryFilter } from '@utils/query-args';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
@@ -78,7 +79,10 @@ export default class CatalogPageView extends View {
   }
 
   addCategoryList() {
-    getCategories(this._categoryDropDown.removeChild, showErrorMessage);
+    getCategories(
+      this._categoryDropDown.setCategories.bind(this._categoryDropDown),
+      showErrorMessage
+    );
   }
 
   addSortDropDown() {
@@ -115,12 +119,9 @@ export default class CatalogPageView extends View {
   updateProductList() {
     this._productList.removeContent();
     this._chipsBlock.clearChips();
-    const { filters } = this._filtersModal;
-    const filtersRequest = filters.map((filter) => filter.filter);
-    filters.forEach((filter) => this._chipsBlock.addChip(filter.description));
     const { searchString } = this._controlsBlock;
-
     const { sortBy } = this._sortDropDown;
+    const filtersRequest = this.prepareFilters();
     getProducts(
       this.setProductList.bind(this),
       showErrorMessage,
@@ -129,5 +130,15 @@ export default class CatalogPageView extends View {
       filtersRequest,
       [sortBy]
     );
+  }
+
+  prepareFilters() {
+    const { filters } = this._filtersModal;
+    if (this._categoryDropDown.currentCategory) {
+      filters.push(categoryFilter(this._categoryDropDown.currentCategory));
+    }
+    filters.forEach((filter) => this._chipsBlock.addChip(filter.description));
+    const filtersRequest = filters.map((filter) => filter.filter);
+    return filtersRequest;
   }
 }
