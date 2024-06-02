@@ -3,6 +3,9 @@ import View from '@views/view';
 import getProducts from '@services/products';
 import { IProductData } from '@models/products';
 import { showErrorMessage } from '@utils/toast-messages';
+import SortDropdownView from '@views/catalog/sort-dropdown';
+import initMaterializeComponent from '@utils/materilalize-js-init';
+import { Dropdown } from 'materialize-css';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
@@ -12,6 +15,10 @@ export default class CatalogPageView extends View {
   private _pageWrapper = new BaseComponent({});
 
   private _productList = new ProductListView();
+
+  private _controlsBlock = new CatalogControls();
+
+  private _sortDropDown = new SortDropdownView(() => {});
 
   private _filtersModal = new CatalogFiltersView(() => {});
 
@@ -25,6 +32,7 @@ export default class CatalogPageView extends View {
     this.addWrapper();
     this.addControls();
     this.addChipsBlock();
+    this.addSortDropDown();
     this.addFiltersModal();
     this.addProductList();
   }
@@ -52,13 +60,25 @@ export default class CatalogPageView extends View {
   }
 
   addControls() {
-    const controlsBlock = new CatalogControls();
-    this._pageWrapper.node.appendChild(controlsBlock.htmlElement);
+    this._controlsBlock = new CatalogControls();
+    this._pageWrapper.node.appendChild(this._controlsBlock.htmlElement);
   }
 
   addChipsBlock() {
     this._chipsBlock = new ChipsBlockView();
     this._pageWrapper.node.appendChild(this._chipsBlock.htmlElement);
+  }
+
+  addSortDropDown() {
+    this._sortDropDown = new SortDropdownView(
+      this.updateProductList.bind(this)
+    );
+    this.htmlElement.appendChild(this._sortDropDown.htmlElement);
+    initMaterializeComponent('.dropdown-trigger', this.htmlElement, () => {
+      Dropdown.init(this._controlsBlock.sortBtn.node, {
+        constrainWidth: false,
+      });
+    });
   }
 
   addFiltersModal() {
@@ -74,11 +94,14 @@ export default class CatalogPageView extends View {
     const { filters } = this._filtersModal;
     const filtersRequest = filters.map((filter) => filter.filter);
     filters.forEach((filter) => this._chipsBlock.addChip(filter.description));
+
+    const { sortBy } = this._sortDropDown;
     getProducts(
       this.setProductList.bind(this),
       showErrorMessage,
       100,
-      filtersRequest
+      filtersRequest,
+      [sortBy]
     );
   }
 }
