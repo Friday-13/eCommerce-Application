@@ -30,6 +30,9 @@ export class CheckboxComponent extends BaseComponent {
     if (attrs.onClick) {
       this._checkbox.node.addEventListener('click', attrs.onClick);
     }
+    if (attrs.disabled !== undefined) {
+      this._checkbox.node.disabled = attrs.disabled;
+    }
   }
 
   get checked(): boolean {
