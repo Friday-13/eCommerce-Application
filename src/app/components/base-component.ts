@@ -5,6 +5,7 @@ export interface IAttributes {
   id?: string;
   classList?: string[] | string;
   content?: string;
+  node?: HTMLElement;
 }
 
 export class BaseComponent<T extends HTMLElement = HTMLElement> {

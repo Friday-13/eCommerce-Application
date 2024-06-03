@@ -119,4 +119,10 @@ export class InputFieldComponent extends BaseComponent {
   getValue(): string {
     return this._input.value;
   }
+
+  setValue(value: string | undefined) {
+    if (value !== undefined) {
+      this._input.value = value;
+    }
+  }
 }
