@@ -8,6 +8,7 @@ import brendDisney from '@assets/brend/disney.png';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import ImageSliderProducts from './slider';
+import ModalImageSliderProducts from './slider-modal';
 
 export default class ProductPageView extends View {
   private galleryWrapper!: BaseComponent;
@@ -23,6 +24,8 @@ export default class ProductPageView extends View {
   private pricesContainer!: BaseComponent;
 
   private productId: string;
+
+  private currentImageUrls: string[] = [];
 
   constructor(productId: string) {
     const attrs: IAttributes = {
@@ -42,6 +45,8 @@ export default class ProductPageView extends View {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const swiper = new Swiper('.swiper', {
       modules: [Navigation, Pagination],
+      slidesPerView: 'auto',
+      watchOverflow: true,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -92,9 +97,33 @@ export default class ProductPageView extends View {
     this.initializeProductPrice(this.productContainer);
   }
 
+  private onImageClick(imageUrl: string) {
+    this.modalOpen(imageUrl);
+  }
+
+  private modalOpen(imageUrl: string) {
+    const initialIndex = this.currentImageUrls.indexOf(imageUrl);
+    console.log('Opening modal for URL:', imageUrl, 'at index:', initialIndex);
+    if (initialIndex === -1) {
+      console.error('Image URL not found in the current array.');
+      return;
+    }
+    const modalSlider = new ModalImageSliderProducts(
+      this.currentImageUrls,
+      initialIndex
+    );
+    document.body.appendChild(modalSlider.htmlElement);
+    modalSlider.open();
+    document.body.classList.add('lock');
+  }
+
   private setupGallerySlider(detailsProduct: BaseComponent) {
     const addImagesToSlider = (imageUrls: string[]) => {
-      const imageSlider = new ImageSliderProducts(imageUrls);
+      this.currentImageUrls = imageUrls;
+      const imageSlider = new ImageSliderProducts(
+        imageUrls,
+        this.modalOpen.bind(this)
+      );
       detailsProduct.node.appendChild(imageSlider.htmlElement);
       setTimeout(() => {
         this.initializeSwiper();
@@ -105,7 +134,6 @@ export default class ProductPageView extends View {
       this.productId,
       (productData: IProductData) => {
         addImagesToSlider(productData.imageUrls);
-        //  this.setupGallerySlider(productData.imageUrls);
       },
       (errorMsg: string) => {
         showErrorMessage(`Error fetching product details: ${errorMsg}`);
