@@ -5,9 +5,12 @@ import { IImageAttributes, ImageComponent } from '@components/image-component';
 export default class ImageSliderProducts extends View {
   private container!: BaseComponent;
 
-  constructor(images: string[]) {
+  constructor(
+    images: string[],
+    private onImageClick: (imageUrl: string) => void
+  ) {
     const attrs: IAttributes = {
-      classList: ['swiper'],
+      classList: ['swiper', 'swiper-product'],
     };
     super(attrs);
     this.container = new BaseComponent(attrs);
@@ -40,6 +43,10 @@ export default class ImageSliderProducts extends View {
       };
       const imgSlide = new ImageComponent(imgSlideAttrs);
       containerSlide.appendChild(imgSlide);
+
+      imgSlide.node.addEventListener('click', () =>
+        this.onImageClick(imageUrl)
+      );
 
       detailsSlider.appendChild(containerSlide);
     });

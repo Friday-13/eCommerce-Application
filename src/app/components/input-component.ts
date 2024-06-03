@@ -6,6 +6,7 @@ export interface IInputAttributes extends IAttributes {
   required?: boolean;
   disabled?: boolean;
   placeholder?: string;
+  value?: string;
 }
 
 export class InputComponent extends BaseComponent<HTMLInputElement> {
@@ -33,6 +34,10 @@ export class InputComponent extends BaseComponent<HTMLInputElement> {
 
     if (mergedAttrs.type) {
       this.node.type = mergedAttrs.type;
+    }
+
+    if (mergedAttrs.value) {
+      this.node.value = mergedAttrs.value;
     }
   }
 

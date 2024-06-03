@@ -1,0 +1,17 @@
+.control-panel {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px;
+
+  button {
+    display: block;
+  }
+}
+
+.active-sort-option {
+  text-decoration: underline;
+}

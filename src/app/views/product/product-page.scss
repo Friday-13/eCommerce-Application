@@ -24,6 +24,11 @@
   grid-template-rows: minmax(200px, auto) auto;
   gap: 10px;
   padding: 20px;
+
+  @media (width <= 1024px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
 }
 
 /* блок со слайдером */
@@ -31,61 +36,36 @@
   grid-column: 1 / 2;
   grid-row: 1;
   min-width: 0;
+
+  @media (width <= 1024px) {
+    grid-column: 1 / 2;
+  }
 }
 
 .product-container {
   grid-column: 2 / 3;
   grid-row: 1;
+  min-width: 0;
+  padding: 20px;
+
+  @media (width <= 1024px) {
+    grid-column: 1 / 2;
+    grid-row: 2;
+  }
 }
 
 .product-description-container {
   grid-column: 1 / 3;
   grid-row: 2 / 3;
+  min-width: 0;
+
+  @media (width <= 1024px) {
+    grid-column: 1 / 2;
+    grid-row: 3;
+  }
 }
 
 /* сетка */
-
-/* слайдер */
-
-.swiper {
-  width: 900px;
-  height: 600px;
-}
-
-.swiper-slide {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-}
-
-.swiper-slide img {
-  display: block;
-
-  /* max-width: 100%; */
-  height: 100%;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-@media (width <= 768px) {
-  .swiper-slide img {
-    height: auto;
-  }
-}
-
-@media (width <= 480px) {
-  .swiper-slide img {
-    height: 300px;
-  }
-}
-
-.swiper-pagination {
-  bottom: 5px;
-}
-
-/* слайдер */
 
 .product-titles {
   display: flex;
@@ -95,6 +75,15 @@
 
   &:not(:last-child) {
     margin-bottom: 40px;
+  }
+
+  @media (width <= 500px) {
+    justify-content: flex-start;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+      padding: 0.5rem;
+    }
   }
 }
 
@@ -106,12 +95,30 @@
   line-height: 2;
   color: rgb(5 5 40);
   text-align: justify;
+
+  @media (width <= 768px) {
+    max-width: 100%;
+    padding: 10px;
+    font-size: medium;
+    text-align: start;
+  }
+
+  @media (width <= 500px) {
+    max-width: 100%;
+    padding: 10px;
+    font-size: small;
+    text-align: start;
+  }
 }
 
 .product-description ul {
   display: block;
   margin: 1.125rem 0;
   padding-left: 1.875rem;
+
+  @media (width <= 500px) {
+    padding-left: 1rem;
+  }
 }
 
 .product-description li {
