@@ -1,4 +1,5 @@
 nav {
+  position: relative;
   min-height: 105px;
   background-color: #ee6e73;
 }
@@ -10,11 +11,45 @@ nav {
   padding: 10px;
 }
 
+.menu-body {
+  @media (width <= 768px) {
+    position: fixed;
+    z-index: 5;
+    top: 100px;
+    right: -100%;
+    overflow: auto;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 60px 40px 384px;
+    text-align: center;
+    background-color: #ee6e73;
+    transition: all 0.8s ease 0s;
+
+    &.menu-active {
+      right: 0;
+    }
+  }
+}
+
 .nav-list-button {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
+  @media (width >= 768px) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  @media (width <= 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 }
 
 .no-text-transform {
@@ -28,6 +63,7 @@ nav {
 
 .list-item-nav {
   background-color: #c18183;
+  border: 2px solid #fff;
   box-shadow: 0 4px 8px rgb(0 0 0 / 60%);
   transition:
     background-color 0.4s ease,
@@ -41,11 +77,51 @@ nav {
 
   @media (any-hover: hover) {
     &:hover {
-      color: black;
-      background-color: #5f8794;
+      background-color: #855a5b;
+      border: 2px solid #cd4646;
+
+      a {
+        background-color: #855a5b;
+      }
 
       .no-text-transform {
         color: black;
+      }
+    }
+  }
+}
+
+.button-close-burger {
+  display: none;
+
+  @media (width <= 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #665f55;
+    border-radius: 100px;
+
+    span {
+      width: 16px;
+      height: 2px;
+      background-color: #403f3d;
+      border-radius: 2px;
+      transition: all 0.8s ease 0s;
+    }
+
+    &.menu-active {
+      gap: 0;
+
+      .icon-menu-top {
+        transform: rotate(-45deg) translate(0, 60%);
+      }
+
+      .icon-menu-bottom {
+        transform: rotate(45deg) translate(0, -80%);
       }
     }
   }
