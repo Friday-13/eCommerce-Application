@@ -11,6 +11,10 @@
     transform: scale(1.02);
     transition: transform 0.7s;
   }
+
+  .card-title .material-icons {
+    cursor: pointer;
+  }
 }
 
 .price-block {
