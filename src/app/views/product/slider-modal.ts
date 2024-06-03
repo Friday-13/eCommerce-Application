@@ -21,7 +21,7 @@ export default class ModalImageSliderProducts extends View {
       classList: ['swiper-modal-container'],
     };
     super(attrs);
-    console.log('Modal slider initialized with index:', initialIndex); // Для отладки
+    // console.log('Modal slider initialized with index:', initialIndex); // Для отладки
     this.containerModal = new BaseComponent(attrs);
     this.initialIndex = initialIndex;
     this.initializeSliderModal(images);
@@ -105,7 +105,6 @@ export default class ModalImageSliderProducts extends View {
       document.body.removeChild(this.htmlElement);
     });
     this.swiperSliderModal.node.addEventListener('click', (event) => {
-      console.log('Event triggered', event.target);
       const target = event.target as HTMLElement;
       if (
         !target.closest('.swiper-modal .slider-image') &&
