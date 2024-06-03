@@ -4,9 +4,9 @@ import { IProductData } from '@models/products';
 import { getProductById } from '@services/product-data';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
-import brendDisney from '@assets/brend/disney.png';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
+import { Theme, themeToBrandImageMap } from '@models/brend-images';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -103,7 +103,7 @@ export default class ProductPageView extends View {
 
   private modalOpen(imageUrl: string) {
     const initialIndex = this.currentImageUrls.indexOf(imageUrl);
-    console.log('Opening modal for URL:', imageUrl, 'at index:', initialIndex);
+    // console.log('Opening modal for URL:', imageUrl, 'at index:', initialIndex);
     if (initialIndex === -1) {
       console.error('Image URL not found in the current array.');
       return;
@@ -164,7 +164,7 @@ export default class ProductPageView extends View {
     const productCategory = new BaseComponent(productCategotyAttrs);
 
     const productBrendImageAttrs: IImageAttributes = {
-      src: brendDisney,
+      src: '',
       alt: 'Image-product-brend',
       classList: ['brend-image'],
     };
@@ -178,6 +178,12 @@ export default class ProductPageView extends View {
       this.productId,
       (productData: IProductData) => {
         productTitle.textContent = productData.productName;
+        // Используем enum для выбора изображения
+        const brandImageSrc = themeToBrandImageMap[productData.theme as Theme];
+        if (brandImageSrc) {
+          productBrendImage.node.src = brandImageSrc;
+          productBrendImage.node.alt = `Image of ${productData.theme} brand`;
+        }
       },
       (errorMsg: string) => {
         showErrorMessage(`Error fetching product details: ${errorMsg}`);

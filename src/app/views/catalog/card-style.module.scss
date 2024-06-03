@@ -1,9 +1,26 @@
 .product-card {
-  height: 700px;
+  height: 600px;
+  transition: transform 0.7s;
 
   .card-image {
     overflow: hidden;
-    height: 75%;
+    height: 60%;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 0.7s;
+  }
+
+  .card-title .material-icons {
+    cursor: pointer;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 40%;
   }
 }
 

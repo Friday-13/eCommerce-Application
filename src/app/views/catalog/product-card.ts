@@ -4,6 +4,11 @@ import View from '@views/view';
 import getRandomDefaultImage from '@utils/get-random-default-image';
 import { IProductData } from '@models/products';
 import createPriceComponent from '@utils/create-price-component';
+import Router from '@utils/router';
+import {
+  ButtonWithIconComponent,
+  IButtonWithIconAttributes,
+} from '@components/button-with-icons';
 import CardTitleView from './card-title';
 import styles from './card-style.module.scss';
 
@@ -23,9 +28,15 @@ export default class ProductCardView extends View {
     };
     super(attrs);
     this.addCardContiner();
-    this.addImage(content.imageUrls[0]);
+    this.addImage(content.id, content.imageUrls[0]); // и вот тут добавила - надеюсь дальше не пошло?
     this.addContent(content.productName);
-    this.addDescription(content.productName, content.description);
+    this.addDescription(
+      content.productName,
+      content.description,
+      content.pieceCount,
+      content.ageRange,
+      content.id
+    );
     this.addPriceBlock(content.price, content.discountedPrice);
   }
 
@@ -37,7 +48,7 @@ export default class ProductCardView extends View {
     this.appendChild(this._container);
   }
 
-  addImage(src: string = getRandomDefaultImage()) {
+  addImage(productId: string, src: string = getRandomDefaultImage()) {
     const containerAttrs: IAttributes = {
       classList: ['card-image', 'waves-effect', 'waves-block', 'waves-light'],
     };
@@ -47,6 +58,10 @@ export default class ProductCardView extends View {
     };
     this._image = new ImageComponent(imgAttrs);
     imgContainer.appendChild(this._image);
+    // Добавление обработчика клика на изображение
+    imgContainer.node.addEventListener('click', () => {
+      Router.navigateTo(`#${productId}`);
+    });
     this._container.appendChild(imgContainer);
   }
 
@@ -64,7 +79,10 @@ export default class ProductCardView extends View {
 
   addDescription(
     title: string = DEFAULT_TITLE,
-    content: string = DEFAULT_DESCRIPTION
+    content: string = DEFAULT_DESCRIPTION,
+    pieceCount: number = 100,
+    ageRange: string = '6+',
+    id: string = ''
   ) {
     const containerAttrs: IAttributes = {
       classList: 'card-reveal',
@@ -76,11 +94,34 @@ export default class ProductCardView extends View {
     const discriptionAttrs: IAttributes = {
       tag: 'p',
     };
+
+    const pieces = new BaseComponent({ content: `${pieceCount} Pieces` });
+    const age = new BaseComponent({ content: `${ageRange} Ages` });
+
     const discription = new BaseComponent(discriptionAttrs);
-    discription.node.innerHTML = content;
+    let trimmedContent = content;
+    if (trimmedContent.split(' ').length > 120) {
+      trimmedContent = content.split(' ').slice(0, 50).join(' ');
+      trimmedContent += '...';
+    }
+    discription.node.innerHTML = trimmedContent;
+
+    const productPageBtnAttrs: IButtonWithIconAttributes = {
+      classList: 'waves-effect waves-light btn-small red lighten-2',
+      icon: 'arrow_forward',
+      onClick: () => {
+        /* TODO: Add routing */
+        Router.navigateTo(`#${id}`);
+      },
+    };
+
+    const productPageBtn = new ButtonWithIconComponent(productPageBtnAttrs);
 
     container.node.appendChild(titleView.htmlElement);
+    container.appendChild(pieces);
+    container.appendChild(age);
     container.appendChild(discription);
+    container.appendChild(productPageBtn);
     this._container.appendChild(container);
   }
 
