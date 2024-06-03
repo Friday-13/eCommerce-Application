@@ -8,16 +8,20 @@ import initMaterializeComponent from '@utils/materilalize-js-init';
 import { Dropdown } from 'materialize-css';
 import getCategories from '@services/categories';
 import { categoryFilter } from '@utils/query-args';
+import CategoryBreadCrumbsView from '@views/category-breadcrumbs';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
 import ChipsBlockView from './chips-block';
 import CategoryDropDown from './category-drop-down';
+import currentCategory from './current-category';
 
 export default class CatalogPageView extends View {
   private _pageWrapper = new BaseComponent({});
 
   private _productList = new ProductListView();
+
+  private _breadCrumbs = new CategoryBreadCrumbsView(() => {});
 
   private _controlsBlock = new CatalogControls(() => {});
 
@@ -35,6 +39,7 @@ export default class CatalogPageView extends View {
     };
     super(attrs);
     this.addWrapper();
+    this.addBreadCrumbs();
     this.addControls();
     this.addChipsBlock();
     this.addCategoriesDropDown();
@@ -76,6 +81,13 @@ export default class CatalogPageView extends View {
   addChipsBlock() {
     this._chipsBlock = new ChipsBlockView();
     this._pageWrapper.node.appendChild(this._chipsBlock.htmlElement);
+  }
+
+  addBreadCrumbs() {
+    this._breadCrumbs = new CategoryBreadCrumbsView(
+      this.updateProductList.bind(this)
+    );
+    this._pageWrapper.node.appendChild(this._breadCrumbs.htmlElement);
   }
 
   addCategoryList() {
@@ -122,6 +134,9 @@ export default class CatalogPageView extends View {
     const { searchString } = this._controlsBlock;
     const { sortBy } = this._sortDropDown;
     const filtersRequest = this.prepareFilters();
+    this._breadCrumbs.clear();
+    this._breadCrumbs.generateFromPath(currentCategory.categoryPath);
+
     getProducts(
       this.setProductList.bind(this),
       showErrorMessage,
@@ -134,8 +149,8 @@ export default class CatalogPageView extends View {
 
   prepareFilters() {
     const { filters } = this._filtersModal;
-    if (this._categoryDropDown.currentCategory) {
-      filters.push(categoryFilter(this._categoryDropDown.currentCategory));
+    if (currentCategory.treeNode) {
+      filters.push(categoryFilter(currentCategory.treeNode));
     }
     filters.forEach((filter) => this._chipsBlock.addChip(filter.description));
     const filtersRequest = filters.map((filter) => filter.filter);

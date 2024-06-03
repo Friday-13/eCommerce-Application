@@ -2,9 +2,10 @@ import DropdownView from '@utils/drop-down-view';
 import { ICategory } from '@models/category';
 import { CategoryTree, ICategoryTreeNode } from '@utils/category-tree';
 import styles from './catalog-controls-style.module.scss';
+import currentCategory from './current-category';
 
 export default class CategorDropDown extends DropdownView {
-  currentCategory?: ICategoryTreeNode;
+  _tree = new CategoryTree([]);
 
   constructor(applyCallback: () => void) {
     super('category-dropdown', applyCallback);
@@ -16,24 +17,20 @@ export default class CategorDropDown extends DropdownView {
   }
 
   setCategories(categories: Array<ICategory>) {
-    const tree = new CategoryTree(categories);
-    tree.rootCategories.forEach((category) => {
+    this._tree = new CategoryTree(categories);
+    this._tree.rootCategories.forEach((category) => {
       this.createOption(category.name, () => {
-        this.selectCategory(category);
+        currentCategory.setCurrentCategory(category);
       });
       this.setSubCategories(category);
     });
   }
 
   setSubCategories(rootCategory: ICategoryTreeNode) {
-    rootCategory.children.forEach((subcategory) => {
-      this.createSubOption(subcategory.name, () => {
-        this.selectCategory(subcategory);
+    rootCategory.children.forEach((subCategory) => {
+      this.createSubOption(subCategory.name, () => {
+        currentCategory.setCurrentCategory(subCategory);
       });
     });
-  }
-
-  selectCategory(category: ICategoryTreeNode) {
-    this.currentCategory = category;
   }
 }
