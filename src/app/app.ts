@@ -56,7 +56,6 @@ class App {
     const route = hashParts[0];
     const productId = hashParts[1];
 
-    // Если хэш пустой, устанавливаем стартовую страницу каталога
     if (!route) {
       window.location.hash = '#catalog';
       return;
