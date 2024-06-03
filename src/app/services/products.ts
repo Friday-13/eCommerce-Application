@@ -16,7 +16,8 @@ function parseProductProjectionResults(
 const getProducts = (
   sucessCallback: (products: Array<IProductData>) => void,
   errorCallback: (message: string) => void,
-  limit: number = 30,
+  limit: number = 100,
+  searchString?: string,
   filterQuery: Array<string> = [],
   sort: Array<string> = []
 ) => {
@@ -28,6 +29,8 @@ const getProducts = (
         limit,
         'filter.query': filterQuery,
         sort,
+        'text.en-gb': searchString,
+        fuzzy: true,
       },
     })
     .execute()

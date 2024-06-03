@@ -1,83 +1,39 @@
-import { BaseComponent, IAttributes } from '@components/base-component';
-import {
-  AnchorWithIconComponent,
-  IAnchorWithIconAttributes,
-} from '@components/anchor-with-icon';
-import View from '@views/view';
+import { BaseComponent } from '@components/base-component';
+import DropdownView from '@utils/drop-down-view';
 import styles from './catalog-controls-style.module.scss';
 
 type TSortDirection = 'asc' | 'desc';
 
-export default class SortDropdownView extends View {
-  private _applyCallback: () => void;
-
+export default class SortDropdownView extends DropdownView {
   private _currentSort: string = '';
 
-  private _options: Array<BaseComponent> = [];
-
   constructor(applyCallback: () => void) {
-    const attrs: IAttributes = {
-      tag: 'ul',
-      classList: 'dropdown-content',
-      id: 'sort-dropdown',
-    };
-    super(attrs);
-    this._applyCallback = applyCallback;
+    super('sort-dropdown', applyCallback);
     this.addSortOptions();
   }
 
   addSortOptions() {
-    this.createSortOption(
+    this.createOption(
       'Product Name',
       this.sortByName.bind(this, 'asc'),
       'arrow_downward'
     );
-    this.createSortOption(
+    this.createOption(
       'Product Name',
       this.sortByName.bind(this, 'desc'),
       'arrow_upward'
     );
     this.createDivider();
-    this.createSortOption(
+    this.createOption(
       'Product Price',
       this.sortByPrice.bind(this, 'asc'),
       'arrow_downward'
     );
-    this.createSortOption(
+    this.createOption(
       'Product Price',
       this.sortByPrice.bind(this, 'desc'),
       'arrow_upward'
     );
-  }
-
-  createSortOption(text: string, onClick: () => void, icon?: string) {
-    const optionAttrs: IAttributes = {
-      tag: 'li',
-    };
-    const option = new BaseComponent(optionAttrs);
-    const optionContentAttrs: IAnchorWithIconAttributes = {
-      onClick: () => {
-        this.selectOption(option);
-        onClick();
-        this._applyCallback();
-      },
-      content: text,
-      icon,
-    };
-    const optionContent = new AnchorWithIconComponent(optionContentAttrs);
-    option.appendChild(optionContent);
-    this.appendChild(option);
-    this._options.push(option);
-  }
-
-  createDivider() {
-    const dividerAttrs: IAttributes = {
-      tag: 'li',
-      classList: 'divider',
-    };
-    const divider = new BaseComponent(dividerAttrs);
-    divider.node.setAttribute('tabindex', '-1');
-    this.appendChild(divider);
   }
 
   sortByName(direction: TSortDirection) {
@@ -107,6 +63,7 @@ export default class SortDropdownView extends View {
   }
 
   selectOption(option: BaseComponent) {
+    super.selectOption(option);
     if (option.node.classList.contains(styles.activeSortOption)) {
       option.removeClass(styles.activeSortOption);
     } else {
