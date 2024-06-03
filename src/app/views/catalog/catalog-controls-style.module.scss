@@ -28,3 +28,26 @@
 .search-button {
   cursor: pointer;
 }
+
+.sub-category {
+  padding-left: 30px;
+}
+
+.breadcrumb-nav {
+  min-height: auto;
+  background-color: inherit;
+  box-shadow: none;
+}
+
+.breadcrumb-black {
+  cursor: pointer;
+  color: rgb(33 33 33 / 50%);
+
+  &::before {
+    color: rgb(33 33 33 / 50%);
+  }
+
+  &:last-child {
+    color: #212121;
+  }
+}

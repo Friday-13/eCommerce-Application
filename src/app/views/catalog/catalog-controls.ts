@@ -7,6 +7,8 @@ import styles from './catalog-controls-style.module.scss';
 import SearchInputView from './search-input';
 
 export default class CatalogControls extends View {
+  categoryBtn = new ButtonWithIconComponent({});
+
   filterBtn = new ButtonWithIconComponent({});
 
   sortBtn = new ButtonWithIconComponent({});
@@ -18,6 +20,7 @@ export default class CatalogControls extends View {
       classList: ['card', styles.controlPanel],
     };
     super(attrs);
+    this.addCategoryButton();
     this.addSearchString(applySearch);
     this.addFilterButton();
     this.addSortButton();
@@ -37,10 +40,17 @@ export default class CatalogControls extends View {
   }
 
   addSortButton() {
-    this.sortBtn = createIconControl('sort');
+    this.sortBtn = createIconControl('sort', 'sort-btn');
     this.sortBtn.node.setAttribute('data-target', 'sort-dropdown');
     this.sortBtn.addClass('dropdown-trigger');
     this.appendChild(this.sortBtn);
+  }
+
+  addCategoryButton() {
+    this.categoryBtn = createIconControl('apps', 'category-btn');
+    this.categoryBtn.node.setAttribute('data-target', 'category-dropdown');
+    this.categoryBtn.addClass('dropdown-trigger');
+    this.appendChild(this.categoryBtn);
   }
 
   get searchString() {
