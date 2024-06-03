@@ -16,7 +16,7 @@ export default class CatalogPageView extends View {
 
   private _productList = new ProductListView();
 
-  private _controlsBlock = new CatalogControls();
+  private _controlsBlock = new CatalogControls(() => {});
 
   private _sortDropDown = new SortDropdownView(() => {});
 
@@ -60,7 +60,9 @@ export default class CatalogPageView extends View {
   }
 
   addControls() {
-    this._controlsBlock = new CatalogControls();
+    this._controlsBlock = new CatalogControls(
+      this.updateProductList.bind(this)
+    );
     this._pageWrapper.node.appendChild(this._controlsBlock.htmlElement);
   }
 
@@ -94,12 +96,14 @@ export default class CatalogPageView extends View {
     const { filters } = this._filtersModal;
     const filtersRequest = filters.map((filter) => filter.filter);
     filters.forEach((filter) => this._chipsBlock.addChip(filter.description));
+    const { searchString } = this._controlsBlock;
 
     const { sortBy } = this._sortDropDown;
     getProducts(
       this.setProductList.bind(this),
       showErrorMessage,
       100,
+      searchString,
       filtersRequest,
       [sortBy]
     );
