@@ -18,6 +18,8 @@ export class InputFieldComponent extends BaseComponent {
 
   validationMessages: Array<string>;
 
+  htmlElement: HTMLElement;
+
   constructor(
     attrs: IInputFieldAttributes,
     labelAttrs: ILabelAttriubutes,
@@ -36,6 +38,7 @@ export class InputFieldComponent extends BaseComponent {
       this.setValidators(mergedAttrs.customValidators);
     }
     this.validationMessages = [];
+    this.htmlElement = this.node;
   }
 
   protected addInputComponent(attrs: IInputAttributes) {

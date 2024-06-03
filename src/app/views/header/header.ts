@@ -6,7 +6,6 @@ import Router from '@utils/router';
 import { customerClear, isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
 
-
 export default class HeaderView extends View {
   private headerInitialized: boolean;
 

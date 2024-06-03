@@ -79,4 +79,14 @@ export class BaseComponent<T extends HTMLElement = HTMLElement> {
   removeClass(className: string) {
     this._node.classList.remove(className);
   }
+
+  public setValue(value: string): void {
+    if (this.node instanceof HTMLInputElement) {
+      this.node.value = value;
+    } else {
+      throw new Error(
+        "'setValue called on an element that is not an HTMLInputElement'"
+      );
+    }
+  }
 }
