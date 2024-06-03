@@ -1,9 +1,15 @@
 .product-card {
   height: 700px;
+  transition: transform 0.7s;
 
   .card-image {
     overflow: hidden;
     height: 75%;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 0.7s;
   }
 }
 
