@@ -94,6 +94,7 @@ export default class ProductCardView extends View {
     this._container.appendChild(container);
   }
 
+
   addPriceBlock(price: number | null, discountedPrice: number | null) {
     if (price === null) return;
     const attrs: IAttributes = {};

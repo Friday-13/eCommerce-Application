@@ -15,6 +15,13 @@
   .card-title .material-icons {
     cursor: pointer;
   }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 40%;
+  }
 }
 
 .price-block {
