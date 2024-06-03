@@ -17,7 +17,7 @@ describe('HeaderView', () => {
     if (navElement) {
       const menuItems = navElement.querySelectorAll('li');
       expect(menuItems.length).toBe(5);
-      expect(menuItems[0].textContent).toContain('Catalogue');
+      expect(menuItems[0].textContent).toContain('Catalog');
       expect(menuItems[1].textContent).toContain('About Us');
       expect(menuItems[2].textContent).toContain('Sign in');
       expect(menuItems[3].textContent).toContain('Sign up');
