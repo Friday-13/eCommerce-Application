@@ -110,8 +110,7 @@ export default class ProductCardView extends View {
       classList: 'waves-effect waves-light btn-small red lighten-2',
       icon: 'arrow_forward',
       onClick: () => {
-        /* TODO: Add routing */
-        Router.navigateTo(`#${id}`);
+        Router.navigateTo(`#product/${id}`);
       },
     };
 
