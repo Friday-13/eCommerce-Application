@@ -52,24 +52,25 @@ class App {
   }
 
   private route = (): void => {
-    const hash = window.location.hash.slice(1); // Удаляем символ '#'
-    if (!hash) {
+    const hashParts = window.location.hash.slice(1).split('/'); // Разделение хэша на части
+    const route = hashParts[0];
+    const productId = hashParts[1];
+
+    // Если хэш пустой, устанавливаем стартовую страницу каталога
+    if (!route) {
       window.location.hash = '#catalog';
       return;
     }
+
     if (this.currentPage) {
       document.body.removeChild(this.currentPage.htmlElement);
       this.currentPage = null;
     }
 
-    // Проверка, соответствует ли hash формату UUID
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-    const isProductId = uuidRegex.test(hash);
-
-    if (isProductId) {
+    // Определение действия на основе полученного маршрута
+    if (route === 'product' && productId) {
       this.hideFooterHeader = false;
-      this.mainView.page = new ProductPageView(hash); // Создаем страницу продукта с ID
+      this.mainView.page = new ProductPageView(productId); // Загрузка страницы продукта с переданным ID
     } else {
       switch (window.location.hash) {
         case '#main':

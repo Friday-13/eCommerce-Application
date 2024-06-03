@@ -50,7 +50,7 @@ export default class ProductCardView extends View {
     imgContainer.appendChild(this._image);
     // Добавление обработчика клика на изображение
     imgContainer.node.addEventListener('click', () => {
-      Router.navigateTo(`#${productId}`);
+      Router.navigateTo(`#product/${productId}`);
     });
     this._container.appendChild(imgContainer);
   }
