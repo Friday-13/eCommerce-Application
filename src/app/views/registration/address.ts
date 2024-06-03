@@ -23,17 +23,17 @@ import {
 import FormSectionView from './form-section';
 
 class AddressSection extends FormSectionView {
-  private streetInput = new InputFieldComponent({}, {}, {});
+  public streetInput = new InputFieldComponent({}, {}, {});
 
-  private cityInput = new InputFieldComponent({}, {}, {});
+  public cityInput = new InputFieldComponent({}, {}, {});
 
-  private postalCodeInput = new InputFieldComponent({}, {}, {});
+  public postalCodeInput = new InputFieldComponent({}, {}, {});
 
-  private countrySelector: FormSelect;
+  public countrySelector: FormSelect;
 
   private selectComponent = new BaseComponent({});
 
-  private countryInput = new BaseComponent({});
+  public countryInput = new BaseComponent({});
 
   private countryCode: string = '';
 
@@ -214,6 +214,10 @@ class AddressSection extends FormSectionView {
 
   get htmlElement() {
     return super.htmlElement;
+  }
+
+  public getStreetInputValue(): string | undefined {
+    return this.streetInput?.input.value;
   }
 }
 

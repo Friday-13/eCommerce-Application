@@ -6,6 +6,7 @@ import HeaderView from '@views/header/header';
 import LoginView from '@views/login/login-page';
 import MainView from '@views/main-view';
 import MainPageView from '@views/main/main-page';
+import ProfileView from '@views/profile/profile-page';
 import ProductPageView from '@views/product/product-page';
 import RegistrationView from '@views/registration/registration-page';
 
@@ -21,6 +22,7 @@ class App {
     | MainPageView
     | RegistrationView
     | LoginView
+    | ProfileView
     | CatalogPageView
     | null = null;
 
@@ -119,6 +121,12 @@ class App {
         if (isPageAccessable('none-authorized')) {
           this.hideFooterHeader = false;
           this.mainView.page = new LoginView();
+        }
+        break;
+      case '#profile':
+        if (isPageAccessable('authorized')) {
+          this.hideFooterHeader = false;
+          this.mainView.page = new ProfileView();
         }
         break;
       case '#catalog':
