@@ -4,6 +4,7 @@ import View from '@views/view';
 import getRandomDefaultImage from '@utils/get-random-default-image';
 import { IProductData } from '@models/products';
 import createPriceComponent from '@utils/create-price-component';
+import Router from '@utils/router';
 import CardTitleView from './card-title';
 import styles from './card-style.module.scss';
 
@@ -23,7 +24,7 @@ export default class ProductCardView extends View {
     };
     super(attrs);
     this.addCardContiner();
-    this.addImage(content.imageUrls[0]);
+    this.addImage(content.id, content.imageUrls[0]); // и вот тут добавила - надеюсь дальше не пошло?
     this.addContent(content.productName);
     this.addDescription(content.productName, content.description);
     this.addPriceBlock(content.price, content.discountedPrice);
@@ -37,7 +38,7 @@ export default class ProductCardView extends View {
     this.appendChild(this._container);
   }
 
-  addImage(src: string = getRandomDefaultImage()) {
+  addImage(productId: string, src: string = getRandomDefaultImage()) {
     const containerAttrs: IAttributes = {
       classList: ['card-image', 'waves-effect', 'waves-block', 'waves-light'],
     };
@@ -47,6 +48,10 @@ export default class ProductCardView extends View {
     };
     this._image = new ImageComponent(imgAttrs);
     imgContainer.appendChild(this._image);
+    // Добавление обработчика клика на изображение
+    imgContainer.node.addEventListener('click', () => {
+      Router.navigateTo(`#product/${productId}`);
+    });
     this._container.appendChild(imgContainer);
   }
 

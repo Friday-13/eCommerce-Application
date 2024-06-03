@@ -12,7 +12,7 @@ import RegistrationView from '@views/registration/registration-page';
 class App {
   private headerView: HeaderView;
 
-  private mainView: MainView;
+  private mainView!: MainView;
 
   private footerView: FooterView;
 
@@ -26,7 +26,6 @@ class App {
 
   constructor() {
     this.headerView = new HeaderView();
-    this.mainView = new MainView();
     this.footerView = new FooterView();
 
     window.addEventListener('hashchange', this.route);
@@ -53,17 +52,57 @@ class App {
   }
 
   private route = (): void => {
-    if (!window.location.hash) {
-      window.location.hash = '#main';
+    const hashParts = window.location.hash.slice(1).split('/'); // Разделение хэша на части
+    const route = hashParts[0];
+    const productId = hashParts[1];
+
+    if (!route) {
+      window.location.hash = '#catalog';
       return;
     }
+
     if (this.currentPage) {
       document.body.removeChild(this.currentPage.htmlElement);
       this.currentPage = null;
     }
 
-    const productId = 'f305c4c8-9993-420a-a59d-4937e994c3da';
+    // Определение действия на основе полученного маршрута
+    if (route === 'product' && productId) {
+      this.hideFooterHeader = false;
+      this.mainView.page = new ProductPageView(productId); // Загрузка страницы продукта с переданным ID
+    } else {
+      switch (window.location.hash) {
+        case '#main':
+          this.hideFooterHeader = false;
+          this.mainView.page = new MainPageView();
+          break;
+        case '#registration':
+          if (isPageAccessable('none-authorized')) {
+            this.hideFooterHeader = false;
+            this.mainView.page = new RegistrationView();
+          }
+          break;
+        case '#login':
+          if (isPageAccessable('none-authorized')) {
+            this.hideFooterHeader = false;
+            this.mainView.page = new LoginView();
+          }
+          break;
+        case '#catalog':
+          this.hideFooterHeader = false;
+          this.mainView.page = new CatalogPageView();
+          break;
+        case '#error':
+          this.hideFooterHeader = true;
+          this.mainView.page = new Error404();
+          break;
+        default:
+          this.hideFooterHeader = true;
+          this.mainView.page = new Error404();
+      }
+    }
 
+    /*
     switch (window.location.hash) {
       case '#main':
         this.hideFooterHeader = false;
@@ -94,6 +133,7 @@ class App {
         this.hideFooterHeader = true;
         this.mainView.page = new Error404();
     }
+    */
     this.headerView.updateMenu();
   };
 
