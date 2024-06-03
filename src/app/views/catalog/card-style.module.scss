@@ -1,10 +1,10 @@
 .product-card {
-  height: 700px;
+  height: 600px;
   transition: transform 0.7s;
 
   .card-image {
     overflow: hidden;
-    height: 75%;
+    height: 60%;
   }
 
   &:hover {

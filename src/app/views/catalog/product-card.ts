@@ -82,7 +82,12 @@ export default class ProductCardView extends View {
       tag: 'p',
     };
     const discription = new BaseComponent(discriptionAttrs);
-    discription.node.innerHTML = content;
+    let trimmedContent = content;
+    if (trimmedContent.split(' ').length > 120) {
+      trimmedContent = content.split(' ').slice(0, 50).join(' ');
+      trimmedContent += '...';
+    }
+    discription.node.innerHTML = trimmedContent;
 
     container.node.appendChild(titleView.htmlElement);
     container.appendChild(discription);
