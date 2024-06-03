@@ -36,20 +36,20 @@ export default class ModalImageSliderProducts extends View {
 
   private initializeSliderDetailsModal(images: string[]) {
     const swiperSliderAttrs: IAttributes = {
-      classList: ['swiper swiper-modal'],
+      classList: ['swiper', 'swiper-modal'],
     };
     this.swiperSliderModal = new BaseComponent(swiperSliderAttrs);
     this.containerModal.appendChild(this.swiperSliderModal); // убрали в контейнер swiper
 
     const detailsSliderAttrs: IAttributes = {
-      classList: ['swiper-wrapper wrapper-modal'],
+      classList: ['swiper-wrapper', 'wrapper-modal'],
     };
     this.detailsSliderModal = new BaseComponent(detailsSliderAttrs);
     this.swiperSliderModal.appendChild(this.detailsSliderModal); // убрали в swiper детали
 
     images.forEach((imageUrl) => {
       const containerSlideAttrs: IAttributes = {
-        classList: ['swiper-slide slide-modal'],
+        classList: ['swiper-slide', 'slide-modal'],
       };
       this.containerSlideModal = new BaseComponent(containerSlideAttrs);
 
@@ -67,7 +67,7 @@ export default class ModalImageSliderProducts extends View {
 
   private initializeSliderNavigationModal() {
     const navigationSliderNextAttrs: IAttributes = {
-      classList: ['swiper-button-next next-modal'],
+      classList: ['swiper-button-next', 'next-modal'],
     };
     const navigationSliderModalNext = new BaseComponent(
       navigationSliderNextAttrs
@@ -75,7 +75,7 @@ export default class ModalImageSliderProducts extends View {
     this.swiperSliderModal.appendChild(navigationSliderModalNext);
 
     const navigationSliderPrevAttrs: IAttributes = {
-      classList: ['swiper-button-prev prev-modal'],
+      classList: ['swiper-button-prev', 'prev-modal'],
     };
     const navigationSliderModalPrev = new BaseComponent(
       navigationSliderPrevAttrs
@@ -85,7 +85,7 @@ export default class ModalImageSliderProducts extends View {
 
   private initializeSliderPaginationModal() {
     const paginationSliderAttrs: IAttributes = {
-      classList: ['swiper-pagination pagination-modal'],
+      classList: ['swiper-pagination', 'pagination-modal'],
     };
     const paginationSliderModal = new BaseComponent(paginationSliderAttrs);
     this.swiperSliderModal.appendChild(paginationSliderModal);
@@ -105,12 +105,19 @@ export default class ModalImageSliderProducts extends View {
       document.body.removeChild(this.htmlElement);
     });
     this.swiperSliderModal.node.addEventListener('click', (event) => {
+      console.log('Event triggered', event.target);
       const target = event.target as HTMLElement;
       if (
-        !target.closest('.slide-image') &&
-        !target.closest('.swiper-button-next') &&
-        !target.closest('.swiper-button-prev') &&
-        !target.closest('.swiper-pagination')
+        !target.closest('.swiper-modal .slider-image') &&
+        !target.closest('.swiper-modal .swiper-button-next') &&
+        !target.closest(
+          '.swiper-modal .swiper-button-next .swiper-button-disabled'
+        ) &&
+        !target.closest('.swiper-modal .swiper-button-prev') &&
+        !target.closest(
+          '.swiper-modal .swiper-button-prev .swiper-button-disabled'
+        ) &&
+        !target.closest('.swiper-modal .swiper-pagination')
       ) {
         this.close();
         document.body.classList.remove('lock');

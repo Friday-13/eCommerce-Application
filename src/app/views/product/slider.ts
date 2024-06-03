@@ -10,7 +10,7 @@ export default class ImageSliderProducts extends View {
     private onImageClick: (imageUrl: string) => void
   ) {
     const attrs: IAttributes = {
-      classList: ['swiper'],
+      classList: ['swiper', 'swiper-product'],
     };
     super(attrs);
     this.container = new BaseComponent(attrs);
