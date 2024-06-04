@@ -1,14 +1,10 @@
 import isPageAccessable from '@utils/access-control';
-import Error404 from '@views/404/404';
-import CatalogPageView from '@views/catalog/catalog-page';
-import FooterView from '@views/footer/footer';
-import HeaderView from '@views/header/header';
-import LoginView from '@views/login/login-page';
-import MainView from '@views/main-view';
-import MainPageView from '@views/main/main-page';
-import ProfileView from '@views/profile/profile-page';
-import ProductPageView from '@views/product/product-page';
-import RegistrationView from '@views/registration/registration-page';
+import { Error404, MainPageView, LoginView, ProfileView, RegistrationView, CatalogPageView, HeaderView, MainView, FooterView, ProductPageView} from '@views/index';
+
+
+
+type Page = Error404 | MainPageView | RegistrationView | LoginView | ProfileView | CatalogPageView;
+
 
 class App {
   private headerView: HeaderView;
@@ -17,14 +13,7 @@ class App {
 
   private footerView: FooterView;
 
-  private currentPage:
-    | Error404
-    | MainPageView
-    | RegistrationView
-    | LoginView
-    | ProfileView
-    | CatalogPageView
-    | null = null;
+  private currentPage: Page | null = null;
 
   constructor() {
     this.headerView = new HeaderView();
@@ -54,12 +43,12 @@ class App {
   }
 
   private route = (): void => {
-    const hashParts = window.location.hash.slice(1).split('/'); // Разделение хэша на части
+    const hashParts = window.location.hash.slice(1).split('/');
     const route = hashParts[0];
     const productId = hashParts[1];
 
     if (!route) {
-      window.location.hash = '#catalog';
+      window.location.hash = '#main';
       return;
     }
 
@@ -68,10 +57,9 @@ class App {
       this.currentPage = null;
     }
 
-    // Определение действия на основе полученного маршрута
     if (route === 'product' && productId) {
       this.hideFooterHeader = false;
-      this.mainView.page = new ProductPageView(productId); // Загрузка страницы продукта с переданным ID
+      this.mainView.page = new ProductPageView(productId); 
     } else {
       switch (window.location.hash) {
         case '#main':
