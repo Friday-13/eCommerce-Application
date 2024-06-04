@@ -17,6 +17,8 @@ import { IFormInputField, createInputField } from '@utils/create-input-field';
 import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
 import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
+import createEmailField from '@utils/create-email-field';
+import createPasswordField from '@utils/create-password-field';
 
 export default class ProfileView extends View {
   private form = new FormComponent({});
@@ -44,6 +46,12 @@ export default class ProfileView extends View {
   private billingAddressContainer = new FormSectionView();
 
   private billingAndShipping = new FormSectionView();
+  
+  private credentialsSection = new FormSectionView();
+  
+  private emailInput = new InputFieldComponent({}, {}, {});
+
+  private passwordInput = new InputFieldComponent({}, {}, {});
 
   constructor() {
     const attrs: IAttributes = {
@@ -54,6 +62,7 @@ export default class ProfileView extends View {
     this.addForm();
     this.populateProfileView();
     this.addPersonalInformation();
+    this.addCredentials();
   }
 
   private addForm() {
@@ -92,6 +101,16 @@ export default class ProfileView extends View {
       }
       if (customer.dateOfBirth !== undefined) {
         this.birthdayInput.input.value = customer.dateOfBirth;
+      } else {
+        showErrorMessage('Date of birth is undefined');
+      }
+      if (customer.email !== undefined) {
+        this.emailInput.input.value = customer.email;
+      } else {
+        showErrorMessage('Email is undefined');
+      }
+      if (customer.password !== undefined) {
+        this.passwordInput.input.value = customer.password;
       } else {
         showErrorMessage('Date of birth is undefined');
       }
@@ -270,4 +289,18 @@ export default class ProfileView extends View {
     this.countryInput = createInputField(attrs);
     container.appendChild(this.countryInput);
   }
+
+  private addCredentials() {
+    this.credentialsSection = new FormSectionView('Email and Password');      
+    this.emailInput = createEmailField();
+    this.emailInput.input.setDisable(true);
+    this.passwordInput = createPasswordField();
+    this.passwordInput.input.setDisable(true);
+    this.credentialsSection.appendChild(this.emailInput);
+    this.credentialsSection.appendChild(this.passwordInput);
+    this.form.node.appendChild(this.credentialsSection.htmlElement);
+  
+  }
+
+
 }
