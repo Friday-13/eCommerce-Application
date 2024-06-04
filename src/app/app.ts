@@ -90,17 +90,17 @@ class App {
             this.mainView.page = new LoginView();
           }
           break;
-          case '#profile':
-        if (isPageAccessable('authorized')) {
-          this.hideFooterHeader = false;
-          this.mainView.page = new ProfileView();
-        }
-        break;
+        case '#profile':
+          if (isPageAccessable('authorized')) {
+            this.hideFooterHeader = false;
+            this.mainView.page = new ProfileView();
+          }
+          break;
         case '#catalog':
           this.hideFooterHeader = false;
           this.mainView.page = new CatalogPageView();
           break;
-          
+
         case '#error':
           this.hideFooterHeader = true;
           this.mainView.page = new Error404();
@@ -110,7 +110,7 @@ class App {
           this.mainView.page = new Error404();
       }
     }
-    
+
     this.headerView.updateMenu();
   };
 
