@@ -9,6 +9,7 @@ import MainPageView from '@views/main/main-page';
 import ProfileView from '@views/profile/profile-page';
 import ProductPageView from '@views/product/product-page';
 import RegistrationView from '@views/registration/registration-page';
+import PasswordChangeView from '@views/change-password/change-password';
 
 class App {
   private headerView: HeaderView;
@@ -24,6 +25,7 @@ class App {
     | LoginView
     | ProfileView
     | CatalogPageView
+    | PasswordChangeView
     | null = null;
 
   constructor() {
@@ -97,6 +99,12 @@ class App {
       case '#error':
         this.hideFooterHeader = true;
         this.mainView.page = new Error404();
+        break;
+      case '#change':
+        if (isPageAccessable('authorized')) {
+          this.hideFooterHeader = false;
+          this.mainView.page = new PasswordChangeView();
+        }
         break;
       default:
         this.hideFooterHeader = true;

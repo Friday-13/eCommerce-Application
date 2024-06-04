@@ -19,6 +19,8 @@ import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-
 import { CheckboxComponent } from '@components/checkbox-component';
 import createEmailField from '@utils/create-email-field';
 import createPasswordField from '@utils/create-password-field';
+import { ButtonComponent, IButtonAttributes } from '@components/button-component';
+import Router from '@utils/router';
 
 export default class ProfileView extends View {
   private form = new FormComponent({});
@@ -63,6 +65,7 @@ export default class ProfileView extends View {
     this.populateProfileView();
     this.addPersonalInformation();
     this.addCredentials();
+    this.createChangePasswordButton();
   }
 
   private addForm() {
@@ -299,8 +302,20 @@ export default class ProfileView extends View {
     this.credentialsSection.appendChild(this.emailInput);
     this.credentialsSection.appendChild(this.passwordInput);
     this.form.node.appendChild(this.credentialsSection.htmlElement);
-  
+    
   }
 
-
+  private createChangePasswordButton() {
+    const buttonAttrs: IButtonAttributes = {
+      type: 'button',
+      content: 'Change Password',
+      tag: 'button',
+      onClick: () => {
+        Router.navigateTo('#change');
+      },
+    };
+  
+    const button = new ButtonComponent(buttonAttrs);  
+    this.form.appendChild(button);
+  }
 }
