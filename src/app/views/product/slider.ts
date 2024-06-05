@@ -5,12 +5,14 @@ import { IImageAttributes, ImageComponent } from '@components/image-component';
 export default class ImageSliderProducts extends View {
   private container!: BaseComponent;
 
+  private swiperSlider!: BaseComponent;
+
   constructor(
     images: string[],
     private onImageClick: (imageUrl: string) => void
   ) {
     const attrs: IAttributes = {
-      classList: ['swiper', 'swiper-product'],
+      classList: ['swiper-container'],
     };
     super(attrs);
     this.container = new BaseComponent(attrs);
@@ -20,15 +22,20 @@ export default class ImageSliderProducts extends View {
   public initializeSlider(images: string[]) {
     this.initializeSliderDetails(images);
     this.initializeSliderNavigation();
-    this.initializeSliderPagination();
   }
 
   private initializeSliderDetails(images: string[]) {
+    const swiperSliderAttrs: IAttributes = {
+      classList: ['swiper', 'swiper-product'],
+    };
+    this.swiperSlider = new BaseComponent(swiperSliderAttrs);
+    this.container.appendChild(this.swiperSlider);
+
     const detailsSliderAttrs: IAttributes = {
       classList: ['swiper-wrapper'],
     };
     const detailsSlider = new BaseComponent(detailsSliderAttrs);
-    this.container.appendChild(detailsSlider);
+    this.swiperSlider.appendChild(detailsSlider);
 
     images.forEach((imageUrl) => {
       const containerSlideAttrs: IAttributes = {
@@ -57,21 +64,13 @@ export default class ImageSliderProducts extends View {
       classList: ['swiper-button-next'],
     };
     const navigationSliderNext = new BaseComponent(navigationSliderNextAttrs);
-    this.container.appendChild(navigationSliderNext);
+    this.swiperSlider.appendChild(navigationSliderNext);
 
     const navigationSliderPrevAttrs: IAttributes = {
       classList: ['swiper-button-prev'],
     };
     const navigationSliderPrev = new BaseComponent(navigationSliderPrevAttrs);
-    this.container.appendChild(navigationSliderPrev);
-  }
-
-  private initializeSliderPagination() {
-    const paginationSliderAttrs: IAttributes = {
-      classList: ['swiper-pagination'],
-    };
-    const paginationSlider = new BaseComponent(paginationSliderAttrs);
-    this.container.appendChild(paginationSlider);
+    this.swiperSlider.appendChild(navigationSliderPrev);
   }
 
   public get htmlElement() {

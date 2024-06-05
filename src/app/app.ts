@@ -1,10 +1,24 @@
 import isPageAccessable from '@utils/access-control';
-import { Error404, MainPageView, LoginView, ProfileView, RegistrationView, CatalogPageView, HeaderView, MainView, FooterView, ProductPageView} from '@views/index';
+import {
+  Error404,
+  MainPageView,
+  LoginView,
+  ProfileView,
+  RegistrationView,
+  CatalogPageView,
+  HeaderView,
+  MainView,
+  FooterView,
+  ProductPageView,
+} from '@views/index';
 
-
-
-type Page = Error404 | MainPageView | RegistrationView | LoginView | ProfileView | CatalogPageView;
-
+type Page =
+  | Error404
+  | MainPageView
+  | RegistrationView
+  | LoginView
+  | ProfileView
+  | CatalogPageView;
 
 class App {
   private headerView: HeaderView;
@@ -59,7 +73,7 @@ class App {
 
     if (route === 'product' && productId) {
       this.hideFooterHeader = false;
-      this.mainView.page = new ProductPageView(productId); 
+      this.mainView.page = new ProductPageView(productId);
     } else {
       switch (window.location.hash) {
         case '#main':

@@ -12,13 +12,15 @@ export default class ModalImageSliderProducts extends View {
 
   private containerSlideModal!: BaseComponent;
 
+  private SliderModalContainer!: BaseComponent;
+
   private detailsSliderModal!: BaseComponent;
 
   private initialIndex!: number;
 
   constructor(images: string[], initialIndex: number) {
     const attrs: IAttributes = {
-      classList: ['swiper-modal-container'],
+      classList: ['swiper-modal-block'],
     };
     super(attrs);
     // console.log('Modal slider initialized with index:', initialIndex); // Для отладки
@@ -31,15 +33,20 @@ export default class ModalImageSliderProducts extends View {
     this.initializeSliderDetailsModal(images);
     this.initializeSliderCloseModal();
     this.initializeSliderNavigationModal();
-    this.initializeSliderPaginationModal();
   }
 
   private initializeSliderDetailsModal(images: string[]) {
+    const swiperSliderModalAttrs: IAttributes = {
+      classList: ['swiper-modal-container'],
+    };
+    this.SliderModalContainer = new BaseComponent(swiperSliderModalAttrs);
+    this.containerModal.appendChild(this.SliderModalContainer); // убрали в контейнер swiperContainer
+
     const swiperSliderAttrs: IAttributes = {
       classList: ['swiper', 'swiper-modal'],
     };
     this.swiperSliderModal = new BaseComponent(swiperSliderAttrs);
-    this.containerModal.appendChild(this.swiperSliderModal); // убрали в контейнер swiper
+    this.SliderModalContainer.appendChild(this.swiperSliderModal); // убрали в контейнер swiper
 
     const detailsSliderAttrs: IAttributes = {
       classList: ['swiper-wrapper', 'wrapper-modal'],
@@ -66,29 +73,21 @@ export default class ModalImageSliderProducts extends View {
   }
 
   private initializeSliderNavigationModal() {
-    const navigationSliderNextAttrs: IAttributes = {
-      classList: ['swiper-button-next', 'next-modal'],
-    };
-    const navigationSliderModalNext = new BaseComponent(
-      navigationSliderNextAttrs
-    );
-    this.swiperSliderModal.appendChild(navigationSliderModalNext);
-
     const navigationSliderPrevAttrs: IAttributes = {
-      classList: ['swiper-button-prev', 'prev-modal'],
+      classList: ['swiper-button-prev'],
     };
     const navigationSliderModalPrev = new BaseComponent(
       navigationSliderPrevAttrs
     );
     this.swiperSliderModal.appendChild(navigationSliderModalPrev);
-  }
 
-  private initializeSliderPaginationModal() {
-    const paginationSliderAttrs: IAttributes = {
-      classList: ['swiper-pagination', 'pagination-modal'],
+    const navigationSliderNextAttrs: IAttributes = {
+      classList: ['swiper-button-next'],
     };
-    const paginationSliderModal = new BaseComponent(paginationSliderAttrs);
-    this.swiperSliderModal.appendChild(paginationSliderModal);
+    const navigationSliderModalNext = new BaseComponent(
+      navigationSliderNextAttrs
+    );
+    this.swiperSliderModal.appendChild(navigationSliderModalNext);
   }
 
   private initializeSliderCloseModal() {
@@ -102,25 +101,20 @@ export default class ModalImageSliderProducts extends View {
     closeButton.node.addEventListener('click', (event) => {
       event.preventDefault();
       this.close();
-      document.body.removeChild(this.htmlElement);
+      this.htmlElement.remove();
     });
-    this.swiperSliderModal.node.addEventListener('click', (event) => {
+    this.containerModal.node.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       if (
-        !target.closest('.swiper-modal .slider-image') &&
-        !target.closest('.swiper-modal .swiper-button-next') &&
-        !target.closest(
-          '.swiper-modal .swiper-button-next .swiper-button-disabled'
-        ) &&
-        !target.closest('.swiper-modal .swiper-button-prev') &&
-        !target.closest(
-          '.swiper-modal .swiper-button-prev .swiper-button-disabled'
-        ) &&
-        !target.closest('.swiper-modal .swiper-pagination')
+        !target.closest('.swiper-wrapper.wrapper-modal') &&
+        !target.closest('.swiper-button-next') &&
+        !target.closest('.swiper-button-prev') &&
+        !target.closest('.swiper-button-prev.swiper-button-disabled') &&
+        !target.closest('.swiper-button-next.swiper-button-disabled')
       ) {
         this.close();
         document.body.classList.remove('lock');
-        document.body.removeChild(this.htmlElement);
+        this.htmlElement.remove();
       }
     });
   }
