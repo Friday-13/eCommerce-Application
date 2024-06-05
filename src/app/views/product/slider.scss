@@ -4,6 +4,11 @@
   max-width: 900px;
   height: auto;
 
+  .swiper-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
   .swiper-slide {
     overflow: hidden;
     display: flex;
@@ -17,31 +22,29 @@
     display: block;
     height: 100%;
     object-fit: contain;
-    border-radius: 10px;
+    border-radius: 20px;
 
     @media (width <= 500px) {
-      width: 400px;
-      height: 300px;
+      width: 350px;
+      height: 280px;
+      object-fit: contain;
+      border-radius: 20px;
     }
 
     @media (width <= 450px) {
       width: 280px;
       height: 200px;
+      object-fit: contain;
+      border-radius: 20px;
     }
   }
 
   .swiper-button-prev,
   .swiper-button-next {
-    --swiper-navigation-size: 34px;
+    --swiper-navigation-size: 32px;
 
-    height: 24px;
-    font-weight: 800;
     color: rgb(2 142 142);
     transition: all 0.4s ease 0s;
-
-    @media (width <= 500px) {
-      display: none;
-    }
 
     @media (any-hover: hover) {
       &:hover {
@@ -50,30 +53,26 @@
     }
   }
 
-  .swiper-pagination {
-    --swiper-theme-color: #0ff;
+  .swiper-button-prev {
+    left: 0;
+  }
 
-    bottom: 5px;
+  .swiper-button-next {
+    right: 0;
   }
 
   @media (width <= 1520px) {
     width: 100%;
     max-width: 700px;
-    margin-right: 5px;
-    margin-left: 5px;
   }
 
   @media (width <= 1380px) {
     width: 100%;
     max-width: 500px;
-    margin-right: 5px;
-    margin-left: 5px;
   }
 
   @media (width <= 1024px) {
     width: 100%;
     max-width: 700px;
-    margin-right: auto;
-    margin-left: auto;
   }
 }

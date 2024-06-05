@@ -1,19 +1,17 @@
 .main-container-product {
   width: 100%;
   padding: 1rem;
-}
 
-@media (width >= 768px) {
-  .main-container-product {
+  @media (width >= 1200px) {
+    padding: 1rem 2rem;
+  }
+
+  @media (width >= 768px) {
     padding: 1rem 1.5rem;
   }
 }
 
-@media (width >= 1200px) {
-  .main-container-product {
-    padding: 1rem 2rem;
-  }
-}
+/* общие блоки */
 
 .product-details {
   display: grid;
@@ -68,6 +66,8 @@
     grid-row: 3;
   }
 }
+
+/* общие блоки */
 
 .product-titles {
   display: flex;
