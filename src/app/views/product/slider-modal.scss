@@ -64,6 +64,7 @@
   .swiper-button-prev,
   .swiper-button-next {
     --swiper-navigation-size: 32px;
+
     font-weight: 800;
     color: black;
     transition: all 0.4s ease 0s;
@@ -73,6 +74,7 @@
         color: rgb(182 43 43);
       }
     }
+
     @media (width <= 450px) {
       --swiper-navigation-size: 26px;
     }
@@ -93,16 +95,16 @@
     color 0.3s ease;
 
   @media (width <= 650px) {
+    right: 15px;
     font-size: 36px;
     font-weight: 600;
-    right: 15px;
   }
 
   @media (width <= 520px) {
+    top: -10px;
+    right: 10px;
     font-size: 26px;
     font-weight: 600;
-    right: 10px;
-    top: -10px;
   }
 
   @media (any-hover: hover) {
