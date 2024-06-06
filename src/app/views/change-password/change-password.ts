@@ -1,5 +1,5 @@
 import View from '@views/view';
-import { IAttributes } from '@components/base-component';
+import { BaseComponent, IAttributes } from '@components/base-component';
 import { FormComponent, IFormAttributes } from '@components/form-component';
 import { InputFieldComponent } from '@components/input-field-component';
 import {
@@ -10,56 +10,137 @@ import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 import createPasswordField from '@utils/create-password-field';
 import createEmailField from '@utils/create-email-field';
+import { getCustomer } from '@services/getCustomer';
+import { Customer, CustomerSignin } from '@commercetools/platform-sdk';
+import FormSectionView from '@views/registration/form-section';
+import { IFormInputField } from '@utils/create-input-field';
+import apiRoot from '@services/api-root';
+import {
+  passwordValidator,
+  specialCharValidator,
+} from '@utils/validators/password-validator';
+import changeCustomerPassword from '@services/password';
 
 export default class PasswordChangeView extends View {
   private form = new FormComponent({});
+
+  private currentWrapper = new BaseComponent({});
+
+  private newWrapper = new BaseComponent({});
+
+  private passwordSection = new FormSectionView();
 
   private emailField = new InputFieldComponent({}, {}, {});
 
   private passwordField = new InputFieldComponent({}, {}, {});
 
+  private newPasswordField = new InputFieldComponent({}, {}, {});
+
+  private confirmNewPasswordField = new InputFieldComponent({}, {}, {});
+
   private button = new ButtonComponent({});
 
   private showPasswordButton = new ButtonComponent({});
+
+  private changePassword = new ButtonComponent({});
 
   constructor() {
     const attrs: IAttributes = {
       tag: 'section',
       id: 'change-section',
-      classList: ['col s12'],
+      classList: 'row',
     };
     super(attrs);
     this.addForm();
+    this.addCurrentSection();
+    this.getData();
     this.addEmailField();
     this.addPasswordField();
-    // this.addLoginButton();
-    // this.addSignUpButton();
+    this.addNewPasswordField();
   }
 
-  public addForm() {
+  private addForm() {
     const attrs: IFormAttributes = {
       classList: 'col s6 offset-s3',
-      noValidate: true,
-      onInput: () => {
-        // console.log('Что-то введено');
-      },
-      onSubmit: () => {
-        // console.log('Форма отправлена');
-      },
     };
     this.form = new FormComponent(attrs);
+    this.passwordSection = new FormSectionView(
+      'You can change your password here:'
+    );
     this.appendChild(this.form);
+    this.form.node.appendChild(this.passwordSection.htmlElement);
+  }
+
+  private async getData() {
+    try {
+      const customer = JSON.parse(
+        localStorage.getItem('codecraftCustomer') as string
+      );
+      const customerData = await getCustomer(customer.id);
+      this.populateForm(customerData);
+      this.addConfirmPasswordButton();
+      this.addChangePasswordButton(customerData);
+      return customerData;
+    } catch (error) {
+      showErrorMessage('Error getting customer data');
+      return null;
+    }
+  }
+
+  private populateForm(customerData: Customer | null) {
+    if (customerData) {
+      const customer: Customer = customerData;
+      if (customer.email !== undefined) {
+        this.emailField.input.value = customer.email;
+      } else {
+        showErrorMessage('Email is undefined');
+      }
+    } else {
+      showErrorMessage('Error getting customer data');
+    }
+  }
+
+  private addCurrentSection() {
+    const currentWrapperAttr: IAttributes = {
+      tag: 'section',
+      classList: 'row col s12',
+    };
+    this.currentWrapper = new BaseComponent(currentWrapperAttr);
+    this.form.appendChild(this.currentWrapper);
   }
 
   public addEmailField() {
     this.emailField = createEmailField();
     this.emailField.input.setDisable(true);
-    this.form.appendChild(this.emailField);
+    this.currentWrapper.appendChild(this.emailField);
   }
 
   public addPasswordField() {
-    this.passwordField = createPasswordField();
-    this.form.appendChild(this.passwordField);
+    const updatedAttrs: IFormInputField = {
+      id: 'currentPassword',
+      label: 'Current password',
+      placeholder: 'Enter current password',
+      type: 'password',
+      customValidators: [],
+    };
+    this.passwordField = createPasswordField(updatedAttrs);
+    this.currentWrapper.appendChild(this.passwordField);
+  }
+
+  public addConfirmPasswordButton() {
+    const attrs: IButtonAttributes = {
+      type: 'button',
+      content: 'Confirm current password',
+      onClick: () => {
+        const email = this.emailField.getValue();
+        const password = this.passwordField.getValue();
+        this.authenticateCustomer(email, password);
+      },
+    };
+    this.button = new ButtonComponent(attrs);
+    this.button.addClass('col');
+    this.button.addClass('s6');
+    this.currentWrapper.appendChild(this.button);
 
     const toggleButtonAttrs: IButtonAttributes = {
       content: 'Show/Hide Password',
@@ -68,54 +149,102 @@ export default class PasswordChangeView extends View {
           event.preventDefault();
         }
         this.passwordField.togglePasswordVisibility();
+        this.newPasswordField.togglePasswordVisibility();
+        this.confirmNewPasswordField.togglePasswordVisibility();
       },
     };
 
     this.showPasswordButton = new ButtonComponent(toggleButtonAttrs);
     this.showPasswordButton.addClass('show-hide');
-    this.passwordField.appendChild(this.showPasswordButton);
+    this.form.appendChild(this.showPasswordButton);
   }
 
-//   public addLoginButton() {
-//     const attrs: IButtonAttributes = {
-//       type: 'button',
-//       content: 'Sign in',
-//       onClick: () => {
-//         if (this.emailField.isValid() && this.passwordField.isValid()) {
-//           const email = this.emailField.getValue().trim();
-//           const password = this.passwordField.getValue();
-//         //   login({ email, password }, ChangePasswordView.sucessChange, showErrorMessage);
-//         }
-//       },
-//     };
-//     this.button = new ButtonComponent(attrs);
-//     this.button.addClass('col');
-//     this.button.addClass('s3');
-//     this.button.addClass('login-sign-in');
-//     this.form.appendChild(this.button);
-//   }
+  async authenticateCustomer(email: string, password: string) {
+    const signInBody: CustomerSignin = {
+      email,
+      password,
+    };
 
-//   public addSignUpButton() {
-//     const attrs: IButtonAttributes = {
-//       type: 'button',
-//       content: 'Sign up',
-//       onClick: () => {
-//         Router.navigateTo('#registration');
-//       },
-//     };
-//     this.button = new ButtonComponent(attrs);
-//     this.button.addClass('col');
-//     this.button.addClass('s6');
-//     this.form.appendChild(this.button);
-//   }
+    try {
+      const signInResult = await apiRoot
+        .login()
+        .post({ body: signInBody })
+        .execute();
+      const customerData = signInResult.body.customer;
+      showSucessMessage('Valid password');
+      this.addNewSection();
+      this.addNewPasswordField();
+      this.addChangePasswordButton(customerData);
+      return signInResult;
+    } catch (error) {
+      showErrorMessage('Invalid password');
+      throw error;
+    }
+  }
 
-  static sucessChange() {
+  private addNewSection() {
+    const newWrapperAttr: IAttributes = {
+      tag: 'section',
+      classList: 'row col s12',
+    };
+    this.newWrapper = new BaseComponent(newWrapperAttr);
+    this.form.appendChild(this.newWrapper);
+  }
+
+  public addNewPasswordField() {
+    const newPasswordAttrs: IFormInputField = {
+      id: 'new-password',
+      label: 'Enter new password',
+      placeholder: 'New password',
+      type: 'password',
+      customValidators: [passwordValidator, specialCharValidator],
+    };
+    this.newPasswordField = createPasswordField(newPasswordAttrs);
+    this.newWrapper.appendChild(this.newPasswordField);
+
+    const confirmNewPasswordAttrs: IFormInputField = {
+      id: 'confirm-new',
+      label: 'Enter new password again',
+      placeholder: 'New password',
+      type: 'password',
+      customValidators: [passwordValidator, specialCharValidator],
+    };
+    this.confirmNewPasswordField = createPasswordField(confirmNewPasswordAttrs);
+    this.newWrapper.appendChild(this.confirmNewPasswordField);
+  }
+
+  public addChangePasswordButton(customerData: Customer | null) {
+    const attrs: IButtonAttributes = {
+      type: 'button',
+      content: 'Save new password',
+      onClick: () => this.handlePasswordChange(customerData),
+    };
+
+    this.changePassword = new ButtonComponent(attrs);
+    this.changePassword.addClass('col');
+    this.changePassword.addClass('s6');
+    this.newWrapper.appendChild(this.changePassword);
+  }
+
+  private handlePasswordChange(customerData: Customer | null) {
+    const currentPassword = this.passwordField.getValue().trim();
+    const newPassword = this.newPasswordField.getValue().trim();
+    const confirmedPassword = this.confirmNewPasswordField.getValue().trim();
+    if (customerData && newPassword === confirmedPassword) {
+      changeCustomerPassword(
+        customerData.id,
+        customerData.version,
+        currentPassword,
+        newPassword
+      )
+        .then(() => PasswordChangeView.successChange())
+        .catch(() => showErrorMessage('Passwords do not match'));
+    }
+  }
+
+  static successChange() {
     const SUCSESS_MSG = 'The password has been changed';
     Router.navigateTo('#profile');
     showSucessMessage(SUCSESS_MSG);
-  }
-
-  public clearContent(): void {
-    document.body.removeChild(this.htmlElement);
   }
 }
