@@ -17,6 +17,13 @@ import { IFormInputField, createInputField } from '@utils/create-input-field';
 import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
 import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
+import createEmailField from '@utils/create-email-field';
+import createPasswordField from '@utils/create-password-field';
+import {
+  ButtonComponent,
+  IButtonAttributes,
+} from '@components/button-component';
+import Router from '@utils/router';
 
 export default class ProfileView extends View {
   private form = new FormComponent({});
@@ -45,6 +52,12 @@ export default class ProfileView extends View {
 
   private billingAndShipping = new FormSectionView();
 
+  private credentialsSection = new FormSectionView();
+
+  private emailInput = new InputFieldComponent({}, {}, {});
+
+  private passwordInput = new InputFieldComponent({}, {}, {});
+
   constructor() {
     const attrs: IAttributes = {
       classList: 'row',
@@ -54,6 +67,8 @@ export default class ProfileView extends View {
     this.addForm();
     this.populateProfileView();
     this.addPersonalInformation();
+    this.addCredentials();
+    this.createChangePasswordButton();
   }
 
   private addForm() {
@@ -95,6 +110,16 @@ export default class ProfileView extends View {
       } else {
         showErrorMessage('Date of birth is undefined');
       }
+      if (customer.email !== undefined) {
+        this.emailInput.input.value = customer.email;
+      } else {
+        showErrorMessage('Email is undefined');
+      }
+      if (customer.password !== undefined) {
+        this.passwordInput.input.value = customer.password;
+      } else {
+        showErrorMessage('Password is undefined');
+      }
     } else {
       showErrorMessage('Error getting customer data');
     }
@@ -133,6 +158,8 @@ export default class ProfileView extends View {
     this.billingAndShipping = new FormSectionView('Billing & Shipping Address');
 
     if (customerData && customerData.addresses) {
+      console.log(customerData);
+
       const { addresses } = customerData;
       const defaultShippingId = customerData.defaultShippingAddressId;
       const defaultBillingId = customerData.defaultBillingAddressId;
@@ -269,5 +296,30 @@ export default class ProfileView extends View {
     };
     this.countryInput = createInputField(attrs);
     container.appendChild(this.countryInput);
+  }
+
+  private addCredentials() {
+    this.credentialsSection = new FormSectionView('Email and Password');
+    this.emailInput = createEmailField();
+    this.emailInput.input.setDisable(true);
+    this.passwordInput = createPasswordField();
+    this.passwordInput.input.setDisable(true);
+    this.credentialsSection.appendChild(this.emailInput);
+    this.credentialsSection.appendChild(this.passwordInput);
+    this.form.node.appendChild(this.credentialsSection.htmlElement);
+  }
+
+  private createChangePasswordButton() {
+    const buttonAttrs: IButtonAttributes = {
+      type: 'button',
+      content: 'Change Password',
+      tag: 'button',
+      onClick: () => {
+        Router.navigateTo('#change');
+      },
+    };
+
+    const button = new ButtonComponent(buttonAttrs);
+    this.form.appendChild(button);
   }
 }
