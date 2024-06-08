@@ -1,0 +1,72 @@
+@import "node_modules/materialize-css/sass/materialize";
+
+@import "../app/views/header/header";
+@import "../app/views/main/main";
+@import "../app/views/footer/footer";
+@import "../app/views/404/404";
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.hide-on-med-and-down {
+  display: block !important;
+}
+
+.hidden {
+  display: none;
+}
+
+#login-section {
+  margin: 10% 30% 0;
+}
+
+#create-account {
+  margin-left: 25%;
+}
+
+main {
+  flex: 1 0 auto;
+  width: 100%;
+  background: linear-gradient(
+    270deg,
+    #f0f0f0,
+    #fde5e5,
+    #e5f9fd,
+    #e5fde7,
+    #fdfde5,
+    #f0f0f0
+  );
+  background-size: 800% 800%;
+  animation: gradient-background-light 15s ease infinite;
+}
+
+@keyframes gradient-background-light {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.login-sign-in {
+  margin-right: 30px;
+}
+
+.show-hide {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.input-field > label {
+  font-weight: 600;
+  color: black;
+}

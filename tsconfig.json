@@ -31,16 +31,28 @@
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
     "paths": {
       "@baseStyles/": ["./src/styles/style.scss"],
-      "@assets/": ["./src/assets/*"],
+      "@assets/*": ["./src/assets/*"],
       "@utils/*": ["./src/app/utils/*"],
       "@views/*": ["./src/app/views/*"],
       "@controllers/*": ["./src/app/controllers/*"],
       "@models/*": ["./src/app/models/*"],
-      "@services/*": ["./src/app/services/*"]
+      "@services/*": ["./src/app/services/*"],
+      "@components/*": ["./src/app/components/*"]
     },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "camelCaseOnly"
+        }
+      }
+    ],
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
-    // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
+    "types": [
+      "vite/client",
+      "jest"
+    ] /* Specify type package names to be included without being referenced in a source file. */,
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
     // "moduleSuffixes": [],                             /* List of file name suffixes to search when resolving a module. */
     // "allowImportingTsExtensions": true,               /* Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set. */
@@ -115,19 +127,11 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "src/**/*.ts",
     ".eslintrc.cjs",
     "vite.config.ts",
     "**/*.ts",
-    "jest.config.cjs"
+    "jest.config.cjs",
+    "jest.setup.js"
   ],
-  "exclude": ["node_modules", "dist"],
-  "plugins": [
-    {
-      "name": "typescript-plugin-css-modules",
-      "options": {
-        "classnameTransform": "camelCaseOnly"
-      }
-    }
-  ]
+  "exclude": ["node_modules", "dist"]
 }
