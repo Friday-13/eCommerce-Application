@@ -1,0 +1,116 @@
+.swiper-modal-block {
+  cursor: pointer;
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  visibility: hidden;
+  opacity: 0;
+  background-color: rgb(0 0 0 / 80%);
+  transition:
+    transform 0.5s ease-out,
+    opacity 0.5s ease-out,
+    visibility 0.5s ease-out;
+
+  &.popup-open {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.swiper-modal-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper.swiper-modal {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+
+  .swiper-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .swiper-slide {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swiper-slide img {
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .swiper-button-prev {
+    left: 0;
+  }
+
+  .swiper-button-next {
+    right: 0;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    --swiper-navigation-size: 32px;
+
+    font-weight: 800;
+    color: black;
+    transition: all 0.4s ease 0s;
+
+    @media (any-hover: hover) {
+      &:hover {
+        color: rgb(182 43 43);
+      }
+    }
+
+    @media (width <= 450px) {
+      --swiper-navigation-size: 26px;
+    }
+  }
+}
+
+.button-close-modal {
+  cursor: pointer;
+  position: absolute;
+  z-index: 15;
+  top: 0;
+  right: 25px;
+  transform-origin: 50% 50%;
+  font-size: 46px;
+  font-weight: 700;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+
+  @media (width <= 650px) {
+    right: 15px;
+    font-size: 36px;
+    font-weight: 600;
+  }
+
+  @media (width <= 520px) {
+    top: -10px;
+    right: 10px;
+    font-size: 26px;
+    font-weight: 600;
+  }
+
+  @media (any-hover: hover) {
+    &:hover {
+      transform: scale(1.2);
+      color: rgb(182 43 43);
+    }
+  }
+}

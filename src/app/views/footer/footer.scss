@@ -2,6 +2,10 @@
   padding-top: 0;
 }
 
+.footer-container {
+  padding: 10px;
+}
+
 .footer-items {
   display: flex;
   gap: 10rem;
@@ -9,6 +13,14 @@
   justify-content: center;
   min-height: 2rem;
   color: black;
+
+  @media (width <= 500px) {
+    gap: 4rem;
+    max-width: 100%;
+    padding: 10px;
+    font-size: small;
+    text-align: start;
+  }
 }
 
 .footer-link-school {
