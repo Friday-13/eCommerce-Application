@@ -154,7 +154,11 @@
 
 .product-price {
   font-size: 1.2em;
-  color: #999;
+  color: black;
+  font-weight: 700;
+}
+
+.price-strikethrough {
   text-decoration: line-through;
 }
 

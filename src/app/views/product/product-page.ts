@@ -27,17 +27,34 @@ export default class ProductPageView extends View {
 
   private currentImageUrls: string[] = [];
 
+  private productData?: IProductData;
+
   constructor(productId: string) {
     const attrs: IAttributes = {
       classList: ['main-container-product'],
     };
     super(attrs);
     this.productId = productId;
-    this.initializeContentProductPage();
+    this.fetchProductData(() => {
+      this.initializeContentProductPage();
+    });
   }
 
   public initializeContentProductPage() {
     this.initializeDetailsProduct();
+  }
+
+  private fetchProductData(callback: () => void): void {
+    getProductById(
+      this.productId,
+      (productData: IProductData) => {
+        this.productData = productData;
+        callback();
+      },
+      (errorMsg: string) => {
+        showErrorMessage(`Error fetching product details: ${errorMsg}`);
+      }
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -105,7 +122,6 @@ export default class ProductPageView extends View {
     const initialIndex = this.currentImageUrls.indexOf(imageUrl);
     // console.log('Opening modal for URL:', imageUrl, 'at index:', initialIndex);
     if (initialIndex === -1) {
-      console.error('Image URL not found in the current array.');
       return;
     }
     const modalSlider = new ModalImageSliderProducts(
@@ -118,6 +134,8 @@ export default class ProductPageView extends View {
   }
 
   private setupGallerySlider(detailsProduct: BaseComponent) {
+    if (!this.productData) return;
+
     const addImagesToSlider = (imageUrls: string[]) => {
       this.currentImageUrls = imageUrls;
       const imageSlider = new ImageSliderProducts(
@@ -130,15 +148,7 @@ export default class ProductPageView extends View {
       }, 0);
     };
 
-    getProductById(
-      this.productId,
-      (productData: IProductData) => {
-        addImagesToSlider(productData.imageUrls);
-      },
-      (errorMsg: string) => {
-        showErrorMessage(`Error fetching product details: ${errorMsg}`);
-      }
-    );
+    addImagesToSlider(this.productData.imageUrls);
   }
 
   // private setupAdditionalDivs(parentComponent: BaseComponent) {
@@ -146,6 +156,8 @@ export default class ProductPageView extends View {
   // }
 
   private initializeProductTitle(detailsProduct: BaseComponent) {
+    if (!this.productData) return;
+
     const titlesAttrs: IAttributes = {
       classList: ['product-titles'],
     };
@@ -154,7 +166,7 @@ export default class ProductPageView extends View {
     const productTitleAttrs: IAttributes = {
       tag: 'h1',
       classList: ['product-title'],
-      content: '',
+      content: this.productData.productName,
     };
     const productTitle = new BaseComponent(productTitleAttrs);
 
@@ -174,26 +186,18 @@ export default class ProductPageView extends View {
     this.titlesContainer.appendChild(productCategory);
     productCategory.appendChild(productBrendImage);
 
-    getProductById(
-      this.productId,
-      (productData: IProductData) => {
-        productTitle.textContent = productData.productName;
-        // Используем enum для выбора изображения
-        const brandImageSrc = themeToBrandImageMap[productData.theme as Theme];
-        if (brandImageSrc) {
-          productBrendImage.node.src = brandImageSrc;
-          productBrendImage.node.alt = `Image of ${productData.theme} brand`;
-        }
-      },
-      (errorMsg: string) => {
-        showErrorMessage(`Error fetching product details: ${errorMsg}`);
-      }
-    );
+    const brandImageSrc = themeToBrandImageMap[this.productData.theme as Theme];
+    if (brandImageSrc) {
+      productBrendImage.node.src = brandImageSrc;
+      productBrendImage.node.alt = `Image of ${this.productData.theme} brand`;
+    }
 
     detailsProduct.appendChild(this.titlesContainer);
   }
 
   private initializeProductPrice(detailsProduct: BaseComponent) {
+    if (!this.productData) return;
+
     const pricesProductAttrs: IAttributes = {
       classList: ['product-prices'],
     };
@@ -201,34 +205,28 @@ export default class ProductPageView extends View {
 
     const productPriceAttrs: IAttributes = {
       classList: ['product-price'],
-      content: '',
+      content: `$ ${this.productData.price}`,
     };
     const productPrice = new BaseComponent(productPriceAttrs);
-
-    const productDiscountPriceAttrs: IAttributes = {
-      classList: ['product-price-discount'],
-      content: '',
-    };
-    const productDiscountPrice = new BaseComponent(productDiscountPriceAttrs);
-
     this.pricesContainer.appendChild(productPrice);
-    this.pricesContainer.appendChild(productDiscountPrice);
 
-    getProductById(
-      this.productId,
-      (productData: IProductData) => {
-        productPrice.textContent = `$ ${productData.price}`;
-        productDiscountPrice.textContent = `$ ${productData.discountedPrice}`;
-      },
-      (errorMsg: string) => {
-        showErrorMessage(`Error fetching product details: ${errorMsg}`);
-      }
-    );
+    // Добавляем цену со скидкой только если она есть
+    if (this.productData.discountedPrice) {
+      const productDiscountPriceAttrs: IAttributes = {
+        classList: ['product-price-discount'],
+        content: `$ ${this.productData.discountedPrice}`,
+      };
+      const productDiscountPrice = new BaseComponent(productDiscountPriceAttrs);
+      this.pricesContainer.appendChild(productDiscountPrice);
+      productPrice.addClass('price-strikethrough');
+    }
 
     detailsProduct.appendChild(this.pricesContainer);
   }
 
   private initializeProductDescription(detailsProduct: BaseComponent) {
+    if (!this.productData) return;
+
     const productDescriptionContainerAttrs: IAttributes = {
       tag: 'section',
       classList: ['product-description-container'],
@@ -245,15 +243,6 @@ export default class ProductPageView extends View {
     };
     this.productDescription = new BaseComponent(productDescriptionAttrs);
     this.productDescriptionContainer.appendChild(this.productDescription);
-
-    getProductById(
-      this.productId,
-      (productData: IProductData) => {
-        this.productDescription.node.innerHTML = productData.description;
-      },
-      (errorMsg: string) => {
-        showErrorMessage(`Error fetching product details: ${errorMsg}`);
-      }
-    );
+    this.productDescription.node.innerHTML = this.productData.description;
   }
 }
