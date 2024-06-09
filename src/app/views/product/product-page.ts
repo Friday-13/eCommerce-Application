@@ -7,6 +7,7 @@ import View from '@views/view';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Theme, themeToBrandImageMap } from '@models/brend-images';
+import { IButtonAttributes } from '@components/button-component';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -112,6 +113,7 @@ export default class ProductPageView extends View {
 
     this.initializeProductTitle(this.productContainer);
     this.initializeProductPrice(this.productContainer);
+    this.initializeProductCart(this.productContainer);
   }
 
   private onImageClick(imageUrl: string) {
@@ -222,6 +224,28 @@ export default class ProductPageView extends View {
     }
 
     detailsProduct.appendChild(this.pricesContainer);
+  }
+
+  private initializeProductCart(detailsProduct: BaseComponent) {
+    if (!this.productData) return;
+
+    const cartProductAttrs: IAttributes = {
+      classList: ['product-cart'],
+    };
+    const cartContainer = new BaseComponent(cartProductAttrs);
+
+    const addCartButtonAttrs: IButtonAttributes = {
+      classList: ['button-add-cart', 'waves-light', 'btn', 'no-text-transform'],
+      content: 'Add to cart',
+    };
+    const addCartButton = new BaseComponent(addCartButtonAttrs);
+    cartContainer.appendChild(addCartButton);
+
+    addCartButton.node.addEventListener('click', (event) => {
+      event.preventDefault();
+    });
+
+    detailsProduct.appendChild(cartContainer);
   }
 
   private initializeProductDescription(detailsProduct: BaseComponent) {
