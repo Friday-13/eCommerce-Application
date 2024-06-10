@@ -8,6 +8,7 @@ import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Theme, themeToBrandImageMap } from '@models/brend-images';
 import { IButtonAttributes } from '@components/button-component';
+import { Cart } from '@commercetools/platform-sdk';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -29,6 +30,8 @@ export default class ProductPageView extends View {
   private currentImageUrls: string[] = [];
 
   private productData?: IProductData;
+
+  private cartData?: Cart;
 
   constructor(productId: string) {
     const attrs: IAttributes = {
