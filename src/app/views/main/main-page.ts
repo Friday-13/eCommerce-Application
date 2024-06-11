@@ -38,25 +38,30 @@ export default class MainPageView extends View {
     const promoSection = new BaseComponent(promoSectionAttr);
     this.mainContainer.appendChild(promoSection);
 
+    const discountContainer: IAttributes = {
+      tag: 'div',
+      classList: ['row', 'center-align'],
+    };
+
     const cardAttr1: ICardAttributes = {
       inputValue: 'DISCOUNT10',
       description: 'GET 30% OFF YOUR CART WITH ORDERS OVER 1000$',
     };
-    const card1 = new CardComponent(cardAttr1);
+    const card1 = new CardComponent(cardAttr1, discountContainer);
     promoSection.appendChild(card1);
 
     const cardAttr2: ICardAttributes = {
       inputValue: 'DISCOUNT20',
       description: 'TAKE AN EXTRA 20% OFF FOR ORDERS OVER 1000€',
     };
-    const card2 = new CardComponent(cardAttr2);
+    const card2 = new CardComponent(cardAttr2, discountContainer);
     promoSection.appendChild(card2);
 
     const cardAttr3: ICardAttributes = {
       inputValue: 'DISCOUNT30',
       description: 'GET 30% OFF YOUR CART WITH ORDERS OVER 1500$',
     };
-    const card3 = new CardComponent(cardAttr3);
+    const card3 = new CardComponent(cardAttr3, discountContainer);
     promoSection.appendChild(card3);
   }
 }

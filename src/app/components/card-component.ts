@@ -8,16 +8,19 @@ export interface ICardAttributes {
   imageSrc?: string;
   title?: string;
   description?: string;
-  buttonText?: string;
   inputValue?: string;
-  buttonClickHandler?: () => void;
 }
 
 export class CardComponent extends BaseComponent {
-  constructor(data: Partial<ICardAttributes> = {}) {
-    const { imageSrc = '', title = '', description = '', inputValue = ''  } = data;
+  constructor(data: Partial<ICardAttributes> = {}, discountContainerAttr?: IAttributes) {
+    const {
+      imageSrc = '',
+      title = '',
+      description = '',
+      inputValue = '',
+    } = data;
 
-    super({ tag: 'div', classList: ['col', 's12', 'm4'] });
+    super({ tag: 'div', classList: ['col', 's12', 'm4', 'center-align'] });
 
     const card = new BaseComponent({ tag: 'div', classList: ['card'] });
     this.appendChild(card);
@@ -59,49 +62,48 @@ export class CardComponent extends BaseComponent {
       });
       cardContent.appendChild(contentParagraph);
     }
-    const discountContainerAttr: IAttributes = {
-      tag: 'div',
-      classList: ['row'],
-    };
-    const discountContainer = new BaseComponent(discountContainerAttr);
-    card.appendChild(discountContainer);
 
-    const inputAttr: IInputAttributes = {
-      disabled: true,
-      value: inputValue,
-      classList: ['col s3 red-text offset-s2'],
-      id: 'input',
-    };
-    const input = new InputComponent(inputAttr);
-    discountContainer.appendChild(input);
+    if (discountContainerAttr) {
+      const discountContainer = new BaseComponent(discountContainerAttr);
+      card.appendChild(discountContainer);
 
-    const buttonAttr: IButtonAttributes = {
-      content: 'COPY',
-      onClick: () => {
-        const inputElement = document.getElementById(
-          'input'
-        ) as HTMLInputElement;
-        if (inputElement) {
-          navigator.clipboard
-            .writeText(inputElement.value)
-            .then(() => {
-              showSucessMessage('Text copied to clipboard');
-            })
-            .catch(() => {
-              showErrorMessage('Failed to copy text');
-            });
-        }
-      },
-      classList: [
-        'edit-profile-button',
-        'profile-button',
-        'waves-effect',
-        'waves-light',
-        'btn',
-        'no-text-transform',
-      ],
-    };
-    const button = new ButtonComponent(buttonAttr);
-    discountContainer.appendChild(button);
+      const inputAttr: IInputAttributes = {
+        disabled: true,
+        value: inputValue,
+        classList: ['col s3 red-text offset-s2'],
+        id: 'input',
+      };
+      const input = new InputComponent(inputAttr);
+      discountContainer.appendChild(input);
+
+      const buttonAttr: IButtonAttributes = {
+        content: 'COPY',
+        onClick: () => {
+          const inputElement = document.getElementById(
+            'input'
+          ) as HTMLInputElement;
+          if (inputElement) {
+            navigator.clipboard
+              .writeText(inputElement.value)
+              .then(() => {
+                showSucessMessage('Text copied to clipboard');
+              })
+              .catch(() => {
+                showErrorMessage('Failed to copy text');
+              });
+          }
+        },
+        classList: [
+          'edit-profile-button',
+          'profile-button',
+          'waves-effect',
+          'waves-light',
+          'btn',
+          'no-text-transform',
+        ],
+      };
+      const button = new ButtonComponent(buttonAttr);
+      discountContainer.appendChild(button);
+    }
   }
 }
