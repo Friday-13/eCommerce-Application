@@ -9,6 +9,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Theme, themeToBrandImageMap } from '@models/brend-images';
 import { IButtonAttributes } from '@components/button-component';
 import { Cart } from '@commercetools/platform-sdk';
+import CartHandler from '@services/cart-handler';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -33,12 +34,15 @@ export default class ProductPageView extends View {
 
   private cartData?: Cart;
 
-  constructor(productId: string) {
+  private cartHandler: CartHandler;
+
+  constructor(productId: string, userId: string | null = null) {
     const attrs: IAttributes = {
       classList: ['main-container-product'],
     };
     super(attrs);
     this.productId = productId;
+    this.cartHandler = new CartHandler(userId);
     this.fetchProductData(() => {
       this.initializeContentProductPage();
     });
@@ -203,6 +207,8 @@ export default class ProductPageView extends View {
   private initializeProductPrice(detailsProduct: BaseComponent) {
     if (!this.productData) return;
 
+    console.log('Initializing cart with product data:', this.productData);
+
     const pricesProductAttrs: IAttributes = {
       classList: ['product-prices'],
     };
@@ -229,6 +235,17 @@ export default class ProductPageView extends View {
     detailsProduct.appendChild(this.pricesContainer);
   }
 
+  private handleAddToCartPage() {
+    if (!this.productData) {
+      return;
+    }
+
+    const productId = this.productData.id;
+    const quantity = 1;
+
+    this.cartHandler.handleAddToCart(productId, quantity);
+  }
+
   private initializeProductCart(detailsProduct: BaseComponent) {
     if (!this.productData) return;
 
@@ -246,6 +263,7 @@ export default class ProductPageView extends View {
 
     addCartButton.node.addEventListener('click', (event) => {
       event.preventDefault();
+      this.handleAddToCartPage();
     });
 
     detailsProduct.appendChild(cartContainer);

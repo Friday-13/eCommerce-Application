@@ -12,6 +12,12 @@ export const addProductToCart = (
   successCallback: (cartData: Cart) => void,
   errorCallback: (message: string) => void
 ): void => {
+  console.log('addProductToCart called with:', {
+    cartId,
+    cartVersion,
+    productId,
+    quantity,
+  });
   apiRoot
     .carts()
     .withId({ ID: cartId })
@@ -30,9 +36,11 @@ export const addProductToCart = (
     .execute()
     .then((response: ClientResponse<Cart>) => {
       const cartData: Cart = response.body;
+      console.log('Product added to cart successfully:', cartData);
       successCallback(cartData);
     })
     .catch((error: ClientResponse<{ message: string }>) => {
+      console.error('Error adding product to cart:', error.body);
       errorCallback(error.body.message);
     });
 };

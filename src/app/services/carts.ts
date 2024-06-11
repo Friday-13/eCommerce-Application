@@ -17,6 +17,7 @@ export const createAnonymousCart = (
     .execute()
     .then((response: ClientResponse<Cart>) => {
       const cartData: Cart = response.body;
+      console.log(cartData);
       successCallback(cartData);
     })
     .catch((error: ClientResponse<{ message: string }>) => {
