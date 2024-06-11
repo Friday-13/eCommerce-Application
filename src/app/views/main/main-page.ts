@@ -2,6 +2,7 @@ import View from '@views/view';
 import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import carUrl from '@assets/main-image.webp';
+import { CardComponent, ICardAttributes } from '@components/card';
 
 export default class MainPageView extends View {
   private mainContainer!: BaseComponent; // добавлять разные блоки сюда
@@ -28,5 +29,31 @@ export default class MainPageView extends View {
     this.mainContainer.appendChild(mainImg);
     this.appendChild(this.mainContainer);
     document.body.appendChild(this.htmlElement);
+
+    const promoSectionAttr: IAttributes = {
+      tag: 'section',
+      id: 'promo-section',
+      classList: ['row'],
+    };
+    const promoSection = new BaseComponent(promoSectionAttr);
+    this.mainContainer.appendChild(promoSection);
+
+    const cardAttr1: ICardAttributes = {
+      description: 'This is a description for the card',
+    };
+    const card1 = new CardComponent(cardAttr1);
+    promoSection.appendChild(card1);
+
+    const cardAttr2: ICardAttributes = {
+      description: 'This is a description for the card',
+    };
+    const card2 = new CardComponent(cardAttr2);
+    promoSection.appendChild(card2);
+
+    const cardAttr3: ICardAttributes = {
+      description: 'This is a description for the card',
+    };
+    const card3 = new CardComponent(cardAttr3);
+    promoSection.appendChild(card3);
   }
 }
