@@ -15,7 +15,7 @@ export interface ICardAttributes {
 
 export class CardComponent extends BaseComponent {
   constructor(data: Partial<ICardAttributes> = {}) {
-    const { imageSrc = '', title = '', description = '' } = data;
+    const { imageSrc = '', title = '', description = '', inputValue = ''  } = data;
 
     super({ tag: 'div', classList: ['col', 's12', 'm4'] });
 
@@ -68,7 +68,7 @@ export class CardComponent extends BaseComponent {
 
     const inputAttr: IInputAttributes = {
       disabled: true,
-      value: 'DISCOUNT30',
+      value: inputValue,
       classList: ['col s3 red-text offset-s2'],
       id: 'input',
     };
