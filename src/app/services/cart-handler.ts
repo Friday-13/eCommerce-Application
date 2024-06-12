@@ -10,7 +10,11 @@ class CartHandler {
 
   constructor(userId: string | null) {
     this.userId = userId;
-    this.loadCartFromLocalStorage();
+    if (!userId) {
+      this.loadCartFromLocalStorage();
+    } else {
+      this.loadCartFromServer(userId);
+    }
   }
 
   public handleAddToCart(productId: string, quantity: number): void {
@@ -33,7 +37,6 @@ class CartHandler {
         (cartData) => {
           this.currentCartId = cartData.id;
           this.currentCartVersion = cartData.version;
-          this.saveCartToLocalStorage();
           this.addProductToExistingCart(
             this.currentCartId,
             this.currentCartVersion,
@@ -79,7 +82,9 @@ class CartHandler {
       (cartData) => {
         this.currentCartId = cartData.id;
         this.currentCartVersion = cartData.version;
-        this.saveCartToLocalStorage();
+        if (!this.userId) {
+          this.saveCartToLocalStorage();
+        }
         console.log('Product added to cart:', cartData);
       },
       (errorMessage) => {
@@ -104,6 +109,10 @@ class CartHandler {
       this.currentCartVersion = cartData.currentCartVersion;
     }
   }
+
+  // метод для загрузки корзины зарегистрированного пользователя с сервера
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
+  private loadCartFromServer(userId: string): void {}
 }
 
 export default CartHandler;

@@ -55,7 +55,6 @@ export const getProductById = (
           masterData: { current },
         },
       }) => {
-        console.log('Fetched current data:', current);
         const productData = createProductData(id, current);
         successCallback(productData);
       }

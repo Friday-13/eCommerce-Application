@@ -207,8 +207,6 @@ export default class ProductPageView extends View {
   private initializeProductPrice(detailsProduct: BaseComponent) {
     if (!this.productData) return;
 
-    console.log('Initializing cart with product data:', this.productData);
-
     const pricesProductAttrs: IAttributes = {
       classList: ['product-prices'],
     };
