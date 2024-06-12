@@ -18,9 +18,9 @@ describe('HeaderView', () => {
       const menuItems = navElement.querySelectorAll('li');
       expect(menuItems.length).toBe(5);
       expect(menuItems[0].textContent).toContain('Catalog');
-      expect(menuItems[2].textContent).toContain('Sign in');
-      expect(menuItems[3].textContent).toContain('Sign up');
-      expect(menuItems[1].textContent).toContain('About Us');
+      expect(menuItems[1].textContent).toContain('Sign in');
+      expect(menuItems[2].textContent).toContain('Sign up');
+      expect(menuItems[3].textContent).toContain('About Us');
       expect(menuItems[4].textContent).toContain('Cart');
     } else {
       throw new Error('Navigation element is not found');
