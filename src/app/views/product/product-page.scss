@@ -150,11 +150,19 @@
   gap: 2rem;
   align-items: center;
   justify-content: flex-start;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
 }
 
 .product-price {
   font-size: 1.2em;
-  color: #999;
+  font-weight: 700;
+  color: black;
+}
+
+.price-strikethrough {
   text-decoration: line-through;
 }
 
@@ -162,4 +170,36 @@
   font-size: 1.5em;
   font-weight: bold;
   color: #e60023;
+}
+
+.button-add-cart {
+  height: 40px;
+  font-size: 20px;
+  background-color: #c18183;
+  border: 2px solid #fff;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 60%);
+  transition:
+    background-color 0.4s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+  }
+
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: #855a5b;
+      border: 2px solid #cd4646;
+
+      a {
+        background-color: #855a5b;
+      }
+
+      .no-text-transform {
+        color: black;
+      }
+    }
+  }
 }
