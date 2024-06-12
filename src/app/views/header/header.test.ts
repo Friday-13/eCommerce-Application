@@ -21,7 +21,7 @@ describe('HeaderView', () => {
       expect(menuItems[1].textContent).toContain('Sign in');
       expect(menuItems[2].textContent).toContain('Sign up');
       expect(menuItems[3].textContent).toContain('group');
-      expect(menuItems[4].textContent).toContain('Cart');
+      expect(menuItems[4].textContent).toContain('shopping_cart');
     } else {
       throw new Error('Navigation element is not found');
     }
