@@ -21,6 +21,7 @@ const getProducts = (
   filterQuery: Array<string> = [],
   sort: Array<string> = []
 ) => {
+  console.log(limit);
   apiRoot
     .productProjections()
     .search()
@@ -38,6 +39,7 @@ const getProducts = (
       const { results } = response.body;
       const products = parseProductProjectionResults(results);
       sucessCallback(products);
+      console.log(response);
     })
     .catch((error) => {
       errorCallback(error.message);
