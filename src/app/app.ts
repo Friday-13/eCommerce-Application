@@ -10,6 +10,7 @@ import {
   MainView,
   FooterView,
   ProductPageView,
+  BasketPageView,
 } from '@views/index';
 
 type Page =
@@ -101,6 +102,11 @@ class App {
         case '#catalog':
           this.hideFooterHeader = false;
           this.mainView.page = new CatalogPageView();
+          break;
+
+        case '#cart':
+          this.hideFooterHeader = false;
+          this.mainView.page = new BasketPageView();
           break;
 
         case '#error':
