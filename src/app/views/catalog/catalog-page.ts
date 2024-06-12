@@ -1,5 +1,3 @@
-import { BaseComponent, IAttributes } from '@components/base-component';
-import View from '@views/view';
 import getProducts from '@services/products';
 import { IProductData } from '@models/products';
 import { showErrorMessage } from '@utils/toast-messages';
@@ -9,6 +7,7 @@ import { Dropdown } from 'materialize-css';
 import getCategories from '@services/categories';
 import { categoryFilter } from '@utils/query-args';
 import CategoryBreadCrumbsView from '@views/category-breadcrumbs';
+import PageView from '@views/page-view';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
@@ -16,9 +15,7 @@ import ChipsBlockView from './chips-block';
 import CategoryDropDown from './category-drop-down';
 import currentCategory from './current-category';
 
-export default class CatalogPageView extends View {
-  private _pageWrapper = new BaseComponent({});
-
+export default class CatalogPageView extends PageView {
   private _productList = new ProductListView();
 
   private _breadCrumbs = new CategoryBreadCrumbsView(() => {});
@@ -34,11 +31,7 @@ export default class CatalogPageView extends View {
   private _chipsBlock = new ChipsBlockView();
 
   constructor() {
-    const attrs: IAttributes = {
-      classList: 'row',
-    };
-    super(attrs);
-    this.addWrapper();
+    super();
     this.addBreadCrumbs();
     this.addControls();
     this.addChipsBlock();
@@ -49,18 +42,10 @@ export default class CatalogPageView extends View {
     this.addCategoryList();
   }
 
-  addWrapper() {
-    const attrs: IAttributes = {
-      classList: ['col', 's12', 'm10', 'offset-m1'],
-    };
-    this._pageWrapper = new BaseComponent(attrs);
-    this.appendChild(this._pageWrapper);
-  }
-
   addProductList() {
     getProducts(this.setProductList.bind(this), showErrorMessage);
     this._productList = new ProductListView();
-    this._pageWrapper.node.appendChild(this._productList.htmlElement);
+    this._pageWrapper.appendChild(this._productList);
   }
 
   get productList() {
@@ -75,19 +60,19 @@ export default class CatalogPageView extends View {
     this._controlsBlock = new CatalogControls(
       this.updateProductList.bind(this)
     );
-    this._pageWrapper.node.appendChild(this._controlsBlock.htmlElement);
+    this._pageWrapper.appendChild(this._controlsBlock);
   }
 
   addChipsBlock() {
     this._chipsBlock = new ChipsBlockView();
-    this._pageWrapper.node.appendChild(this._chipsBlock.htmlElement);
+    this._pageWrapper.appendChild(this._chipsBlock);
   }
 
   addBreadCrumbs() {
     this._breadCrumbs = new CategoryBreadCrumbsView(
       this.updateProductList.bind(this)
     );
-    this._pageWrapper.node.appendChild(this._breadCrumbs.htmlElement);
+    this._pageWrapper.appendChild(this._breadCrumbs);
   }
 
   addCategoryList() {
