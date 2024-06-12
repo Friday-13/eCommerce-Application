@@ -15,6 +15,7 @@ import createPasswordField from '@utils/create-password-field';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 import View from '@views/view';
+import { fetchAndStoreUserToken } from '@services/auth-service';
 import AddressSection from './address';
 import FormSectionView from './form-section';
 import styles from './registration-page.module.scss';
@@ -141,6 +142,7 @@ export default class RegistrationView extends View {
       tag: 'button',
       onClick: () => {
         this.submitForm();
+        // fetchAndStoreUserToken();
       },
     };
     this.submitButton = new ButtonComponent(attrs);
@@ -174,9 +176,10 @@ export default class RegistrationView extends View {
       showErrorMessage('Form invalid');
       return;
     }
+
     registration(
       this.collectFormData(),
-      RegistrationView.sucessRegister,
+      RegistrationView.sucessRegister, // правильное написание
       showErrorMessage
     );
   }
@@ -230,5 +233,11 @@ export default class RegistrationView extends View {
     const SUCSESS_MSG = 'You have successfully registered';
     Router.navigateTo('#main');
     showSucessMessage(SUCSESS_MSG);
+    try {
+      fetchAndStoreUserToken();
+    } catch (error) {
+      console.error('Failed to fetch and store user token:', error);
+      showErrorMessage('Failed to fetch user token.');
+    }
   }
 }

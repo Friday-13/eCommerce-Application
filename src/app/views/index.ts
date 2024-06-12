@@ -9,3 +9,4 @@ export { default as MainPageView } from './main/main-page';
 export { default as ProfileView } from './profile/profile-page';
 export { default as ProductPageView } from './product/product-page';
 export { default as RegistrationView } from './registration/registration-page';
+export { default as BasketPageView } from './basket/basket-page';

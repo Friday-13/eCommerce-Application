@@ -10,7 +10,10 @@ const attributeValue = (
   return attribute ? attribute.value : 'Не указано';
 };
 
-export const createProductData = (current: ICurrent): IProductData => {
+export const createProductData = (
+  id: string,
+  current: ICurrent
+): IProductData => {
   const productName = current.name['en-GB'];
   const productDescription = current.description?.['en-GB'] || '';
   const images = current.masterVariant.images?.map((image) => image.url) || [];
@@ -21,8 +24,6 @@ export const createProductData = (current: ICurrent): IProductData => {
     prices && prices[0]?.discounted
       ? prices[0].discounted.value.centAmount / 100
       : null;
-
-  const { id } = current;
 
   return {
     id,
@@ -50,10 +51,11 @@ export const getProductById = (
     .then(
       ({
         body: {
+          id,
           masterData: { current },
         },
       }) => {
-        const productData = createProductData(current);
+        const productData = createProductData(id, current);
         successCallback(productData);
       }
     )

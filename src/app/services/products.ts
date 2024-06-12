@@ -7,7 +7,7 @@ function parseProductProjectionResults(
   results: Array<ProductProjection>
 ): Array<IProductData> {
   const products = results.map((result) => {
-    const product = createProductData(result);
+    const product = createProductData(result.id, result);
     return product;
   });
   return products;
