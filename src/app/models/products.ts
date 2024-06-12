@@ -20,7 +20,6 @@ interface ILocalizedString {
 }
 
 export interface ICurrent {
-  id: string;
   name: ILocalizedString;
   description?: ILocalizedString;
   masterVariant: {
