@@ -49,6 +49,8 @@ export default class RegistrationView extends View {
 
   private selectLikeShippingCheckBox = new CheckboxComponent({});
 
+  private static customerData: CustomerDraft;
+
   constructor() {
     const attrs: IAttributes = {
       classList: 'row',
@@ -179,7 +181,7 @@ export default class RegistrationView extends View {
 
     registration(
       this.collectFormData(),
-      RegistrationView.sucessRegister, // правильное написание
+      RegistrationView.sucessRegister,
       showErrorMessage
     );
   }
@@ -220,6 +222,7 @@ export default class RegistrationView extends View {
       defaultBillingAddress: defaultBilling,
     };
 
+    RegistrationView.customerData = customerData;
     return customerData;
   }
 
@@ -229,12 +232,17 @@ export default class RegistrationView extends View {
     addressSection.setDefault(false);
   }
 
-  static sucessRegister() {
+  static async sucessRegister() {
     const SUCSESS_MSG = 'You have successfully registered';
     Router.navigateTo('#main');
     showSucessMessage(SUCSESS_MSG);
     try {
-      fetchAndStoreUserToken();
+      const { email, password } = RegistrationView.customerData;
+      if (!email || !password) {
+        throw new Error('Email or password is missing.');
+      }
+      console.log('successRegister called with:', { email, password });
+      await fetchAndStoreUserToken(email, password);
     } catch (error) {
       console.error('Failed to fetch and store user token:', error);
       showErrorMessage('Failed to fetch user token.');

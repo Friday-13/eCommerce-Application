@@ -1,13 +1,12 @@
 import fetch from 'isomorphic-fetch';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import SdkAuth from '@commercetools/sdk-auth';
-import { getCustomerToken } from '@models/customer';
 import { clientConfig } from './client';
 
 const AUTH_TOKEN_KEY = 'authToken';
 
 interface IUserCredentials {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -24,10 +23,13 @@ const sdkAuth = new SdkAuth({
 export async function getUserToken(
   credentials: IUserCredentials
 ): Promise<string> {
+  console.log('getUserToken called with credentials:', credentials);
   const tokenResponse = await sdkAuth.customerPasswordFlow({
-    username: credentials.username,
+    email: credentials.email,
     password: credentials.password,
   });
+
+  console.log('Token response:', tokenResponse);
 
   if (!tokenResponse.access_token) {
     throw new Error('Failed to fetch token');
@@ -37,30 +39,29 @@ export async function getUserToken(
 }
 
 // Функция для получения токена и сохранения его в локальное хранилище
-export async function fetchAndStoreUserToken(): Promise<void> {
-  const customerData = getCustomerToken();
-  console.log('Customer data from localStorage:', customerData);
-  if (!customerData) {
-    throw new Error('No customer data found in localStorage.');
-  }
-
-  if (!customerData.email || !customerData.password) {
-    throw new Error('Customer data is missing required fields.');
+export async function fetchAndStoreUserToken(
+  email: string,
+  password: string
+): Promise<void> {
+  if (!email || !password) {
+    throw new Error('Email and password are required.');
   }
 
   const credentials: IUserCredentials = {
-    username: customerData.email,
-    password: customerData.password,
+    email,
+    password,
   };
 
-  console.log('Credentials for token request:', credentials);
-
   try {
+    console.log(
+      'Attempting to fetch user token with credentials:',
+      credentials
+    );
     const token = await getUserToken(credentials);
     localStorage.setItem(AUTH_TOKEN_KEY, token);
-    console.log('Token saved to localStorage:', token);
+    console.log('User token fetched and stored successfully.');
   } catch (error) {
-    console.error('Error fetching user token:', error);
+    console.error('Error occurred while fetching user token:', error);
     throw new Error('Failed to fetch user token.');
   }
 }
