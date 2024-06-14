@@ -3,8 +3,7 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import carUrl from '@assets/main-image.webp';
 import { ICardAttributes } from '@components/card-component';
-import DiscountCardComponent  from './discount-card';
-
+import DiscountCardComponent from './discount-card';
 
 export default class MainPageView extends View {
   private mainContainer!: BaseComponent; // добавлять разные блоки сюда
@@ -42,7 +41,7 @@ export default class MainPageView extends View {
 
     const cardAttr1: ICardAttributes = {
       inputValue: 'DISCOUNT10',
-      description: 'GET 30% OFF YOUR CART WITH ORDERS OVER 1000$',
+      description: 'GET 10% OFF YOUR CART WITH ORDERS OVER 500$',
     };
     const card1 = new DiscountCardComponent(cardAttr1);
     promoSection.appendChild(card1);

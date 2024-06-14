@@ -96,6 +96,15 @@ export default class HeaderView extends View {
       };
       const link = new AnchorComponent(linkAttrs);
 
+      if (content === 'About Us') {
+        const iconHtml = '<i class="tiny material-icons">group</i>';
+        link.node.innerHTML = iconHtml;
+      }
+      if (content === 'Cart') {
+        const iconHtml = '<i class="tiny material-icons">shopping_cart</i>';
+        link.node.innerHTML = iconHtml;
+      }
+
       link.node.addEventListener('click', (event) => {
         event.preventDefault();
         if (callback) {
@@ -113,17 +122,17 @@ export default class HeaderView extends View {
     if (isCustomerAuthorized()) {
       menuItems.push(
         createMenuItem('#catalog', 'Catalog'),
-        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign out', customerClear),
         createMenuItem('#profile', 'Profile'),
+        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#cart', 'Cart')
       );
     } else {
       menuItems.push(
         createMenuItem('#catalog', 'Catalog'),
-        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign in'),
         createMenuItem('#registration', 'Sign up'),
+        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#cart', 'Cart')
       );
     }
