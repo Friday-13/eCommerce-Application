@@ -3,8 +3,7 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import carUrl from '@assets/main-image.webp';
 import { ICardAttributes } from '@components/card-component';
-import DiscountCardComponent  from './discount-card';
-
+import DiscountCardComponent from './discount-card';
 
 export default class MainPageView extends View {
   private mainContainer!: BaseComponent; // добавлять разные блоки сюда

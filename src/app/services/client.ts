@@ -1,11 +1,13 @@
 import fetch from 'isomorphic-fetch';
 import {
+  AnonymousAuthMiddlewareOptions,
   ClientBuilder,
-  type AuthMiddlewareOptions,
+  PasswordAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions,
+  UserAuthOptions,
   type HttpMiddlewareOptions,
-  // type PasswordAuthMiddlewareOptions,
-  // type ExistingTokenMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
+import { loadSavedToken, saveToken } from './token-storage';
 
 interface IClientConfig extends ImportMetaEnv {
   VITE_CTP_API_URL: string;
@@ -23,7 +25,8 @@ const clientID = clientConfig.VITE_CTP_CLIENT_ID;
 const clientSecret = clientConfig.VITE_CTP_CLIENT_SECRET;
 
 // Configure authMiddlewareOptions
-const authMiddlewareOptions: AuthMiddlewareOptions = {
+//
+const anonymusAuthMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   host: clientConfig.VITE_CTP_AUTH_URL,
   projectKey,
   credentials: {
@@ -40,79 +43,73 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch,
 };
 
-/*
-// add 12/06
-// Функция для получения параметров password flow
-const getPasswordFlowOptions = (
-  username: string,
-  password: string
-): PasswordAuthMiddlewareOptions => {
-  return {
+// Export the ClientBuilder
+export const ctpClient = new ClientBuilder()
+  .withProjectKey(projectKey)
+  // .withClientCredentialsFlow(authMiddlewareOptions)
+  .withAnonymousSessionFlow(anonymusAuthMiddlewareOptions)
+  // .withPasswordFlow(passwordAuthMiddlewareOptions)
+  .withHttpMiddleware(httpMiddlewareOptions)
+  // .withLoggerMiddleware()
+  .build();
+
+function createPasswordAuthMiddlewareOptions(user: UserAuthOptions) {
+  const options: PasswordAuthMiddlewareOptions = {
     host: clientConfig.VITE_CTP_AUTH_URL,
     projectKey,
     credentials: {
-      clientId: clientID,
-      clientSecret,
-      user: {
-        username,
-        password,
-      },
+      clientId: `${clientID}`,
+      clientSecret: `${clientSecret}`,
+      user,
+    },
+    tokenCache: {
+      get: loadSavedToken,
+      set: saveToken,
     },
     scopes,
     fetch,
   };
-};
+  return options;
+}
 
-// Функция для аутентификации пользователя и сохранения токена
-export const authenticateUser = async (
-  username: string,
-  password: string
-): Promise<void> => {
-  const passwordFlowOptions = getPasswordFlowOptions(username, password);
-  const tokenClient = new ClientBuilder()
-    .withPasswordFlow(passwordFlowOptions)
-    .withHttpMiddleware(httpMiddlewareOptions)
-    // .withLoggerMiddleware()
-    .build();
-
-  const tokenResponse = await tokenClient.execute({
-    uri: '/oauth/token',
-    method: 'POST',
-    body: {
-      grant_type: 'password',
-      username,
-      password,
+function createTokenAuthMiddlewareOptions() {
+  const token = loadSavedToken();
+  const options: RefreshAuthMiddlewareOptions = {
+    host: clientConfig.VITE_CTP_AUTH_URL,
+    projectKey,
+    credentials: {
+      clientId: `${clientID}`,
+      clientSecret: `${clientSecret}`,
     },
-  });
-  const token = tokenResponse.body.access_token;
-  localStorage.setItem('access_token', token);
-  console.log('Access token:', token);
-};
+    tokenCache: {
+      get: loadSavedToken,
+      set: saveToken,
+    },
+    refreshToken: token.token,
+    fetch,
+  };
+  return options;
+}
 
-// Функция для создания авторизованного клиента
-export const createAuthenticatedClient = () => {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    throw new Error('No access token available');
-  }
-
-  const clientAuthenticate = new ClientBuilder()
+export function createPasswordFlowClient(user: UserAuthOptions) {
+  const passwordAuthMiddlewareOptions =
+    createPasswordAuthMiddlewareOptions(user);
+  const client = new ClientBuilder()
     .withProjectKey(projectKey)
-    .withExistingTokenFlow(token, { force: true })
+    .withPasswordFlow(passwordAuthMiddlewareOptions)
     .withHttpMiddleware(httpMiddlewareOptions)
     // .withLoggerMiddleware()
     .build();
+  return client;
+}
 
-  return clientAuthenticate;
-};
-
-// add 12/06
-*/
-
-// Export the ClientBuilder
-export const ctpClient = new ClientBuilder()
-  .withProjectKey(projectKey)
-  .withClientCredentialsFlow(authMiddlewareOptions)
-  .withHttpMiddleware(httpMiddlewareOptions)
-  // .withLoggerMiddleware()
-  .build();
+export function createTokenFlowClient() {
+  const refreshTokenAuthMiddlewareOptions = createTokenAuthMiddlewareOptions();
+  const client = new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withRefreshTokenFlow(refreshTokenAuthMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    // .withLoggerMiddleware()
+    .build();
+  return client;
+}
