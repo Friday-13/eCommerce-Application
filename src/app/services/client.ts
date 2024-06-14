@@ -5,7 +5,7 @@ import {
   type PasswordAuthMiddlewareOptions,
   type HttpMiddlewareOptions,
   type AnonymousAuthMiddlewareOptions,
-  type RefreshAuthMiddlewareOptions,
+  // type RefreshAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 import tokenCache from './token-cache';
 
@@ -51,15 +51,15 @@ const anonymousAuthMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   fetch,
 };
 
-const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
+export const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
   host: clientConfig.VITE_CTP_AUTH_URL,
   projectKey,
   credentials: {
     clientId: clientID,
     clientSecret,
     user: {
-      password: '',
       username: '',
+      password: '',
     },
   },
   scopes,
@@ -67,6 +67,7 @@ const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
   tokenCache,
 };
 
+/*
 const refreshAuthMiddlewareOptions: RefreshAuthMiddlewareOptions = {
   host: clientConfig.VITE_CTP_AUTH_URL,
   projectKey,
@@ -78,6 +79,7 @@ const refreshAuthMiddlewareOptions: RefreshAuthMiddlewareOptions = {
   refreshToken: '',
   tokenCache,
 };
+*/
 
 // Export the ClientBuilder
 export const ctpClient = new ClientBuilder()
@@ -85,7 +87,7 @@ export const ctpClient = new ClientBuilder()
   .withClientCredentialsFlow(authMiddlewareOptions)
   .withAnonymousSessionFlow(anonymousAuthMiddlewareOptions)
   .withPasswordFlow(passwordAuthMiddlewareOptions)
-  .withRefreshTokenFlow(refreshAuthMiddlewareOptions)
+  // .withRefreshTokenFlow(refreshAuthMiddlewareOptions)
   .withHttpMiddleware(httpMiddlewareOptions)
   // .withLoggerMiddleware()
   .build();
