@@ -1,5 +1,5 @@
 import { ClientResponse, Cart } from '@commercetools/platform-sdk';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
 
 // Отправляет запрос на добавление товара в корзину
 // При успешном добавлении товара вызывает successCallback с обновленными данными корзины
@@ -18,7 +18,7 @@ export const addProductToCart = (
     productId,
     quantity,
   });
-  apiRoot
+  ApiRoot.root
     .carts()
     .withId({ ID: cartId })
     .post({

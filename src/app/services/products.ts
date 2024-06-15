@@ -1,6 +1,6 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { IProductData } from '@models/products';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
 import { createProductData } from './product-data';
 
 function parseProductProjectionResults(
@@ -21,7 +21,7 @@ const getProducts = (
   filterQuery: Array<string> = [],
   sort: Array<string> = []
 ) => {
-  apiRoot
+  ApiRoot.root
     .productProjections()
     .search()
     .get({

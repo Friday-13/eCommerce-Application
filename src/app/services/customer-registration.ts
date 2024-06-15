@@ -1,8 +1,8 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { customerTokenResponse, saveCustomerToken } from '@models/customer';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
+import login from './login-authorization';
 
-const SUCSESS_MSG = 'You have successfully registered';
 const EMAIL_EXIST_ADD_MSG = 'Use another email or try to login';
 const EMAIL_EXIST_DEF_MSG =
   'There is already an existing customer with the provided email.';
@@ -12,7 +12,7 @@ const registration = (
   sucessCallback: (message: string) => void,
   errorCallback: (message: string) => void
 ) => {
-  apiRoot
+  ApiRoot.root
     .customers()
     .post({
       body: customer,
@@ -23,7 +23,11 @@ const registration = (
       if (customerToken) {
         saveCustomerToken(customerToken);
       }
-      sucessCallback(SUCSESS_MSG);
+      login(
+        { email: customer.email, password: customer.password as string },
+        sucessCallback,
+        errorCallback
+      );
     })
     .catch((reason) => {
       if (reason.message === EMAIL_EXIST_DEF_MSG) {
