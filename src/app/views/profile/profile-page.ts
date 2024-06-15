@@ -83,10 +83,7 @@ export default class ProfileView extends View {
 
   private async populateProfileView() {
     try {
-      const customer = JSON.parse(
-        localStorage.getItem('codecraftCustomer') as string
-      );
-      const customerData = await getCustomer(customer.id);
+      const customerData = await getCustomer();
       this.populateForm(customerData);
       this.populateAddresses(customerData);
     } catch (error) {

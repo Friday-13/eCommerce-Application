@@ -42,4 +42,5 @@ export const customerTokenResponse = (
 
 export const customerClear = () => {
   localStorage.removeItem(CUSTOMER_KEY);
+  localStorage.clear();
 };

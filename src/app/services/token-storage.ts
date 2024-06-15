@@ -1,14 +1,20 @@
 import { TokenStore } from '@commercetools/sdk-client-v2';
 
+export function isTokenExist() {
+  const tokenString = localStorage.getItem('access-token');
+  return Boolean(tokenString);
+}
+
 export function loadSavedToken() {
   const tokenString = localStorage.getItem('access-token');
   let token: TokenStore;
-  if (tokenString) {
-    token = JSON.parse(tokenString);
-  } else {
-    token = { token: '', refreshToken: '', expirationTime: 0 };
+  if (!isTokenExist()) {
+    token = {
+      token: '',
+      expirationTime: 0,
+    };
   }
-  console.log(token);
+  token = JSON.parse(tokenString as string);
   return token;
 }
 

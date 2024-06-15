@@ -1,5 +1,5 @@
 import { getCustomerToken } from '@models/customer';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
 import CartHandler from './cart-handler';
 
 export default function getCart() {
@@ -7,7 +7,7 @@ export default function getCart() {
   const cart = new CartHandler(customer.id);
   cart.loadCartFromLocalStorage();
   console.log(cart);
-  apiRoot
+  ApiRoot.root
     .carts()
     .withId({ ID: cart.id })
     .get()

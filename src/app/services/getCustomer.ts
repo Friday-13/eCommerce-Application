@@ -1,14 +1,8 @@
 import { Customer } from '@commercetools/platform-sdk';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
 
-export const getCustomer = async (
-  customerId: string
-): Promise<Customer | null> => {
-  const response = await apiRoot
-    .customers()
-    .withId({ ID: customerId })
-    .get()
-    .execute();
+export const getCustomer = async (): Promise<Customer | null> => {
+  const response = await ApiRoot.refreshTokenRoot.me().get().execute();
   const customerData = response.body;
   if (customerData) {
     return customerData;

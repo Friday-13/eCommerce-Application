@@ -1,13 +1,14 @@
 import fetch from 'isomorphic-fetch';
 import {
   AnonymousAuthMiddlewareOptions,
+  Client,
   ClientBuilder,
   PasswordAuthMiddlewareOptions,
   RefreshAuthMiddlewareOptions,
   UserAuthOptions,
   type HttpMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
-import { loadSavedToken, saveToken } from './token-storage';
+import { isTokenExist, loadSavedToken, saveToken } from './token-storage';
 
 interface IClientConfig extends ImportMetaEnv {
   VITE_CTP_API_URL: string;
@@ -43,73 +44,86 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch,
 };
 
-// Export the ClientBuilder
-export const ctpClient = new ClientBuilder()
-  .withProjectKey(projectKey)
-  // .withClientCredentialsFlow(authMiddlewareOptions)
-  .withAnonymousSessionFlow(anonymusAuthMiddlewareOptions)
-  // .withPasswordFlow(passwordAuthMiddlewareOptions)
-  .withHttpMiddleware(httpMiddlewareOptions)
-  // .withLoggerMiddleware()
-  .build();
+class ApiClient {
+  private _anonymusClient: Client;
 
-function createPasswordAuthMiddlewareOptions(user: UserAuthOptions) {
-  const options: PasswordAuthMiddlewareOptions = {
-    host: clientConfig.VITE_CTP_AUTH_URL,
-    projectKey,
-    credentials: {
-      clientId: `${clientID}`,
-      clientSecret: `${clientSecret}`,
-      user,
-    },
-    tokenCache: {
-      get: loadSavedToken,
-      set: saveToken,
-    },
-    scopes,
-    fetch,
-  };
-  return options;
+  private _tokenClient: Client;
+
+  get client(): Client {
+    if (isTokenExist()) {
+      return this.getRefreshTokenFlowClient();
+    }
+    return this.getAnonymusFlowClient();
+  }
+
+  getAnonymusFlowClient() {
+    this.createAnonimusClient();
+    return this._anonymusClient;
+  }
+
+  getRefreshTokenFlowClient() {
+    if (!this._tokenClient) {
+      this.createTokenClient();
+    }
+    return this._tokenClient;
+  }
+
+  static getPasswordFlowClient(user: UserAuthOptions) {
+    const options: PasswordAuthMiddlewareOptions = {
+      host: anonymusAuthMiddlewareOptions.host,
+      credentials: {
+        ...anonymusAuthMiddlewareOptions.credentials,
+        user,
+      },
+      fetch: anonymusAuthMiddlewareOptions.fetch,
+      projectKey: anonymusAuthMiddlewareOptions.projectKey,
+      tokenCache: {
+        get: loadSavedToken,
+        set: saveToken,
+      },
+      scopes,
+    };
+    const passwordClient = ApiClient.baseClient
+      .withPasswordFlow(options)
+      .build();
+    return passwordClient;
+  }
+
+  createTokenClient() {
+    const token = loadSavedToken();
+    if (!token.refreshToken) {
+      throw Error('No token!');
+    }
+    const options: RefreshAuthMiddlewareOptions = {
+      host: anonymusAuthMiddlewareOptions.host,
+      credentials: anonymusAuthMiddlewareOptions.credentials,
+      fetch: anonymusAuthMiddlewareOptions.fetch,
+      projectKey: anonymusAuthMiddlewareOptions.projectKey,
+      tokenCache: {
+        get: loadSavedToken,
+        set: saveToken,
+      },
+      refreshToken: token.refreshToken,
+    };
+    this._tokenClient = ApiClient.baseClient
+      .withRefreshTokenFlow(options)
+      .build();
+  }
+
+  createAnonimusClient() {
+    this._anonymusClient = ApiClient.baseClient
+      .withAnonymousSessionFlow(anonymusAuthMiddlewareOptions)
+      .build();
+  }
+
+  private static get baseClient() {
+    return (
+      new ClientBuilder()
+        .withProjectKey(projectKey)
+        // .withLoggerMiddleware()
+        .withHttpMiddleware(httpMiddlewareOptions)
+    );
+  }
 }
 
-function createTokenAuthMiddlewareOptions() {
-  const token = loadSavedToken();
-  const options: RefreshAuthMiddlewareOptions = {
-    host: clientConfig.VITE_CTP_AUTH_URL,
-    projectKey,
-    credentials: {
-      clientId: `${clientID}`,
-      clientSecret: `${clientSecret}`,
-    },
-    tokenCache: {
-      get: loadSavedToken,
-      set: saveToken,
-    },
-    refreshToken: token.token,
-    fetch,
-  };
-  return options;
-}
-
-export function createPasswordFlowClient(user: UserAuthOptions) {
-  const passwordAuthMiddlewareOptions =
-    createPasswordAuthMiddlewareOptions(user);
-  const client = new ClientBuilder()
-    .withProjectKey(projectKey)
-    .withPasswordFlow(passwordAuthMiddlewareOptions)
-    .withHttpMiddleware(httpMiddlewareOptions)
-    // .withLoggerMiddleware()
-    .build();
-  return client;
-}
-
-export function createTokenFlowClient() {
-  const refreshTokenAuthMiddlewareOptions = createTokenAuthMiddlewareOptions();
-  const client = new ClientBuilder()
-    .withProjectKey(projectKey)
-    .withRefreshTokenFlow(refreshTokenAuthMiddlewareOptions)
-    .withHttpMiddleware(httpMiddlewareOptions)
-    // .withLoggerMiddleware()
-    .build();
-  return client;
-}
+export const apiClient = new ApiClient();
