@@ -25,8 +25,6 @@ const scopes = clientConfig.VITE_CTP_SCOPES.split(' ');
 const clientID = clientConfig.VITE_CTP_CLIENT_ID;
 const clientSecret = clientConfig.VITE_CTP_CLIENT_SECRET;
 
-// Configure authMiddlewareOptions
-//
 const anonymusAuthMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   host: clientConfig.VITE_CTP_AUTH_URL,
   projectKey,
@@ -38,13 +36,12 @@ const anonymusAuthMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   fetch,
 };
 
-// Configure httpMiddlewareOptions
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: clientConfig.VITE_CTP_API_URL,
   fetch,
 };
 
-class ApiClient {
+export class ApiClient {
   private _anonymusClient: Client;
 
   private _tokenClient: Client;

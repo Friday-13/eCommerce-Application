@@ -1,4 +1,4 @@
-import { clientConfig, apiClient } from '@services/client';
+import { clientConfig, apiClient, ApiClient } from '@services/client';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { Client, UserAuthOptions } from '@commercetools/sdk-client-v2';
 import { isTokenExist } from './token-storage';
@@ -28,7 +28,7 @@ class ApiRoot {
   }
 
   static getPasswordRoot(user: UserAuthOptions) {
-    const client = apiClient.getPasswordFlowClient(user);
+    const client = ApiClient.getPasswordFlowClient(user);
     const root = ApiRoot.generateRoot(client);
     return root;
   }
