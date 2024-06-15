@@ -7,7 +7,7 @@ import createNameField from '@utils/create-name-field';
 import createDateField from '@utils/create-date-field';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
-import { getCustomer } from '@services/getCustomer';
+import { getCustomer } from '@services/get-customer';
 import {
   postalCodeNoCountryValidator,
   postalCodeUKValidator,

@@ -1,12 +1,14 @@
 import { TokenStore } from '@commercetools/sdk-client-v2';
 
+const TOKEN_KEY = 'access-token';
+
 export function isTokenExist() {
-  const tokenString = localStorage.getItem('access-token');
+  const tokenString = localStorage.getItem(TOKEN_KEY);
   return Boolean(tokenString);
 }
 
 export function loadSavedToken() {
-  const tokenString = localStorage.getItem('access-token');
+  const tokenString = localStorage.getItem(TOKEN_KEY);
   let token: TokenStore;
   if (!isTokenExist()) {
     token = {
@@ -19,5 +21,9 @@ export function loadSavedToken() {
 }
 
 export function saveToken(token: TokenStore) {
-  localStorage.setItem('access-token', JSON.stringify(token));
+  localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+}
+
+export function clearToken() {
+  localStorage.removeItem(TOKEN_KEY);
 }

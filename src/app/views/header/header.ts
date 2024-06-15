@@ -3,9 +3,10 @@ import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
-import { customerClear, isCustomerAuthorized } from '@models/customer';
+import { isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
 import { IButtonAttributes } from '@components/button-component';
+import logoutCustomer from '@services/logout-customer';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
@@ -114,7 +115,7 @@ export default class HeaderView extends View {
       menuItems.push(
         createMenuItem('#catalog', 'Catalog'),
         createMenuItem('#about-us', 'About Us'),
-        createMenuItem('#login', 'Sign out', customerClear),
+        createMenuItem('#login', 'Sign out', logoutCustomer),
         createMenuItem('#profile', 'Profile'),
         createMenuItem('#cart', 'Cart')
       );
