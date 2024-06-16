@@ -8,6 +8,7 @@ import getCategories from '@services/categories';
 import { categoryFilter } from '@utils/query-args';
 import CategoryBreadCrumbsView from '@views/category-breadcrumbs';
 import PageView from '@views/page-view';
+import PaginationView from '@views/pagination/pagination-view';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
@@ -40,6 +41,7 @@ export default class CatalogPageView extends PageView {
     this.addFiltersModal();
     this.addProductList();
     this.addCategoryList();
+    this.addPagination();
   }
 
   addProductList() {
@@ -111,6 +113,11 @@ export default class CatalogPageView extends PageView {
       this.updateProductList.bind(this)
     );
     this.appendChild(this._filtersModal);
+  }
+
+  addPagination() {
+    const pagination = new PaginationView();
+    this._pageWrapper.appendChild(pagination);
   }
 
   updateProductList() {
