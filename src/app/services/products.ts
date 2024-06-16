@@ -14,9 +14,10 @@ function parseProductProjectionResults(
 }
 
 const getProducts = (
-  sucessCallback: (products: Array<IProductData>) => void,
+  sucessCallback: (products: Array<IProductData>, total?: number) => void,
   errorCallback: (message: string) => void,
   limit: number = 100,
+  offset: number = 0,
   searchString?: string,
   filterQuery: Array<string> = [],
   sort: Array<string> = []
@@ -31,13 +32,15 @@ const getProducts = (
         sort,
         'text.en-gb': searchString,
         fuzzy: true,
+        offset,
       },
     })
     .execute()
     .then((response) => {
       const { results } = response.body;
       const products = parseProductProjectionResults(results);
-      sucessCallback(products);
+      const { total } = response.body;
+      sucessCallback(products, total);
     })
     .catch((error) => {
       errorCallback(error.message);

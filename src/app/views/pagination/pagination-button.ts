@@ -5,7 +5,7 @@ import View from '@views/view';
 export default class PaginationButtonView extends View {
   private _anchor = new AnchorComponent({});
 
-  constructor(value: string, onClick: () => void, isActive?: boolean) {
+  constructor(value: number, onClick: () => void, isActive?: boolean) {
     const attrs: IAttributes = {
       tag: 'li',
       classList: ['waves-effect', 'active'],
@@ -13,7 +13,7 @@ export default class PaginationButtonView extends View {
     super(attrs);
     this._anchor = new AnchorComponent({});
     this.appendChild(this._anchor);
-    this.value = value;
+    this.value = `${value + 1}`;
     this.active = Boolean(isActive);
     this.htmlElement.onclick = onClick;
   }
