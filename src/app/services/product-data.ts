@@ -1,5 +1,5 @@
 import { IProductData, IAttributeProducts, ICurrent } from '@models/products';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
 
 // Функция для извлечения значения атрибута из списка атрибутов
 const attributeValue = (
@@ -43,7 +43,7 @@ export const getProductById = (
   successCallback: (productData: IProductData) => void,
   errorCallback: (message: string) => void
 ): void => {
-  apiRoot
+  ApiRoot.root
     .products()
     .withId({ ID: productId })
     .get()

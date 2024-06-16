@@ -1,16 +1,20 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
+import { ICartData } from '@models/cart';
 import View from '@views/view';
 
 export default class BasketProductView extends View {
   private imageContainerCart!: BaseComponent;
 
-  constructor() {
+  private cartData?: ICartData | null = null;
+
+  constructor(cartData: ICartData) {
     const attrs: IAttributes = {
       tag: 'article',
       classList: 'card',
     };
     super(attrs);
+    this.cartData = cartData;
     this.initializeContentProductBlockInCart();
   }
 

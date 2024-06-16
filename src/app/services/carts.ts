@@ -1,5 +1,5 @@
 import { Cart, ClientResponse } from '@commercetools/platform-sdk';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
 
 // запрос на создание анон cart
 // При успешном создании корзины вызывает successCallback с данными корзины.
@@ -7,7 +7,7 @@ export const createAnonymousCart = (
   successCallback: (cartData: Cart) => void,
   errorCallback: (message: string) => void
 ): void => {
-  apiRoot
+  ApiRoot.root
     .carts()
     .post({
       body: {
@@ -30,7 +30,7 @@ export const createCustomerCart = (
   successCallback: (cartData: Cart) => void,
   errorCallback: (message: string) => void
 ): void => {
-  apiRoot
+  ApiRoot.root
     .carts()
     .post({
       body: {

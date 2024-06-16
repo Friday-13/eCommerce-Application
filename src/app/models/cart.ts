@@ -1,17 +1,15 @@
-import { ILocalizedString } from './products';
-
-// Интерфейсы для структуры данных корзины
 export interface ICartData {
   id: string;
   version: number;
-  createdAt: string;
-  lastModifiedAt: string;
+  createdBy: {
+    anonymousId: string;
+  };
   customerId?: string;
   customerEmail?: string;
   anonymousId?: string;
   lineItems: ILineItem[];
   totalLineItemQuantity?: number;
-  totalPrice: IPrice;
+  totalPrice: ITotalPrice;
   cartState: 'Active' | 'Merged' | 'Ordered';
   discountCodes: IDiscountCode[];
   discountOnTotalPrice?: IDiscountOnTotalPrice;
@@ -20,7 +18,7 @@ export interface ICartData {
 export interface ILineItem {
   id: string;
   productId: string;
-  name: ILocalizedString;
+  name: string;
   variant: IVariant;
   price: IPrice;
   quantity: number;
@@ -28,9 +26,9 @@ export interface ILineItem {
   discountedPricePerQuantity: IDiscountedLineItemPriceForQuantity[];
 }
 
-interface IVariant {
+export interface IVariant {
   id: number;
-  sku: string;
+  sku?: string;
   prices: IPrice[];
   images: { url: string }[];
 }
@@ -40,6 +38,12 @@ export interface IPrice {
 }
 
 export interface IMoney {
+  currencyCode: string;
+  centAmount: number;
+  fractionDigits: number;
+}
+
+export interface ITotalPrice {
   currencyCode: string;
   centAmount: number;
   fractionDigits: number;
