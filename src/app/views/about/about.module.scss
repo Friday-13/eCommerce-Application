@@ -4,3 +4,19 @@
   align-items: center;
   cursor: pointer;
 }
+
+#collaboration,
+#contribution {
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.member-items-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#contribution > h5 {
+  margin-bottom: 35px;
+}
