@@ -160,10 +160,6 @@ export default class ProductPageView extends View {
     addImagesToSlider(this.productData.imageUrls);
   }
 
-  // private setupAdditionalDivs(parentComponent: BaseComponent) {
-  // Создание дополнительных divs
-  // }
-
   private initializeProductTitle(detailsProduct: BaseComponent) {
     if (!this.productData) return;
 

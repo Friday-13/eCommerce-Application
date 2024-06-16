@@ -28,6 +28,14 @@ export const createCartData = (cart: Cart): ICartData => {
                 centAmount: price.value.centAmount,
                 fractionDigits: price.value.fractionDigits,
               },
+              discountedPrice: price.discounted
+                ? {
+                    // Проверяем, есть ли скидочная цена
+                    currencyCode: price.discounted.value.currencyCode,
+                    centAmount: price.discounted.value.centAmount,
+                    fractionDigits: price.discounted.value.fractionDigits,
+                  }
+                : null, // Если нет скидочной цены, возвращаем null
             }))
           : [],
       // Используем только первое изображение
@@ -41,7 +49,7 @@ export const createCartData = (cart: Cart): ICartData => {
     return {
       id: item.id,
       productId: item.productId,
-      name: item.name.en,
+      name: item.name['en-GB'],
       variant,
       price: {
         value: {

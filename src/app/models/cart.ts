@@ -35,12 +35,17 @@ export interface IVariant {
 
 export interface IPrice {
   value: IMoney;
+  discounted?: IDiscounted;
 }
 
 export interface IMoney {
   currencyCode: string;
   centAmount: number;
   fractionDigits: number;
+}
+
+export interface IDiscounted {
+  value: IMoney;
 }
 
 export interface ITotalPrice {
