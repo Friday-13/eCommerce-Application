@@ -1,5 +1,6 @@
-import { customerTokenResponse, saveCustomerToken } from '@models/customer';
+import { customerTokenResponse } from '@models/customer';
 import { UserAuthOptions } from '@commercetools/sdk-client-v2';
+import CookieManager from '@utils/cookie';
 import ApiRoot from './api-root';
 
 function login(
@@ -17,9 +18,9 @@ function login(
     .post({ body: customer })
     .execute()
     .then((response) => {
-      const customerToken = customerTokenResponse(response.body.customer);
-      if (customerToken) {
-        saveCustomerToken(customerToken);
+      const customerDataForId = customerTokenResponse(response.body.customer);
+      if (customerDataForId && customerDataForId.id) {
+        CookieManager.setUserId(customerDataForId.id);
       }
       sucessCallback('You have successfully logged in!');
     })

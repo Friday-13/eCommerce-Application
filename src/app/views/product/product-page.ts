@@ -10,6 +10,8 @@ import { Theme, themeToBrandImageMap } from '@models/brend-images';
 import { IButtonAttributes } from '@components/button-component';
 import { Cart } from '@commercetools/platform-sdk';
 import CartHandler from '@services/cart-handler';
+import { getCartById } from '@services/cart-data';
+import { ICartData } from '@models/cart';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -35,6 +37,8 @@ export default class ProductPageView extends View {
   private cartData?: Cart;
 
   private cartHandler: CartHandler;
+
+  private addCartButton!: BaseComponent;
 
   constructor(productId: string, userId: string | null = null) {
     const attrs: IAttributes = {
@@ -237,7 +241,44 @@ export default class ProductPageView extends View {
     const productId = this.productData.id;
     const quantity = 1;
 
-    this.cartHandler.handleAddToCart(productId, quantity);
+    // Перед добавлением в корзину, проверяем, есть ли уже этот продукт в корзине
+    this.fetchCartAndCheckProduct(productId, (isInCart) => {
+      if (!isInCart) {
+        // Если продукта нет в корзине, добавляем его
+        this.cartHandler.handleAddToCart(productId, quantity);
+        this.addCartButton.node.classList.add('button-disabled');
+      } else {
+        this.addCartButton.node.classList.remove('button-disabled');
+      }
+    });
+  }
+
+  private fetchCartAndCheckProduct(
+    productId: string,
+    callback: (isInCart: boolean) => void
+  ): void {
+    // получаем сartId из LS
+    this.cartHandler.loadCartFromLocalStorage();
+    const { currentCartId } = this.cartHandler;
+    if (!currentCartId) {
+      callback(false);
+      return;
+    }
+
+    getCartById(
+      currentCartId,
+      (cartData: ICartData) => {
+        // Проверка наличия продукта в корзине
+        const isInCart = cartData.lineItems.some(
+          (lineItem) => lineItem.productId === productId
+        );
+        callback(isInCart);
+      },
+      (errorMsg: string) => {
+        showErrorMessage(`Error fetching cart: ${errorMsg}`);
+        callback(false); // Обработка ошибки, продукт считается не в корзине
+      }
+    );
   }
 
   private initializeProductCart(detailsProduct: BaseComponent) {
@@ -252,10 +293,10 @@ export default class ProductPageView extends View {
       classList: ['button-add-cart', 'waves-light', 'btn', 'no-text-transform'],
       content: 'Add to cart',
     };
-    const addCartButton = new BaseComponent(addCartButtonAttrs);
-    cartContainer.appendChild(addCartButton);
+    this.addCartButton = new BaseComponent(addCartButtonAttrs);
+    cartContainer.appendChild(this.addCartButton);
 
-    addCartButton.node.addEventListener('click', (event) => {
+    this.addCartButton.node.addEventListener('click', (event) => {
       event.preventDefault();
       this.handleAddToCartPage();
     });

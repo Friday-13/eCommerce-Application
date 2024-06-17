@@ -3,7 +3,7 @@ import { addProductToCart } from './add-product-cart';
 import { createAnonymousCart, createCustomerCart } from './carts';
 
 class CartHandler {
-  private currentCartId: string | null = null;
+  public currentCartId: string | null = null;
 
   private currentCartVersion: number | null = null;
 
@@ -108,7 +108,7 @@ class CartHandler {
     localStorage.setItem('anonymousCart', JSON.stringify(cartData));
   }
 
-  private loadCartFromLocalStorage(): void {
+  public loadCartFromLocalStorage(): void {
     const savedCart = localStorage.getItem('anonymousCart');
     if (savedCart) {
       const cartData = JSON.parse(savedCart);

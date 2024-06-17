@@ -1,4 +1,6 @@
 import isPageAccessable from '@utils/access-control';
+import CookieManager from '@utils/cookie';
+import LocalStorageManager from '@utils/local-cart-id';
 import {
   Error404,
   MainPageView,
@@ -61,7 +63,7 @@ class App {
     const hashParts = window.location.hash.slice(1).split('/');
     const route = hashParts[0];
     const productId = hashParts[1];
-    const cartId = '101b4406-a115-4cc9-9c0f-9b50832da419';
+    const cartId = LocalStorageManager.getCartId();
 
     if (!route) {
       window.location.hash = '#main';
@@ -75,6 +77,7 @@ class App {
 
     if (route === 'product' && productId) {
       this.hideFooterHeader = false;
+      const userId = CookieManager.getUserId();
       this.mainView.page = new ProductPageView(productId, userId);
     } else {
       switch (window.location.hash) {
@@ -107,9 +110,13 @@ class App {
 
         case '#cart':
           this.hideFooterHeader = false;
-          this.mainView.page = new BasketPageView(cartId);
+          if (cartId) {
+            this.mainView.page = new BasketPageView(cartId);
+          } else {
+            // Обработка случая, когда cartId отсутствует
+            this.mainView.page = new Error404();
+          }
           break;
-
         case '#error':
           this.hideFooterHeader = true;
           this.mainView.page = new Error404();

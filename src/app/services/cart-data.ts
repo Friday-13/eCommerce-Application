@@ -113,3 +113,13 @@ export const getCartById = (
       errorCallback(`Failed to load cart: ${error.message}`);
     });
 };
+
+// проверяет наличие товара в корзине, возвращает true  или false
+export const getsProductInCartId = (
+  cartData: ICartData,
+  productId: string
+): boolean => {
+  return cartData.lineItems.some(
+    (lineItem) => lineItem.productId === productId
+  );
+};
