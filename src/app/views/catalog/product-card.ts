@@ -28,7 +28,7 @@ export default class ProductCardView extends View {
     };
     super(attrs);
     this.addCardContiner();
-    this.addImage(content.id, content.imageUrls[0]); // и вот тут добавила - надеюсь дальше не пошло?
+    this.addImage(content.id, content.imageUrls[0]);
     this.addContent(content.productName);
     this.addDescription(
       content.productName,
@@ -38,11 +38,12 @@ export default class ProductCardView extends View {
       content.id
     );
     this.addPriceBlock(content.price, content.discountedPrice);
+    this.addAddtoCartButton();
   }
 
   addCardContiner() {
     const attrs: IAttributes = {
-      classList: ['card', styles.productCard],
+      classList: ['card', 'sticky-action', styles.productCard],
     };
     this._container = new BaseComponent(attrs);
     this.appendChild(this._container);
@@ -139,5 +140,29 @@ export default class ProductCardView extends View {
       styles.priceBlockNewPrice
     );
     priceBlock.appendChild(productDuscountedPrice);
+  }
+
+  addAddtoCartButton() {
+    const blockAttrs: IAttributes = {
+      classList: 'card-action',
+    };
+    const actionBlock = new BaseComponent(blockAttrs);
+
+    /* TODO: add checking if this product exist in card */
+
+    const buttonAttrs: IButtonWithIconAttributes = {
+      classList: 'waves-effect waves-light btn-small red lighten-2',
+      icon: 'add_shopping_cart',
+    };
+
+    const button = new ButtonWithIconComponent(buttonAttrs);
+    button.node.onclick = () => {
+      button.disabled = !button.disabled;
+      button.icon = 'playlist_add_check';
+      /* TODO: Add add-to-cart feature */
+    };
+
+    actionBlock.appendChild(button);
+    this._container.appendChild(actionBlock);
   }
 }

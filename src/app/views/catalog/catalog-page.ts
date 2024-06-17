@@ -16,7 +16,7 @@ import ChipsBlockView from './chips-block';
 import CategoryDropDown from './category-drop-down';
 import currentCategory from './current-category';
 
-const PRODUCT_PER_PAGE = 3;
+const PRODUCT_PER_PAGE = 6;
 
 export default class CatalogPageView extends PageView {
   private _productList = new ProductListView();
