@@ -1,14 +1,15 @@
-.card-action > a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.github-link > a {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ee6e73 !important ;
 }
 
 #collaboration,
 #contribution {
-  margin-left: 2%;
   margin-right: 2%;
+  margin-left: 2%;
 }
 
 .member-items-container {
@@ -19,4 +20,41 @@
 
 #contribution > h5 {
   margin-bottom: 35px;
+}
+
+.rs-school {
+  max-height: 70px;
+}
+
+.logo-container {
+  display: flex;
+  max-height: 70px;
+  margin: 2% 2% 70px;
+  justify-content: center;
+}
+
+.logo-container a {
+  display: contents;
+}
+
+.logo-container img {
+  margin-right: 5%;
+}
+
+@media screen and (max-width <= 550px) {
+  .logo-container {
+    flex-direction: column;
+  }
+  
+  .logo-container h6 {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width <= 640px) {
+  .member-items-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }

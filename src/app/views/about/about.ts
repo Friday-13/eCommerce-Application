@@ -3,7 +3,10 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import dasha from '@assets/about/dasha.png';
 import dima from '@assets/about/dima.png';
 import anna from '@assets/about/anna.png';
+import rsschool from '@assets/about/rsschool.svg';
 import { ICardAttributes } from '@components/card-component';
+import { IImageAttributes, ImageComponent } from '@components/image-component';
+import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import AboutUsCardComponent from './about-us-card';
 import styles from './about.module.scss';
 import contributionList from './contributions';
@@ -25,6 +28,36 @@ export default class AboutUsView extends View {
     this.appendChild(this.aboutContainer);
     document.body.appendChild(this.htmlElement);
 
+    const logoContainerAttr: IAttributes = {
+      tag: 'div',
+      classList: ['logo-container'],
+    };
+    const logoContainer = new BaseComponent(logoContainerAttr);
+    this.aboutContainer.appendChild(logoContainer);
+
+    const logoLinkAttr: IAnchorAttrs = {
+      href: 'https://rs.school/',
+      id: 'logo',
+    };
+    const logoLink = new AnchorComponent(logoLinkAttr);
+    logoContainer.appendChild(logoLink);
+
+    const rsImageAttr: IImageAttributes = {
+      src: rsschool,
+      alt: 'RS School',
+      classList: ['responsive-img', 'rs-school'],
+    };
+    const rsImage = new ImageComponent(rsImageAttr);
+    logoLink.appendChild(rsImage);
+
+    const logoTextAttr: IAttributes = {
+      tag: 'h6',
+      content:
+        'This project is developed as part of the final task of the course JavaScript/Front-end (2023Q4) from the RS School.',
+    };
+    const logoText = new BaseComponent(logoTextAttr);
+    logoContainer.appendChild(logoText);
+
     const aboutTitleAttr: IAttributes = {
       tag: 'h5',
       content: 'Team members',
@@ -45,7 +78,7 @@ export default class AboutUsView extends View {
       imageSrc: dima,
       title: 'Dmitrii Samsonenko',
       href: 'https://github.com/Friday-13',
-      bio: 'Bla lalalalalalala',
+      bio: 'Loading.......',
     };
     const card1 = new AboutUsCardComponent(cardAttr1);
     aboutSection.appendChild(card1);
@@ -54,7 +87,7 @@ export default class AboutUsView extends View {
       imageSrc: anna,
       title: 'Anna Golosova',
       href: 'https://github.com/Golosova76',
-      bio: 'Bla lalalalalalala',
+      bio: "Hi! My name is Anna, and I'm a junior frontend developer at a large IT company. I'm studying at RS School and thoroughly enjoying my dive into the world of frontend development. My career has been a real adventure: I've had the chance to try different fields, which helped me develop a unique skill set. Now, I apply these skills in IT, creating interfaces that are user-friendly and visually appealing. When I'm not coding, I like to explore new technologies and experiment with design. To me, IT is a world of endless possibilities, and I'm excited to discover something new every day.",
     };
     const card2 = new AboutUsCardComponent(cardAttr2);
 
@@ -64,7 +97,7 @@ export default class AboutUsView extends View {
       imageSrc: dasha,
       title: 'Daria Borzova',
       href: 'https://github.com/InStageTwo',
-      bio: 'Every day I try to learn something new. I tried my hand at many jobs, but everywhere I felt stagnation at some point. I hope that with the help of RSSchool, I will be able to change my life.',
+      bio: "Each day is a new chapter in my book of learning. I tried my hand at many jobs, yet in each, I encountered a plateau that beckoned me to seek more. Web development, with its ever-evolving landscape, promises a horizon that stretches beyond the mundane. Through the guidance of RSSchool, I envision a transformation in my professional life and hope to contribute to society. It's a field where stagnation is but a myth, and growth is the only constant—a realm where my passion for technology and my desire to make a difference can truly flourish.",
     };
     const card3 = new AboutUsCardComponent(cardAttr3);
     aboutSection.appendChild(card3);
@@ -94,7 +127,7 @@ export default class AboutUsView extends View {
     contributionList.forEach((member) => {
       const memberItem = new BaseComponent({
         tag: 'div',
-        classList: ['member-item'],
+        classList: ['member-item', 'card', 'col', 's12', 'm4', 'center-align'],
       });
 
       const memberTitle = new BaseComponent({
