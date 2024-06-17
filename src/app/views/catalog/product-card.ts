@@ -28,7 +28,7 @@ export default class ProductCardView extends View {
     };
     super(attrs);
     this.addCardContiner();
-    this.addImage(content.id, content.imageUrls[0]); // и вот тут добавила - надеюсь дальше не пошло?
+    this.addImage(content.id, content.imageUrls[0]);
     this.addContent(content.productName);
     this.addDescription(
       content.productName,
@@ -63,6 +63,7 @@ export default class ProductCardView extends View {
       Router.navigateTo(`#product/${productId}`);
     });
     this._container.appendChild(imgContainer);
+    this._image.node.setAttribute('loading', 'lazy');
   }
 
   addContent(title: string = DEFAULT_TITLE) {
