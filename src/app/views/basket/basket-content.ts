@@ -2,17 +2,22 @@ import { IAttributes } from '@components/base-component';
 import View from '@views/view';
 import { ICartData } from '@models/cart';
 import BasketProductView from './basket-product';
+import BasketEmptyView from './basket-empty';
 
 export default class BasketContentView extends View {
   private cartData?: ICartData | null = null;
 
-  constructor(cartData: ICartData) {
+  constructor(cartData?: ICartData) {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l8'],
     };
     super(attrs);
     this.cartData = cartData;
-    this.addProducts();
+    if (this.cartData) {
+      this.addProducts();
+    } else {
+      this.addEmptyCartMessage();
+    }
   }
 
   addProducts() {
@@ -31,5 +36,10 @@ export default class BasketContentView extends View {
       product.htmlElement.style.setProperty('min-height', '100px');
       this.appendChild(product);
     }
+  }
+
+  addEmptyCartMessage() {
+    const emptyMessage = new BasketEmptyView();
+    this.appendChild(emptyMessage);
   }
 }
