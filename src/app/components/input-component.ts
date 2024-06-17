@@ -18,7 +18,6 @@ export class InputComponent extends BaseComponent<HTMLInputElement> {
     mergedAttrs.type = attrs.type ? attrs.type : 'text';
     if (mergedAttrs.id) {
       this.node.id = mergedAttrs.id;
-      this.node.autocomplete = 'on';
     }
 
     if (mergedAttrs.required) {

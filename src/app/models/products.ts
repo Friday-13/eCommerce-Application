@@ -15,7 +15,7 @@ export interface IAttributeProducts {
   value: string | number;
 }
 
-export interface ILocalizedString {
+interface ILocalizedString {
   [key: string]: string;
 }
 

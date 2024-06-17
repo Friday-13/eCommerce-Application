@@ -4,19 +4,19 @@ import {
   ButtonComponent,
   IButtonAttributes,
 } from '@components/button-component';
-import { CheckboxComponent } from '@components/checkbox-component';
 import { FormComponent, IFormAttributes } from '@components/form-component';
 import { InputFieldComponent } from '@components/input-field-component';
 import registration from '@services/customer-registration';
-import createDateField from '@utils/create-date-field';
-import createEmailField from '@utils/create-email-field';
-import createNameField from '@utils/create-name-field';
-import createPasswordField from '@utils/create-password-field';
+import View from '@views/view';
+import { CheckboxComponent } from '@components/checkbox-component';
 import Router from '@utils/router';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
-import View from '@views/view';
-import AddressSection from './address';
+import createEmailField from '@utils/create-email-field';
+import createPasswordField from '@utils/create-password-field';
+import createNameField from '@utils/create-name-field';
+import createDateField from '@utils/create-date-field';
 import FormSectionView from './form-section';
+import AddressSection from './address';
 import styles from './registration-page.module.scss';
 
 export default class RegistrationView extends View {
@@ -141,6 +141,7 @@ export default class RegistrationView extends View {
       tag: 'button',
       onClick: () => {
         this.submitForm();
+        // fetchAndStoreUserToken();
       },
     };
     this.submitButton = new ButtonComponent(attrs);
@@ -177,7 +178,7 @@ export default class RegistrationView extends View {
 
     registration(
       this.collectFormData(),
-      RegistrationView.sucessRegister,
+      RegistrationView.sucessRegister, // правильное написание
       showErrorMessage
     );
   }
@@ -231,5 +232,11 @@ export default class RegistrationView extends View {
     const SUCSESS_MSG = 'You have successfully registered';
     Router.navigateTo('#main');
     showSucessMessage(SUCSESS_MSG);
+    // try {
+    //   fetchAndStoreUserToken();
+    // } catch (error) {
+    //   console.error('Failed to fetch and store user token:', error);
+    //   showErrorMessage('Failed to fetch user token.');
+    // }
   }
 }

@@ -1,6 +1,5 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
-import { customerTokenResponse } from '@models/customer';
-import CookieManager from '@utils/cookie';
+import { customerTokenResponse, saveCustomerToken } from '@models/customer';
 import ApiRoot from './api-root';
 import login from './login-authorization';
 
@@ -20,9 +19,9 @@ const registration = (
     })
     .execute()
     .then((response) => {
-      const customerDataForId = customerTokenResponse(response.body.customer);
-      if (customerDataForId && customerDataForId.id) {
-        CookieManager.setUserId(customerDataForId.id);
+      const customerToken = customerTokenResponse(response.body.customer);
+      if (customerToken) {
+        saveCustomerToken(customerToken);
       }
       login(
         { email: customer.email, password: customer.password as string },

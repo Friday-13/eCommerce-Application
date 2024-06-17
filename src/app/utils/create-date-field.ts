@@ -27,7 +27,6 @@ export default function createDateField(
     type: fieldAttrs.type,
     placeholder: fieldAttrs.placeholder,
     classList: 'datepicker',
-    id: fieldAttrs.id,
   };
   const labelAttrs: ILabelAttriubutes = {
     for: fieldAttrs.id,
