@@ -141,7 +141,6 @@ export default class RegistrationView extends View {
       tag: 'button',
       onClick: () => {
         this.submitForm();
-        // fetchAndStoreUserToken();
       },
     };
     this.submitButton = new ButtonComponent(attrs);

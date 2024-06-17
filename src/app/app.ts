@@ -61,7 +61,7 @@ class App {
     const hashParts = window.location.hash.slice(1).split('/');
     const route = hashParts[0];
     const productId = hashParts[1];
-    const cartId = 'f96019a2-085b-4763-abfd-86404d2524dc';
+    const cartId = '101b4406-a115-4cc9-9c0f-9b50832da419';
 
     if (!route) {
       window.location.hash = '#main';
@@ -75,7 +75,7 @@ class App {
 
     if (route === 'product' && productId) {
       this.hideFooterHeader = false;
-      this.mainView.page = new ProductPageView(productId);
+      this.mainView.page = new ProductPageView(productId, userId);
     } else {
       switch (window.location.hash) {
         case '#main':

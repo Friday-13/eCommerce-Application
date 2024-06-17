@@ -2,8 +2,6 @@ import { Cart } from '@commercetools/platform-sdk';
 import { ICartData, ILineItem, IVariant } from '@models/cart';
 import ApiRoot from './api-root';
 
-// productName: item.name['en-GB'],
-
 export const createCartData = (cart: Cart): ICartData => {
   const createdBy = {
     anonymousId: cart.createdBy?.anonymousId || '',
