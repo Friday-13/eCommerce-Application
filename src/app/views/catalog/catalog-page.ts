@@ -8,12 +8,15 @@ import getCategories from '@services/categories';
 import { categoryFilter } from '@utils/query-args';
 import CategoryBreadCrumbsView from '@views/category-breadcrumbs';
 import PageView from '@views/page-view';
+import PaginationView from '@views/pagination/pagination-view';
 import ProductListView from './product-list';
 import CatalogControls from './catalog-controls';
 import CatalogFiltersView from './catalog-filters-modal';
 import ChipsBlockView from './chips-block';
 import CategoryDropDown from './category-drop-down';
 import currentCategory from './current-category';
+
+const PRODUCT_PER_PAGE = 3;
 
 export default class CatalogPageView extends PageView {
   private _productList = new ProductListView();
@@ -30,6 +33,8 @@ export default class CatalogPageView extends PageView {
 
   private _chipsBlock = new ChipsBlockView();
 
+  private _paginationBlock = new PaginationView(this.updateProductList);
+
   constructor() {
     super();
     this.addBreadCrumbs();
@@ -40,10 +45,15 @@ export default class CatalogPageView extends PageView {
     this.addFiltersModal();
     this.addProductList();
     this.addCategoryList();
+    this.addPagination();
   }
 
   addProductList() {
-    getProducts(this.setProductList.bind(this), showErrorMessage);
+    getProducts(
+      this.setProductListAndPagination.bind(this),
+      showErrorMessage,
+      PRODUCT_PER_PAGE
+    );
     this._productList = new ProductListView();
     this._pageWrapper.appendChild(this._productList);
   }
@@ -56,9 +66,21 @@ export default class CatalogPageView extends PageView {
     this._productList.setProducts(products);
   }
 
+  setPagination(total: number) {
+    const lastPage = Math.ceil(total / PRODUCT_PER_PAGE);
+    this._paginationBlock.updateButtons(lastPage);
+  }
+
+  setProductListAndPagination(products: Array<IProductData>, total?: number) {
+    this.setProductList(products);
+    if (total !== undefined) {
+      this.setPagination(total);
+    }
+  }
+
   addControls() {
     this._controlsBlock = new CatalogControls(
-      this.updateProductList.bind(this)
+      this.updateProductListAndPagination.bind(this)
     );
     this._pageWrapper.appendChild(this._controlsBlock);
   }
@@ -70,7 +92,7 @@ export default class CatalogPageView extends PageView {
 
   addBreadCrumbs() {
     this._breadCrumbs = new CategoryBreadCrumbsView(
-      this.updateProductList.bind(this)
+      this.updateProductListAndPagination.bind(this)
     );
     this._pageWrapper.appendChild(this._breadCrumbs);
   }
@@ -96,7 +118,7 @@ export default class CatalogPageView extends PageView {
 
   addCategoriesDropDown() {
     this._categoryDropDown = new CategoryDropDown(
-      this.updateProductList.bind(this)
+      this.updateProductListAndPagination.bind(this)
     );
     this.htmlElement.appendChild(this._categoryDropDown.htmlElement);
     initMaterializeComponent('#category-btn', this.htmlElement, () => {
@@ -108,9 +130,16 @@ export default class CatalogPageView extends PageView {
 
   addFiltersModal() {
     this._filtersModal = new CatalogFiltersView(
-      this.updateProductList.bind(this)
+      this.updateProductListAndPagination.bind(this)
     );
     this.appendChild(this._filtersModal);
+  }
+
+  addPagination() {
+    this._paginationBlock = new PaginationView(
+      this.updateProductList.bind(this)
+    );
+    this._pageWrapper.appendChild(this._paginationBlock);
   }
 
   updateProductList() {
@@ -125,7 +154,28 @@ export default class CatalogPageView extends PageView {
     getProducts(
       this.setProductList.bind(this),
       showErrorMessage,
-      100,
+      PRODUCT_PER_PAGE,
+      PRODUCT_PER_PAGE * this._paginationBlock.pageNumber,
+      searchString,
+      filtersRequest,
+      [sortBy]
+    );
+  }
+
+  updateProductListAndPagination() {
+    this._productList.removeContent();
+    this._chipsBlock.clearChips();
+    const { searchString } = this._controlsBlock;
+    const { sortBy } = this._sortDropDown;
+    const filtersRequest = this.prepareFilters();
+    this._breadCrumbs.clear();
+    this._breadCrumbs.generateFromPath(currentCategory.categoryPath);
+
+    getProducts(
+      this.setProductListAndPagination.bind(this),
+      showErrorMessage,
+      PRODUCT_PER_PAGE,
+      0,
       searchString,
       filtersRequest,
       [sortBy]
