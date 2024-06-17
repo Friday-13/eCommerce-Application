@@ -64,6 +64,7 @@ export default class ProductCardView extends View {
       Router.navigateTo(`#product/${productId}`);
     });
     this._container.appendChild(imgContainer);
+    this._image.node.setAttribute('loading', 'lazy');
   }
 
   addContent(title: string = DEFAULT_TITLE) {

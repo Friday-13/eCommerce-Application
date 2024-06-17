@@ -5,6 +5,8 @@ export interface ICardAttributes {
   title?: string;
   description?: string;
   inputValue?: string;
+  href?: string;
+  bio?: string;
 }
 
 export class CardComponent extends BaseComponent {
@@ -19,16 +21,18 @@ export class CardComponent extends BaseComponent {
     this.card = card;
     this.appendChild(this.card);
 
-    const cardContent = new BaseComponent({
-      tag: 'div',
-      classList: ['card-content'],
-    });
-    card.appendChild(cardContent);
+    if (description !== '') {
+      const cardContent = new BaseComponent({
+        tag: 'div',
+        classList: ['card-content'],
+      });
+      card.appendChild(cardContent);
 
-    const contentParagraph = new BaseComponent({
-      tag: 'p',
-      content: description,
-    });
-    cardContent.appendChild(contentParagraph);
+      const contentParagraph = new BaseComponent({
+        tag: 'p',
+        content: description,
+      });
+      cardContent.appendChild(contentParagraph);
+    }
   }
 }

@@ -25,6 +25,7 @@ export function createInputField(fieldAttrs: IFormInputField) {
     placeholder: fieldAttrs.placeholder,
     disabled: fieldAttrs.disabled,
     required: fieldAttrs.required,
+    id: fieldAttrs.id,
   };
   const labelAttrs: ILabelAttriubutes = {
     for: fieldAttrs.id,

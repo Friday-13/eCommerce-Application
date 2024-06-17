@@ -1,15 +1,19 @@
 import { IAttributes } from '@components/base-component';
+import { ICartData } from '@models/cart';
 import View from '@views/view';
 
 export default class BasketSummaryView extends View {
   protected _card = new View({});
 
-  constructor() {
+  private cartData?: ICartData | null = null;
+
+  constructor(cartData: ICartData) {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l4'],
     };
     super(attrs);
     this.addCard();
+    this.cartData = cartData;
   }
 
   addCard() {
