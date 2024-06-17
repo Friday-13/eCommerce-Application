@@ -7,7 +7,7 @@ import createNameField from '@utils/create-name-field';
 import createDateField from '@utils/create-date-field';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
-import { getCustomer } from '@services/getCustomer';
+import { getCustomer } from '@services/get-customer';
 import {
   postalCodeNoCountryValidator,
   postalCodeUKValidator,
@@ -83,10 +83,7 @@ export default class ProfileView extends View {
 
   private async populateProfileView() {
     try {
-      const customer = JSON.parse(
-        localStorage.getItem('codecraftCustomer') as string
-      );
-      const customerData = await getCustomer(customer.id);
+      const customerData = await getCustomer();
       this.populateForm(customerData);
       this.populateAddresses(customerData);
     } catch (error) {

@@ -1,12 +1,18 @@
 import { customerTokenResponse, saveCustomerToken } from '@models/customer';
-import apiRoot from './api-root';
+import { UserAuthOptions } from '@commercetools/sdk-client-v2';
+import ApiRoot from './api-root';
 
 function login(
   customer: { email: string; password: string },
   sucessCallback: (message: string) => void,
   errorCallback: (message: string) => void
 ) {
-  apiRoot
+  const user: UserAuthOptions = {
+    password: customer.password,
+    username: customer.email,
+  };
+  const root = ApiRoot.getPasswordRoot(user);
+  root
     .login()
     .post({ body: customer })
     .execute()
