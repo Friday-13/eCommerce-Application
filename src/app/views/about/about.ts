@@ -1,8 +1,8 @@
 import View from '@views/view';
 import { BaseComponent, IAttributes } from '@components/base-component';
-import dasha from '@assets/about/dasha.png';
-import dima from '@assets/about/dima.png';
-import anna from '@assets/about/anna.png';
+import dasha from '@assets/about/dasha.jpg';
+import dima from '@assets/about/dima.webp';
+import anna from '@assets/about/anna.jpeg';
 import rsschool from '@assets/about/rsschool.svg';
 import { ICardAttributes } from '@components/card-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';

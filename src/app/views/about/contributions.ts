@@ -5,8 +5,9 @@ const contributionList = [
       'Team leader, organization of the team work, setting up Github project',
       'Registration page',
       'Implementation of the catalog',
-      'Boilerplate for web components',
+      'Base web components kit',
       'Basket',
+      'Technical support of the team',
     ],
   },
   {
@@ -18,11 +19,18 @@ const contributionList = [
       'Product page',
       'Basket',
       'Main page',
+      'CommerceTools products database creation',
+      'Active participation in code review',
     ],
   },
   {
     name: 'Daria Borzova',
-    contributions: ['Login Page', 'User Profile Page', 'About us page'],
+    contributions: [
+      'Login Page',
+      'User Profile Page',
+      'About us page',
+      'Setup CommerceTools project',
+    ],
   },
 ];
 
