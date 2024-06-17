@@ -98,11 +98,13 @@ export default class HeaderView extends View {
       const link = new AnchorComponent(linkAttrs);
 
       if (content === 'About Us') {
-        const iconHtml = '<i class="tiny material-icons">group</i>';
+        const iconHtml =
+          '<i class="tiny material-icons header-icons">group</i>';
         link.node.innerHTML = iconHtml;
       }
       if (content === 'Cart') {
-        const iconHtml = '<i class="tiny material-icons">shopping_cart</i>';
+        const iconHtml =
+          '<i class="tiny material-icons header-icons">shopping_cart</i>';
         link.node.innerHTML = iconHtml;
       }
 
