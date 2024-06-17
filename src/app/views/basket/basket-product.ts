@@ -112,7 +112,7 @@ export default class BasketProductView extends View {
 
     // блок для цен и количества => внутри два блока
     const pricesProductAttrs: IAttributes = {
-      classList: ['cart-producr-prices'],
+      classList: ['cart-product-prices'],
     };
     this.pricesContainer = new BaseComponent(pricesProductAttrs);
 

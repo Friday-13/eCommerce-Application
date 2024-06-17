@@ -3,7 +3,10 @@ export default class CookieManager {
   static setUserId(userId: string) {
     const days = 14; // Срок жизни cookie, например, 14 дней
     const expires = new Date(Date.now() + days * 86400000).toUTCString(); // Вычисляем время истечения cookie
-    document.cookie = `userId=${encodeURIComponent(userId)}; expires=${expires}; path=/; Secure; HttpOnly`;
+    document.cookie = `userId=${encodeURIComponent(userId)}; expires=${expires}; path=/; Secure`;
+    console.log(
+      `Cookie set: userId=${encodeURIComponent(userId)}; expires=${expires}; path=/; Secure`
+    );
   }
 
   // Получение userId из cookie
@@ -15,6 +18,11 @@ export default class CookieManager {
   // Очистка userId из cookie
   static clearUserId() {
     document.cookie =
-      'userId=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly';
+      'userId=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure';
+    console.log('Cookie cleared: userId');
+  }
+
+  static isCustomerAuthorized(): boolean {
+    return Boolean(this.getUserId());
   }
 }
