@@ -8,7 +8,7 @@ export interface ICustomerBase {
   lastName?: string;
 }
 
-const CUSTOMER_KEY = 'codecraftCustomer';
+const CUSTOMER_KEY = 'codecraft-customer';
 
 export const saveCustomerToken = (customer: ICustomerBase) => {
   localStorage.setItem(CUSTOMER_KEY, JSON.stringify(customer));
@@ -40,6 +40,6 @@ export const customerTokenResponse = (
   return customerToken;
 };
 
-export const customerClear = () => {
+export const clearCustomer = () => {
   localStorage.removeItem(CUSTOMER_KEY);
 };
