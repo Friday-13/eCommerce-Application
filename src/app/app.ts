@@ -13,6 +13,7 @@ import {
   FooterView,
   ProductPageView,
   BasketPageView,
+  AboutUsView,
 } from '@views/index';
 
 type Page =
@@ -21,7 +22,8 @@ type Page =
   | RegistrationView
   | LoginView
   | ProfileView
-  | CatalogPageView;
+  | CatalogPageView
+  | AboutUsView;
 
 class App {
   private headerView: HeaderView;
@@ -107,7 +109,6 @@ class App {
           this.hideFooterHeader = false;
           this.mainView.page = new CatalogPageView();
           break;
-
         case '#cart':
           this.hideFooterHeader = false;
           if (cartId) {
@@ -116,6 +117,10 @@ class App {
             // Обработка случая, когда cartId отсутствует
             this.mainView.page = new Error404();
           }
+          break;
+        case '#about-us':
+          this.hideFooterHeader = false;
+          this.mainView.page = new AboutUsView();
           break;
         case '#error':
           this.hideFooterHeader = true;
