@@ -141,7 +141,6 @@ export default class RegistrationView extends View {
       tag: 'button',
       onClick: () => {
         this.submitForm();
-        // fetchAndStoreUserToken();
       },
     };
     this.submitButton = new ButtonComponent(attrs);
@@ -178,7 +177,7 @@ export default class RegistrationView extends View {
 
     registration(
       this.collectFormData(),
-      RegistrationView.sucessRegister, // правильное написание
+      RegistrationView.sucessRegister,
       showErrorMessage
     );
   }

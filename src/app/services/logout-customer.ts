@@ -1,9 +1,9 @@
 import { clearCustomer } from '@models/customer';
-import { clearToken } from './token-storage';
+import CookieManager from '@utils/cookie';
 
 function logoutCustomer() {
   clearCustomer();
-  clearToken();
+  CookieManager.clearUserId();
 }
 
 export default logoutCustomer;

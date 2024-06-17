@@ -1,8 +1,9 @@
+import { showSucessMessage } from '@utils/toast-messages';
 import { addProductToCart } from './add-product-cart';
 import { createAnonymousCart, createCustomerCart } from './carts';
 
 class CartHandler {
-  private currentCartId: string | null = null;
+  public currentCartId: string | null = null;
 
   private currentCartVersion: number | null = null;
 
@@ -45,7 +46,8 @@ class CartHandler {
           );
         },
         (errorMessage) => {
-          console.error('Error creating user cart:', errorMessage);
+          const SUCSESS_MSG = `Error creating user cart: ${errorMessage}`;
+          showSucessMessage(SUCSESS_MSG);
         }
       );
     } else {
@@ -62,7 +64,8 @@ class CartHandler {
           );
         },
         (errorMessage) => {
-          console.error('Error creating anonymous cart:', errorMessage);
+          const SUCSESS_MSG = `Error creating anonymous cart: ${errorMessage}`;
+          showSucessMessage(SUCSESS_MSG);
         }
       );
     }
@@ -82,13 +85,17 @@ class CartHandler {
       (cartData) => {
         this.currentCartId = cartData.id;
         this.currentCartVersion = cartData.version;
+        console.log(
+          `User ID before deciding to save to localStorage: ${this.userId}`
+        );
         if (!this.userId) {
           this.saveCartToLocalStorage();
         }
         console.log('Product added to cart:', cartData);
       },
       (errorMessage) => {
-        console.error('Error adding product to cart:', errorMessage);
+        const SUCSESS_MSG = `Error adding product to cart: ${errorMessage}`;
+        showSucessMessage(SUCSESS_MSG);
       }
     );
   }
@@ -101,7 +108,7 @@ class CartHandler {
     localStorage.setItem('anonymousCart', JSON.stringify(cartData));
   }
 
-  private loadCartFromLocalStorage(): void {
+  public loadCartFromLocalStorage(): void {
     const savedCart = localStorage.getItem('anonymousCart');
     if (savedCart) {
       const cartData = JSON.parse(savedCart);
