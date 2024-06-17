@@ -1,8 +1,8 @@
 import View from '@views/view';
 import { BaseComponent, IAttributes } from '@components/base-component';
-import dasha from '@assets/about/dasha.png';
-import dima from '@assets/about/dima.png';
-import anna from '@assets/about/anna.png';
+import dasha from '@assets/about/dasha.jpg';
+import dima from '@assets/about/dima.webp';
+import anna from '@assets/about/anna.jpeg';
 import rsschool from '@assets/about/rsschool.svg';
 import { ICardAttributes } from '@components/card-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
@@ -78,7 +78,7 @@ export default class AboutUsView extends View {
       imageSrc: dima,
       title: 'Dmitrii Samsonenko',
       href: 'https://github.com/Friday-13',
-      bio: 'I\'m a Python developer with a background in embedded systems, where I developed software in C for various devices and measurement systems.  I\'m transitioning to web development with a focus on backend roles, while also cultivating an interest in frontend development and other web-related skills. Self-education is a key part of my professional development. I enjoy learning new skills and strive to communicate effectively with all team members. The most rewarding aspect of my work is creating new applications or features that are both functional and beneficial. ',
+      bio: "I'm a Python developer with a background in embedded systems, where I developed software in C for various devices and measurement systems.  I'm transitioning to web development with a focus on backend roles, while also cultivating an interest in frontend development and other web-related skills. Self-education is a key part of my professional development. I enjoy learning new skills and strive to communicate effectively with all team members. The most rewarding aspect of my work is creating new applications or features that are both functional and beneficial. ",
     };
     const card1 = new AboutUsCardComponent(cardAttr1);
     aboutSection.appendChild(card1);

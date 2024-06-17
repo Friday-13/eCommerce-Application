@@ -41,11 +41,26 @@
   margin-right: 5%;
 }
 
+.standard-size{
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+.standard-size img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 @media screen and (max-width <= 550px) {
   .logo-container {
     flex-direction: column;
   }
-  
+
   .logo-container h6 {
     margin-top: 10px;
   }
