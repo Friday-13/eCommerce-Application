@@ -1,4 +1,5 @@
 import { Cart, ClientResponse } from '@commercetools/platform-sdk';
+import LocalStorageManager from '@utils/local-cart-id';
 import ApiRoot from './api-root';
 
 // запрос на создание анон cart
@@ -17,8 +18,12 @@ export const createAnonymousCart = (
     .execute()
     .then((response: ClientResponse<Cart>) => {
       const cartData: Cart = response.body;
-      console.log(cartData);
-      successCallback(cartData);
+      if (cartData.id) {
+        LocalStorageManager.setCartId(cartData.id);
+        successCallback(cartData);
+      } else {
+        errorCallback('Failed to retrieve cart ID');
+      }
     })
     .catch((error: ClientResponse<{ message: string }>) => {
       errorCallback(error.body.message);
@@ -41,7 +46,13 @@ export const createCustomerCart = (
     .execute()
     .then((response: ClientResponse<Cart>) => {
       const cartData: Cart = response.body;
-      successCallback(cartData);
+      if (cartData.id) {
+        LocalStorageManager.setCartId(cartData.id);
+        console.log('Cart ID saved to localStorage:', cartData.id);
+        successCallback(cartData);
+      } else {
+        errorCallback('Failed to retrieve cart ID');
+      }
     })
     .catch((error: ClientResponse<{ message: string }>) => {
       errorCallback(error.body.message);
