@@ -43,8 +43,11 @@ class AddressSection extends FormSectionView {
 
   private _isDefault: boolean = false;
 
+  private _prefix: string = '';
+
   constructor(title: string) {
     super(title);
+    this._prefix = title.toLowerCase().split(' ').join('-');
     this.addStreetInput();
     this.addCityInput();
     this.addCountryInput();
@@ -54,7 +57,7 @@ class AddressSection extends FormSectionView {
 
   private addStreetInput() {
     const attrs: IFormInputField = {
-      id: 'street',
+      id: `${this._prefix}-street`,
       type: 'text',
       label: 'Street',
       placeholder: 'Dan Crescent',
@@ -66,7 +69,7 @@ class AddressSection extends FormSectionView {
 
   private addCityInput() {
     const attrs: IFormInputField = {
-      id: 'city',
+      id: `${this._prefix}-city`,
       type: 'text',
       label: 'City',
       placeholder: 'Lake Jeremyville',
@@ -128,7 +131,7 @@ class AddressSection extends FormSectionView {
 
   private addPostalCodeInput() {
     const attrs: IFormInputField = {
-      id: 'postal-code',
+      id: `${this._prefix}-postal-code`,
       type: 'text',
       label: 'Postal code',
       placeholder: '2154',
