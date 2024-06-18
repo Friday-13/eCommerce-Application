@@ -26,12 +26,13 @@ export const createCartData = (cart: Cart): ICartData => {
                 centAmount: price.value.centAmount,
                 fractionDigits: price.value.fractionDigits,
               },
-              discountedPrice: price.discounted
+              discounted: price.discounted
                 ? {
-                    // Проверяем, есть ли скидочная цена
-                    currencyCode: price.discounted.value.currencyCode,
-                    centAmount: price.discounted.value.centAmount,
-                    fractionDigits: price.discounted.value.fractionDigits,
+                    value: {
+                      currencyCode: price.discounted.value.currencyCode,
+                      centAmount: price.discounted.value.centAmount,
+                      fractionDigits: price.discounted.value.fractionDigits,
+                    },
                   }
                 : null, // Если нет скидочной цены, возвращаем null
             }))

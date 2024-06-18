@@ -116,7 +116,18 @@ export default class BasketProductView extends View {
     };
     this.pricesContainer = new BaseComponent(pricesProductAttrs);
 
-    const price = `${(this.productCartData.lineItem.price.value.centAmount / 10 ** this.productCartData.lineItem.price.value.fractionDigits).toFixed(this.productCartData.lineItem.price.value.fractionDigits)}`;
+    // const price = `${(this.productCartData.lineItem.price.value.centAmount / 10 ** this.productCartData.lineItem.price.value.fractionDigits).toFixed(this.productCartData.lineItem.price.value.fractionDigits)}`;
+
+    const { lineItem } = this.productCartData;
+    // Основная цена
+    const price = `${(lineItem.variant.prices[0].value.centAmount / 10 ** lineItem.variant.prices[0].value.fractionDigits).toFixed(lineItem.variant.prices[0].value.fractionDigits)}`;
+
+    // Скидочная цена
+    const discountedPrice =
+      lineItem.variant.prices[0].discounted &&
+      lineItem.variant.prices[0].discounted.value
+        ? `${(lineItem.variant.prices[0].discounted.value.centAmount / 10 ** lineItem.variant.prices[0].discounted.value.fractionDigits).toFixed(lineItem.variant.prices[0].discounted.value.fractionDigits)}`
+        : '';
 
     const productPriceAttrs: IAttributes = {
       classList: ['cart-product-price'],
@@ -125,24 +136,21 @@ export default class BasketProductView extends View {
     const productPrice = new BaseComponent(productPriceAttrs);
     this.pricesContainer.appendChild(productPrice);
 
-    // Форматируем скидочную цену, если она существует, без currencyCode
-    const discountedPrice = this.productCartData.lineItem.variant.prices[0]
-      .discounted
-      ? `${(this.productCartData.lineItem.variant.prices[0].discounted.value.centAmount / 10 ** this.productCartData.lineItem.variant.prices[0].discounted.value.fractionDigits).toFixed(this.productCartData.lineItem.variant.prices[0].discounted.value.fractionDigits)}`
-      : '';
-
     console.log(`Discounted Price: ${discountedPrice}`);
 
     // Добавляем цену со скидкой только если она есть
+
+    // Условное добавление элемента для скидочной цены, если она существует
     if (discountedPrice) {
-      const productDiscountPriceAttrs: IAttributes = {
-        classList: ['product-price-discount'],
+      const discountedPriceAttrs: IAttributes = {
+        classList: ['cart-product-discounted-price'],
         content: `$ ${discountedPrice}`,
       };
-      const productDiscountPrice = new BaseComponent(productDiscountPriceAttrs);
-      this.pricesContainer.appendChild(productDiscountPrice);
+      const discountedPriceElement = new BaseComponent(discountedPriceAttrs);
+      this.pricesContainer.appendChild(discountedPriceElement);
       productPrice.addClass('price-strikethrough');
     }
+
     const { quantity } = this.productCartData.lineItem;
 
     // Добавляем контейнер для количества

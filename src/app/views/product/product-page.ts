@@ -12,6 +12,7 @@ import { Cart } from '@commercetools/platform-sdk';
 import CartHandler from '@services/cart-handler';
 import { getCartById } from '@services/cart-data';
 import { ICartData } from '@models/cart';
+import CookieManager from '@utils/cookie';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -247,8 +248,10 @@ export default class ProductPageView extends View {
         // Если продукта нет в корзине, добавляем его
         this.cartHandler.handleAddToCart(productId, quantity);
         this.addCartButton.node.classList.add('button-disabled');
+        localStorage.setItem(`product-${productId}-disabled`, 'true');
       } else {
         this.addCartButton.node.classList.remove('button-disabled');
+        localStorage.removeItem(`product-${productId}-disabled`);
       }
     });
   }
@@ -257,16 +260,28 @@ export default class ProductPageView extends View {
     productId: string,
     callback: (isInCart: boolean) => void
   ): void {
-    // получаем сartId из LS
-    this.cartHandler.loadCartFromLocalStorage();
-    const { currentCartId } = this.cartHandler;
-    if (!currentCartId) {
+    // Получаем userId из куков
+    const userId = CookieManager.getUserId();
+
+    // Если userId существует, используем метод для зарегистрированных пользователей
+    if (userId) {
+      this.cartHandler.loadCartAuthFromLocalStorage(); // Загрузка корзины зарегистрированного пользователя
+    } else {
+      this.cartHandler.loadCartFromLocalStorage(); // Загрузка корзины анонимного пользователя
+    }
+    // Определяем, какой ID корзины использовать
+    const cartId = userId
+      ? this.cartHandler.currentCustomerCartId
+      : this.cartHandler.currentCartId;
+
+    // Проверяем, есть ли ID корзины после загрузки данных
+    if (!cartId) {
       callback(false);
       return;
     }
 
     getCartById(
-      currentCartId,
+      cartId,
       (cartData: ICartData) => {
         // Проверка наличия продукта в корзине
         const isInCart = cartData.lineItems.some(
@@ -302,6 +317,14 @@ export default class ProductPageView extends View {
     });
 
     detailsProduct.appendChild(cartContainer);
+
+    // Проверяем и восстанавливаем состояние кнопки из localStorage
+    const disabledState = localStorage.getItem(
+      `product-${this.productData.id}-disabled`
+    );
+    if (disabledState) {
+      this.addCartButton.node.classList.add('button-disabled');
+    }
   }
 
   private initializeProductDescription(detailsProduct: BaseComponent) {
