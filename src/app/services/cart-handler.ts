@@ -21,11 +21,11 @@ class CartHandler {
     this.currentCustomerCartId = null;
     this.currentCustomerCartVersion = null;
 
-    if (!userId) {
-      this.loadCartFromLocalStorage();
-    } else {
-      this.loadCartAuthFromLocalStorage();
-    }
+    // if (!userId) {
+    //   this.loadCartFromLocalStorage();
+    // } else {
+    //   this.loadCartAuthFromLocalStorage();
+    // }
   }
 
   public handleAddToCart(productId: string, quantity: number): void {

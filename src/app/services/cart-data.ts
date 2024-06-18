@@ -98,7 +98,7 @@ export const createCartData = (cart: Cart): ICartData => {
 
 export const getCartById = (
   cartId: string,
-  successCallback: (cartData: ICartData) => void,
+  successCallback: (cartData: Cart) => void,
   errorCallback: (message: string) => void
 ): void => {
   ApiRoot.root
@@ -107,8 +107,7 @@ export const getCartById = (
     .get()
     .execute()
     .then(({ body }) => {
-      const cartData = createCartData(body);
-      successCallback(cartData);
+      successCallback(body);
     })
     .catch((error) => {
       errorCallback(`Failed to load cart: ${error.message}`);

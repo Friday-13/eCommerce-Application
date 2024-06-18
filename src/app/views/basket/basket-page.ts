@@ -1,8 +1,9 @@
 import PageView from '@views/page-view';
 import { ICartData } from '@models/cart';
-import { getCartById } from '@services/cart-data';
+import { createCartData, getCartById } from '@services/cart-data';
 import { showErrorMessage } from '@utils/toast-messages';
 import LocalStorageManager from '@utils/local-cart-id';
+import { Cart } from '@commercetools/platform-sdk';
 import BasketTitleView from './basket-title';
 import BasketContentView from './basket-content';
 import BasketSummaryView from './basket-summary';
@@ -34,9 +35,9 @@ export default class BasketPageView extends PageView {
     if (this.cartId) {
       getCartById(
         this.cartId,
-        (cartData: ICartData) => {
+        (cartData: Cart) => {
           console.log('Cart data loaded:', cartData);
-          this.cartData = cartData;
+          this.cartData = createCartData(cartData);
           callback();
         },
         (errorMsg: string) => {
