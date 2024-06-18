@@ -1,15 +1,16 @@
 import { showErrorMessage } from '@utils/toast-messages';
+import CookieManager from '@utils/cookie';
 import { addProductToCart } from './add-product-cart';
 import { createAnonymousCart, createCustomerCart } from './carts';
 
 class CartHandler {
   public currentCartId: string | null = null;
 
-  private currentCartVersion: number | null = null;
+  public currentCartVersion: number | null = null;
 
   public currentCustomerCartId: string | null = null;
 
-  private currentCustomerCartVersion: number | null = null;
+  public currentCustomerCartVersion: number | null = null;
 
   private userId: string | null = null;
 
@@ -122,7 +123,7 @@ class CartHandler {
     );
   }
 
-  private saveCartToLocalStorage(): void {
+  public saveCartToLocalStorage(): void {
     const cartData = {
       currentCartId: this.currentCartId,
       currentCartVersion: this.currentCartVersion,
@@ -139,7 +140,7 @@ class CartHandler {
     }
   }
 
-  private saveCartAuthToLocalStorage(): void {
+  public saveCartAuthToLocalStorage(): void {
     const cartData = {
       currentCustomerCartId: this.currentCustomerCartId,
       currentCustomerCartVersion: this.currentCustomerCartVersion,
@@ -157,4 +158,8 @@ class CartHandler {
   }
 }
 
-export default CartHandler;
+const userId = CookieManager.getUserId();
+
+const cartHandler = new CartHandler(userId);
+
+export default cartHandler;

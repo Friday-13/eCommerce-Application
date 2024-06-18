@@ -9,7 +9,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Theme, themeToBrandImageMap } from '@models/brend-images';
 import { IButtonAttributes } from '@components/button-component';
 import { Cart } from '@commercetools/platform-sdk';
-import CartHandler from '@services/cart-handler';
+import cartHandler from '@services/cart-handler';
 import { getCartById } from '@services/cart-data';
 import { ICartData } from '@models/cart';
 import CookieManager from '@utils/cookie';
@@ -37,17 +37,14 @@ export default class ProductPageView extends View {
 
   private cartData?: Cart;
 
-  private cartHandler: CartHandler;
-
   private addCartButton!: BaseComponent;
 
-  constructor(productId: string, userId: string | null = null) {
+  constructor(productId: string) {
     const attrs: IAttributes = {
       classList: ['main-container-product'],
     };
     super(attrs);
     this.productId = productId;
-    this.cartHandler = new CartHandler(userId);
     this.fetchProductData(() => {
       this.initializeContentProductPage();
     });
@@ -246,7 +243,7 @@ export default class ProductPageView extends View {
     this.fetchCartAndCheckProduct(productId, (isInCart) => {
       if (!isInCart) {
         // Если продукта нет в корзине, добавляем его
-        this.cartHandler.handleAddToCart(productId, quantity);
+        cartHandler.handleAddToCart(productId, quantity);
         this.addCartButton.node.classList.add('button-disabled');
         localStorage.setItem(`product-${productId}-disabled`, 'true');
       } else {
@@ -256,6 +253,7 @@ export default class ProductPageView extends View {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private fetchCartAndCheckProduct(
     productId: string,
     callback: (isInCart: boolean) => void
@@ -265,14 +263,14 @@ export default class ProductPageView extends View {
 
     // Если userId существует, используем метод для зарегистрированных пользователей
     if (userId) {
-      this.cartHandler.loadCartAuthFromLocalStorage(); // Загрузка корзины зарегистрированного пользователя
+      cartHandler.loadCartAuthFromLocalStorage(); // Загрузка корзины зарегистрированного пользователя
     } else {
-      this.cartHandler.loadCartFromLocalStorage(); // Загрузка корзины анонимного пользователя
+      cartHandler.loadCartFromLocalStorage(); // Загрузка корзины анонимного пользователя
     }
     // Определяем, какой ID корзины использовать
     const cartId = userId
-      ? this.cartHandler.currentCustomerCartId
-      : this.cartHandler.currentCartId;
+      ? cartHandler.currentCustomerCartId
+      : cartHandler.currentCartId;
 
     // Проверяем, есть ли ID корзины после загрузки данных
     if (!cartId) {
