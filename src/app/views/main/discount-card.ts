@@ -8,6 +8,8 @@ import { IInputAttributes, InputComponent } from '@components/input-component';
 import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 
 export default class DiscountCardComponent extends CardComponent {
+  private _inputComponent = new InputComponent({});
+
   constructor(data: Partial<ICardAttributes> = {}) {
     super(data);
     const { inputValue = '' } = data;
@@ -23,25 +25,20 @@ export default class DiscountCardComponent extends CardComponent {
       id: 'input',
     };
 
-    const input = new InputComponent(inputAttr);
-    discountContainer.appendChild(input);
+    this._inputComponent = new InputComponent(inputAttr);
+    discountContainer.appendChild(this._inputComponent);
 
     const buttonAttr: IButtonAttributes = {
       content: 'Copy',
       onClick: () => {
-        const inputElement = document.getElementById(
-          'input'
-        ) as HTMLInputElement;
-        if (inputElement) {
-          navigator.clipboard
-            .writeText(inputElement.value)
-            .then(() => {
-              showSucessMessage('Text copied to clipboard');
-            })
-            .catch(() => {
-              showErrorMessage('Failed to copy text');
-            });
-        }
+        navigator.clipboard
+          .writeText(this._inputComponent.value)
+          .then(() => {
+            showSucessMessage('Text copied to clipboard');
+          })
+          .catch(() => {
+            showErrorMessage('Failed to copy text');
+          });
       },
       classList: [
         'edit-profile-button',
