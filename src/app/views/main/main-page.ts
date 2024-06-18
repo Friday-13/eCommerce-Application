@@ -3,10 +3,14 @@ import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import carUrl from '@assets/main-image.webp';
 import { ICardAttributes } from '@components/card-component';
+import getActivePromocodes from '@services/get-active-promocodes';
+import { DiscountCode } from '@commercetools/platform-sdk';
 import DiscountCardComponent from './discount-card';
 
 export default class MainPageView extends View {
   private mainContainer!: BaseComponent; // добавлять разные блоки сюда
+
+  private _promoSection = new BaseComponent({});
 
   constructor() {
     const attrs: IAttributes = {};
@@ -36,28 +40,25 @@ export default class MainPageView extends View {
       id: 'promo-section',
       classList: ['row'],
     };
-    const promoSection = new BaseComponent(promoSectionAttr);
-    this.mainContainer.appendChild(promoSection);
+    this._promoSection = new BaseComponent(promoSectionAttr);
+    this.mainContainer.appendChild(this._promoSection);
+    getActivePromocodes(this.showDiscountCodes.bind(this), () => {});
+  }
 
-    const cardAttr1: ICardAttributes = {
-      inputValue: 'DISCOUNT10',
-      description: 'GET 10% OFF YOUR CART WITH ORDERS OVER 500$',
-    };
-    const card1 = new DiscountCardComponent(cardAttr1);
-    promoSection.appendChild(card1);
+  showDiscountCodes(discountCodes: Array<DiscountCode>) {
+    discountCodes.forEach((discountCode) => {
+      const descriptionField = discountCode.description;
+      let description = '';
+      if (descriptionField) {
+        description = descriptionField['en-GB'];
+      }
+      const cardAttr: ICardAttributes = {
+        inputValue: discountCode.code,
+        description,
+      };
 
-    const cardAttr2: ICardAttributes = {
-      inputValue: 'DISCOUNT20',
-      description: 'TAKE EXTRA 20% OFF FOR ORDERS OVER 1000€',
-    };
-    const card2 = new DiscountCardComponent(cardAttr2);
-    promoSection.appendChild(card2);
-
-    const cardAttr3: ICardAttributes = {
-      inputValue: 'DISCOUNT30',
-      description: 'GET 30% OFF YOUR CART WITH ORDERS OVER 1500$',
-    };
-    const card3 = new DiscountCardComponent(cardAttr3);
-    promoSection.appendChild(card3);
+      const card = new DiscountCardComponent(cardAttr);
+      this._promoSection.appendChild(card);
+    });
   }
 }
