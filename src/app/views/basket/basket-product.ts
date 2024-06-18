@@ -1,6 +1,10 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import { ICartData, ILineItem } from '@models/cart';
+import cartHandler from '@services/cart-handler';
+import { removeProductFromCart } from '@services/carts';
+import CookieManager from '@utils/cookie';
+// import { removeProductFromCart } from '@services/carts';
 import View from '@views/view';
 
 interface IProductCartData {
@@ -14,6 +18,8 @@ export default class BasketProductView extends View {
   private contentContainerCart!: BaseComponent;
 
   private pricesContainer!: BaseComponent;
+
+  private iconDeleteCart!: BaseComponent;
 
   private productCartData?: IProductCartData | null = null;
 
@@ -98,11 +104,45 @@ export default class BasketProductView extends View {
       classList: ['small', 'material-icons'],
       content: 'delete',
     };
-    const iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
+    this.iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
+
+    const cartId = cartHandler.currentCartId as string;
+    const cartVersion = cartHandler.currentCartVersion as number;
+    const { id } = this.productCartData.lineItem;
+
+    this.iconDeleteCart.node.addEventListener('click', () => {
+      removeProductFromCart(
+        cartId,
+        cartVersion,
+        id,
+        (cartData) => {
+          console.log('Product removed from cart:', cartData);
+          this._htmlElement.addClass('none');
+          const userId = CookieManager.getUserId();
+          // Проверка на наличие userID для определения типа пользователя
+          if (userId) {
+            // Зарегистрированный пользователь
+            cartHandler.currentCustomerCartId = cartData.id;
+            cartHandler.currentCustomerCartVersion = cartData.version;
+            cartHandler.saveCartAuthToLocalStorage();
+          } else {
+            // Анонимный пользователь
+            cartHandler.currentCartId = cartData.id;
+            cartHandler.currentCartVersion = cartData.version;
+            cartHandler.saveCartToLocalStorage();
+          }
+          console.log(id);
+          localStorage.removeItem(`product-${id}-disabled`);
+        },
+        (errorMessage) => {
+          console.error('Error removing product from cart:', errorMessage);
+        }
+      );
+    });
 
     contentTextCart.appendChild(contentTitleCart);
     contentTextCart.appendChild(contentDeleteCart);
-    contentDeleteCart.appendChild(iconDeleteCart);
+    contentDeleteCart.appendChild(this.iconDeleteCart);
 
     // блок для цен и количества
     const digitsTitleCartAttrs: IAttributes = {
@@ -135,8 +175,6 @@ export default class BasketProductView extends View {
     };
     const productPrice = new BaseComponent(productPriceAttrs);
     this.pricesContainer.appendChild(productPrice);
-
-    console.log(`Discounted Price: ${discountedPrice}`);
 
     // Добавляем цену со скидкой только если она есть
 

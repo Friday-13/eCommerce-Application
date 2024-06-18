@@ -58,3 +58,34 @@ export const createCustomerCart = (
       errorCallback(error.body.message);
     });
 };
+
+export const removeProductFromCart = (
+  cartId: string,
+  cartVersion: number,
+  lineItemId: string,
+  successCallback: (cartData: Cart) => void,
+  errorCallback: (message: string) => void
+): void => {
+  ApiRoot.root
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: cartVersion,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then((response: ClientResponse<Cart>) => {
+      const cartData: Cart = response.body;
+      successCallback(cartData);
+    })
+    .catch((error: ClientResponse<{ message: string }>) => {
+      errorCallback(error.body.message);
+    });
+};

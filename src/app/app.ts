@@ -1,5 +1,5 @@
 import isPageAccessable from '@utils/access-control';
-import CookieManager from '@utils/cookie';
+
 import {
   Error404,
   MainPageView,
@@ -77,8 +77,8 @@ class App {
 
     if (route === 'product' && productId) {
       this.hideFooterHeader = false;
-      const userId = CookieManager.getUserId();
-      this.mainView.page = new ProductPageView(productId, userId);
+
+      this.mainView.page = new ProductPageView(productId);
     } else {
       switch (window.location.hash) {
         case '#main':
