@@ -36,7 +36,7 @@ export default class BasketSummaryView extends View {
     discountedPrice: 0,
   };
 
-  constructor(cartData: ICartData) {
+  constructor(cartData?: ICartData) {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l4'],
     };

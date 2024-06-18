@@ -1,6 +1,7 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import { ICartData, ILineItem } from '@models/cart';
+// import { removeProductFromCart } from '@services/carts';
 import View from '@views/view';
 
 interface IProductCartData {
@@ -14,6 +15,8 @@ export default class BasketProductView extends View {
   private contentContainerCart!: BaseComponent;
 
   private pricesContainer!: BaseComponent;
+
+  private iconDeleteCart!: BaseComponent;
 
   private productCartData?: IProductCartData | null = null;
 
@@ -98,11 +101,28 @@ export default class BasketProductView extends View {
       classList: ['small', 'material-icons'],
       content: 'delete',
     };
-    const iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
+    this.iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
+
+    /*
+    this.iconDeleteCart.node.addEventListener('click', () => {
+      removeProductFromCart(
+        cartId,
+        cartVersion,
+        lineItemId,
+        (cartData) => {
+          console.log('Product removed from cart:', cartData);
+          // Обновите UI или выполните другие действия после успешного удаления
+        },
+        (errorMessage) => {
+          console.error('Error removing product from cart:', errorMessage);
+        }
+      );
+    });
+    */
 
     contentTextCart.appendChild(contentTitleCart);
     contentTextCart.appendChild(contentDeleteCart);
-    contentDeleteCart.appendChild(iconDeleteCart);
+    contentDeleteCart.appendChild(this.iconDeleteCart);
 
     // блок для цен и количества
     const digitsTitleCartAttrs: IAttributes = {
@@ -135,8 +155,6 @@ export default class BasketProductView extends View {
     };
     const productPrice = new BaseComponent(productPriceAttrs);
     this.pricesContainer.appendChild(productPrice);
-
-    console.log(`Discounted Price: ${discountedPrice}`);
 
     // Добавляем цену со скидкой только если она есть
 

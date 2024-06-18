@@ -38,7 +38,6 @@ const getProducts = (
       const { results } = response.body;
       const products = parseProductProjectionResults(results);
       sucessCallback(products);
-      console.log(response);
     })
     .catch((error) => {
       errorCallback(error.message);
