@@ -73,12 +73,19 @@
 }
 
 .cart-product-prices {
+  display: flex;
+  gap: 20px;
+
   &:not(:last-child) {
     margin-right: 15%;
   }
 }
 
 .cart-product-price {
+}
+
+.cart-product-discounted-price {
+  color: red;
 }
 
 .cart-product-quantity {

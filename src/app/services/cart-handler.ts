@@ -1,4 +1,4 @@
-import { showSucessMessage } from '@utils/toast-messages';
+import { showErrorMessage } from '@utils/toast-messages';
 import { addProductToCart } from './add-product-cart';
 import { createAnonymousCart, createCustomerCart } from './carts';
 
@@ -7,27 +7,45 @@ class CartHandler {
 
   private currentCartVersion: number | null = null;
 
+  public currentCustomerCartId: string | null = null;
+
+  private currentCustomerCartVersion: number | null = null;
+
   private userId: string | null = null;
 
   constructor(userId: string | null) {
     this.userId = userId;
+    this.currentCartId = null;
+    this.currentCartVersion = null;
+    this.currentCustomerCartId = null;
+    this.currentCustomerCartVersion = null;
+
     if (!userId) {
       this.loadCartFromLocalStorage();
     } else {
-      this.loadCartFromServer(userId);
+      this.loadCartAuthFromLocalStorage();
     }
   }
 
   public handleAddToCart(productId: string, quantity: number): void {
-    if (!this.currentCartId || !this.currentCartVersion) {
+    // Определяем, какие переменные корзины использовать
+    let cartId;
+    let cartVersion;
+
+    if (this.userId) {
+      // Проверка, зарегистрирован ли пользователь
+      cartId = this.currentCustomerCartId;
+      cartVersion = this.currentCustomerCartVersion;
+    } else {
+      // Для анонимных пользователей
+      cartId = this.currentCartId;
+      cartVersion = this.currentCartVersion;
+    }
+
+    if (!cartId || !cartVersion) {
       this.createCartAndAddProduct(productId, quantity);
     } else {
-      this.addProductToExistingCart(
-        this.currentCartId,
-        this.currentCartVersion,
-        productId,
-        quantity
-      );
+      this.addProductToExistingCart(cartId, cartVersion, productId, quantity);
     }
   }
 
@@ -36,18 +54,19 @@ class CartHandler {
       createCustomerCart(
         this.userId,
         (cartData) => {
-          this.currentCartId = cartData.id;
-          this.currentCartVersion = cartData.version;
+          this.currentCustomerCartId = cartData.id;
+          this.currentCustomerCartVersion = cartData.version;
+          this.saveCartAuthToLocalStorage();
           this.addProductToExistingCart(
-            this.currentCartId,
-            this.currentCartVersion,
+            this.currentCustomerCartId,
+            this.currentCustomerCartVersion,
             productId,
             quantity
           );
         },
         (errorMessage) => {
           const SUCSESS_MSG = `Error creating user cart: ${errorMessage}`;
-          showSucessMessage(SUCSESS_MSG);
+          showErrorMessage(SUCSESS_MSG);
         }
       );
     } else {
@@ -65,7 +84,7 @@ class CartHandler {
         },
         (errorMessage) => {
           const SUCSESS_MSG = `Error creating anonymous cart: ${errorMessage}`;
-          showSucessMessage(SUCSESS_MSG);
+          showErrorMessage(SUCSESS_MSG);
         }
       );
     }
@@ -83,19 +102,22 @@ class CartHandler {
       productId,
       quantity,
       (cartData) => {
-        this.currentCartId = cartData.id;
-        this.currentCartVersion = cartData.version;
-        console.log(
-          `User ID before deciding to save to localStorage: ${this.userId}`
-        );
-        if (!this.userId) {
+        if (this.userId) {
+          // Для зарегистрированных пользователей
+          this.currentCustomerCartId = cartData.id;
+          this.currentCustomerCartVersion = cartData.version;
+          this.saveCartAuthToLocalStorage();
+        } else {
+          // Для анонимных пользователей
+          this.currentCartId = cartData.id;
+          this.currentCartVersion = cartData.version;
           this.saveCartToLocalStorage();
         }
         console.log('Product added to cart:', cartData);
       },
       (errorMessage) => {
         const SUCSESS_MSG = `Error adding product to cart: ${errorMessage}`;
-        showSucessMessage(SUCSESS_MSG);
+        showErrorMessage(SUCSESS_MSG);
       }
     );
   }
@@ -117,9 +139,22 @@ class CartHandler {
     }
   }
 
-  // метод для загрузки корзины зарегистрированного пользователя с сервера
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
-  private loadCartFromServer(userId: string): void {}
+  private saveCartAuthToLocalStorage(): void {
+    const cartData = {
+      currentCustomerCartId: this.currentCustomerCartId,
+      currentCustomerCartVersion: this.currentCustomerCartVersion,
+    };
+    localStorage.setItem('customerCart', JSON.stringify(cartData));
+  }
+
+  public loadCartAuthFromLocalStorage(): void {
+    const savedCart = localStorage.getItem('customerCart');
+    if (savedCart) {
+      const cartData = JSON.parse(savedCart);
+      this.currentCustomerCartId = cartData.currentCustomerCartId;
+      this.currentCustomerCartVersion = cartData.currentCustomerCartVersion;
+    }
+  }
 }
 
 export default CartHandler;
