@@ -1,6 +1,7 @@
 import { IAttributes } from '@components/base-component';
 import View from '@views/view';
 import { ICartData } from '@models/cart';
+import currentCart from '@services/current-cart';
 import BasketProductView from './basket-product';
 import BasketEmptyView from './basket-empty';
 
@@ -13,7 +14,7 @@ export default class BasketContentView extends View {
     };
     super(attrs);
     this.cartData = cartData;
-    if (this.cartData) {
+    if (currentCart.cartData.lineItems.length !== 0) {
       this.addProducts();
     } else {
       this.addEmptyCartMessage();

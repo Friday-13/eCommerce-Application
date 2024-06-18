@@ -64,7 +64,8 @@ export const removeProductFromCart = (
   cartVersion: number,
   lineItemId: string,
   successCallback: (cartData: Cart) => void,
-  errorCallback: (message: string) => void
+  errorCallback: (message: string) => void,
+  quantity?: number
 ): void => {
   ApiRoot.root
     .carts()
@@ -76,6 +77,7 @@ export const removeProductFromCart = (
           {
             action: 'removeLineItem',
             lineItemId,
+            quantity,
           },
         ],
       },

@@ -1,6 +1,6 @@
 import { ICartData } from '@models/cart';
 import { Cart } from '@commercetools/platform-sdk';
-import { createAnonymousCart } from './carts';
+import { createAnonymousCart, removeProductFromCart } from './carts';
 import { createCartData, getCartById } from './cart-data';
 import { addProductToCart } from './add-product-cart';
 
@@ -67,6 +67,19 @@ class CurrentCart {
       (msg) => {
         console.log(`Error on adding ${msg}`);
       }
+    );
+  }
+
+  removeProductFromAnonymus(productId: string, quantity?: number) {
+    removeProductFromCart(
+      this.cartData.id,
+      this.cartData.version,
+      productId,
+      this.updateCartData.bind(this),
+      (msg) => {
+        console.log(`Error on adding ${msg}`);
+      },
+      quantity
     );
   }
 }
