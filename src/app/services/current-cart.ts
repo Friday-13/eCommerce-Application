@@ -75,7 +75,7 @@ class CurrentCart {
     localStorage.setItem('anonymousCart', JSON.stringify(cartData));
   }
 
-  addProductToAnonymus(productId: string, quantity: number) {
+  addProduct(productId: string, quantity: number) {
     addProductToCart(
       this.cartData.id,
       this.cartData.version,
@@ -88,7 +88,7 @@ class CurrentCart {
     );
   }
 
-  removeProductFromAnonymus(productId: string, quantity?: number) {
+  removeProduct(productId: string, quantity?: number) {
     removeProductFromCart(
       this.cartData.id,
       this.cartData.version,
@@ -105,10 +105,6 @@ class CurrentCart {
     createCustomerCart(userId, this.updateCartData.bind(this), (msg) =>
       console.log(`Creating customer cart error ${msg}`)
     );
-  }
-
-  get cart() {
-    return this.cartData;
   }
 }
 

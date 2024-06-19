@@ -67,7 +67,7 @@ export default class BasketPageView extends PageView {
 
   addBasketContent() {
     // if (!this.cartData) return;
-    this._content = new BasketContentView(this.cartData);
+    this._content = new BasketContentView();
     this._pageWrapper.appendChild(this._content);
   }
 
