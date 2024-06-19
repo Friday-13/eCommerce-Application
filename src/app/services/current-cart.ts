@@ -25,33 +25,52 @@ class CurrentCart {
     this.initCurrentCart(userId);
   }
 
-  public initCurrentCart(userId?: string) {
+  public initCurrentCart(userId?: string, sucessCallback?: () => void) {
     console.log(`Initializing ID ${userId}`);
     if (userId) {
-      this.loadCustomerCart(userId);
+      this.loadCustomerCart(userId, sucessCallback);
       LocalStorageManager.removeAnonymusCart();
     } else {
-      this.loadAnonymusCart();
+      this.loadAnonymusCart(sucessCallback);
     }
   }
 
-  private loadCustomerCart(userId: string) {
+  private loadCustomerCart(userId: string, successCallback?: () => void) {
     isCustomerCartExist(
       userId,
-      this.updateCartData.bind(this),
-      this.createCustomerCart.bind(this)
+      (cart: Cart) => {
+        this.updateCartData(cart);
+        if (successCallback) {
+          successCallback();
+        }
+      },
+      (id: string) => {
+        this.createCustomerCart(id);
+        if (successCallback) {
+          successCallback();
+        }
+      }
     );
   }
 
-  private loadAnonymusCart() {
+  private loadAnonymusCart(successCallback?: () => void) {
     const savedCart = localStorage.getItem('anonymousCart');
     if (savedCart) {
       const cartData = JSON.parse(savedCart);
       this.currentCartId = cartData.currentCartId as string;
       this.currentCartVersion = cartData.currentCartVersion;
-      getCartById(this.currentCartId, this.updateCartData.bind(this), (msg) => {
-        console.log(`Error on loading local cart: ${msg} `);
-      });
+      getCartById(
+        this.currentCartId,
+        (cart: Cart) => {
+          this.updateCartData(cart);
+          if (successCallback) {
+            successCallback();
+          }
+        },
+        (msg) => {
+          console.log(`Error on loading local cart: ${msg} `);
+        }
+      );
     } else {
       createAnonymousCart(this.updateCartData.bind(this), () => {
         console.log('Problem on creating');
@@ -75,25 +94,43 @@ class CurrentCart {
     localStorage.setItem('anonymousCart', JSON.stringify(cartData));
   }
 
-  addProduct(productId: string, quantity: number) {
+  addProduct(
+    productId: string,
+    quantity: number,
+    successCallback?: () => void
+  ) {
     addProductToCart(
       this.cartData.id,
       this.cartData.version,
       productId,
       quantity,
-      this.updateCartData.bind(this),
+      (cart: Cart) => {
+        this.updateCartData(cart);
+        if (successCallback) {
+          successCallback();
+        }
+      },
       (msg) => {
         console.log(`Error on adding ${msg}`);
       }
     );
   }
 
-  removeProduct(productId: string, quantity?: number) {
+  removeProduct(
+    productId: string,
+    quantity?: number,
+    successCallback?: () => void
+  ) {
     removeProductFromCart(
       this.cartData.id,
       this.cartData.version,
       productId,
-      this.updateCartData.bind(this),
+      (cart: Cart) => {
+        this.updateCartData(cart);
+        if (successCallback) {
+          successCallback();
+        }
+      },
       (msg) => {
         console.log(`Error on adding ${msg}`);
       },
@@ -168,7 +205,6 @@ class CurrentCart {
     );
   }
 }
-
 const userId = CookieManager.getUserId();
 
 const currentCart = new CurrentCart(userId);

@@ -1,5 +1,6 @@
 import PageView from '@views/page-view';
 import currentCart from '@services/current-cart';
+import CookieManager from '@utils/cookie';
 import BasketTitleView from './basket-title';
 import BasketContentView from './basket-content';
 import BasketSummaryView from './basket-summary';
@@ -14,7 +15,15 @@ export default class BasketPageView extends PageView {
   constructor() {
     super();
     this.addTitle();
-    this.initializeBasketContent();
+    if (currentCart.cartData) {
+      this.initializeBasketContent();
+    } else {
+      const userId = CookieManager.getUserId();
+      currentCart.initCurrentCart(
+        userId,
+        this.initializeBasketContent.bind(this)
+      );
+    }
   }
 
   private initializeBasketContent = (): void => {
@@ -34,14 +43,12 @@ export default class BasketPageView extends PageView {
   }
 
   addBasketContent() {
-    // if (!this.cartData) return;
     this._content = new BasketContentView();
     this._pageWrapper.appendChild(this._content);
   }
 
   addOrderSummary() {
-    // if (!this.cartData) return;
-    this._summary = new BasketSummaryView(this.cartData);
+    this._summary = new BasketSummaryView();
     this._pageWrapper.appendChild(this._summary);
   }
 }

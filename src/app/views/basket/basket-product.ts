@@ -20,13 +20,16 @@ export default class BasketProductView extends View {
 
   private productCartData?: IProductCartData | null = null;
 
-  constructor(productCartData: IProductCartData) {
+  private _updateCallback: () => void;
+
+  constructor(productCartData: IProductCartData, updateCallback: () => void) {
     const attrs: IAttributes = {
       tag: 'article',
       classList: 'card',
     };
     super(attrs);
     this.productCartData = productCartData;
+    this._updateCallback = updateCallback;
     this.initializeContentProductBlockInCart();
   }
 
@@ -103,37 +106,12 @@ export default class BasketProductView extends View {
     };
     this.iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
 
-    // const cartId = cartHandler.currentCartId as string;
-    // const cartVersion = cartHandler.currentCartVersion as number;
     const { id } = this.productCartData.lineItem;
 
     this.iconDeleteCart.node.addEventListener('click', () => {
-      currentCart.removeProduct(
-        id
-        // (cartData) => {
-        //   console.log('Product removed from cart:', cartData);
-        //   this._htmlElement.addClass('none');
-        //   const userId = CookieManager.getUserId();
-        //   // Проверка на наличие userID для определения типа пользователя
-        //   if (userId) {
-        //     // Зарегистрированный пользователь
-        //     cartHandler.currentCustomerCartId = cartData.id;
-        //     cartHandler.currentCustomerCartVersion = cartData.version;
-        //     cartHandler.saveCartAuthToLocalStorage();
-        //   } else {
-        //     // Анонимный пользователь
-        //     cartHandler.currentCartId = cartData.id;
-        //     cartHandler.currentCartVersion = cartData.version;
-        //     cartHandler.saveCartToLocalStorage();
-        //   }
-        //   console.log(id);
-        //   localStorage.removeItem(`product-${id}-disabled`);
-        // },
-        // (errorMessage) => {
-        //   console.error('Error removing product from cart:', errorMessage);
-        // }
-      );
+      currentCart.removeProduct(id);
       this._htmlElement.addClass('none');
+      this._updateCallback();
     });
 
     contentTextCart.appendChild(contentTitleCart);
