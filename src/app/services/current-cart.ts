@@ -83,7 +83,6 @@ class CurrentCart {
     this.currentCartVersion = cart.version;
     this.cartData = createCartData(cart);
     this.saveCartToLocalStorage();
-    console.log(this.cartData);
   }
 
   public saveCartToLocalStorage(): void {
@@ -118,8 +117,8 @@ class CurrentCart {
 
   removeProduct(
     productId: string,
-    quantity?: number,
-    successCallback?: () => void
+    successCallback?: () => void,
+    quantity?: number
   ) {
     removeProductFromCart(
       this.cartData.id,

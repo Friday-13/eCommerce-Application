@@ -5,6 +5,10 @@ import BasketProductView from './basket-product';
 import BasketEmptyView from './basket-empty';
 
 export default class BasketContentView extends View {
+  private _updateCallback?: () => void;
+
+  private _products: Array<BasketProductView> = [];
+
   constructor() {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l8'],
@@ -15,6 +19,13 @@ export default class BasketContentView extends View {
     } else {
       this.addEmptyCartMessage();
     }
+  }
+
+  set updateCallback(updateCallback: () => void) {
+    this._updateCallback = updateCallback;
+    this._products.forEach((product) => {
+      product.setUpdateCallback(updateCallback);
+    });
   }
 
   addProducts() {
@@ -29,8 +40,12 @@ export default class BasketContentView extends View {
         cartData: currentCart.cartData, // Полные данные корзины
         lineItem: currentCart.cartData.lineItems[i], // Данные конкретного товара
       };
-      const product = new BasketProductView(productCartData);
+      const product = new BasketProductView(
+        productCartData,
+        this._updateCallback
+      );
       product.htmlElement.style.setProperty('min-height', '100px');
+      this._products.push(product);
       this.appendChild(product);
     }
   }

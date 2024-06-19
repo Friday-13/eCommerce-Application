@@ -4,37 +4,22 @@ import View from '@views/view';
 const HEADER_TEXT = 'My Basket';
 
 export default class BasketTitleView extends View {
-  private _productsCount = 0;
-
   private _header = new BaseComponent({});
 
-  constructor(productsCount: number) {
+  constructor() {
     const attrs: IAttributes = {
       classList: 'col s12',
     };
     super(attrs);
     this.addHeader();
-    this.productsCount = productsCount;
   }
 
   addHeader() {
     const attrs: IAttributes = {
       tag: 'h5',
+      content: HEADER_TEXT,
     };
     this._header = new BaseComponent(attrs);
     this.appendChild(this._header);
-  }
-
-  set productsCount(newCount: number) {
-    this._productsCount = newCount;
-    this.updateHeaderText();
-  }
-
-  get productsCount() {
-    return this._productsCount;
-  }
-
-  updateHeaderText() {
-    this._header.textContent = `${HEADER_TEXT} (${this.productsCount})`;
   }
 }

@@ -14,7 +14,6 @@ export default function getActivePromocodes(
     })
     .execute()
     .then((response) => {
-      console.log(response);
       sucessCallback(response.body.results);
     })
     .catch((error) => {

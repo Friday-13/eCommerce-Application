@@ -6,7 +6,7 @@ import BasketContentView from './basket-content';
 import BasketSummaryView from './basket-summary';
 
 export default class BasketPageView extends PageView {
-  private _title = new BasketTitleView(0);
+  private _title = new BasketTitleView();
 
   private _content: BasketContentView | null = null;
 
@@ -29,16 +29,16 @@ export default class BasketPageView extends PageView {
   private initializeBasketContent = (): void => {
     this.addBasketContent();
     this.addOrderSummary();
+
+    if (this._content && this._summary) {
+      this._content.updateCallback = this._summary.updateData.bind(
+        this._summary
+      );
+    }
   };
 
   addTitle() {
-    let countItemsInCart;
-    if (currentCart.cartData) {
-      countItemsInCart = currentCart.cartData.lineItems.length;
-    } else {
-      countItemsInCart = 0;
-    }
-    this._title = new BasketTitleView(countItemsInCart);
+    this._title = new BasketTitleView();
     this._pageWrapper.appendChild(this._title);
   }
 

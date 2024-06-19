@@ -20,17 +20,23 @@ export default class BasketProductView extends View {
 
   private productCartData?: IProductCartData | null = null;
 
-  private _updateCallback: () => void;
+  private _updateCallback?: () => void;
 
-  constructor(productCartData: IProductCartData, updateCallback: () => void) {
+  constructor(productCartData: IProductCartData, updateCallback?: () => void) {
     const attrs: IAttributes = {
       tag: 'article',
       classList: 'card',
     };
     super(attrs);
     this.productCartData = productCartData;
-    this._updateCallback = updateCallback;
+    if (updateCallback) {
+      this.setUpdateCallback = updateCallback;
+    }
     this.initializeContentProductBlockInCart();
+  }
+
+  setUpdateCallback(updateCallback: () => void) {
+    this._updateCallback = updateCallback;
   }
 
   // добавляем то, что в корзине
@@ -109,9 +115,8 @@ export default class BasketProductView extends View {
     const { id } = this.productCartData.lineItem;
 
     this.iconDeleteCart.node.addEventListener('click', () => {
-      currentCart.removeProduct(id);
+      currentCart.removeProduct(id, this._updateCallback?.bind(this));
       this._htmlElement.addClass('none');
-      this._updateCallback();
     });
 
     contentTextCart.appendChild(contentTitleCart);
@@ -129,8 +134,6 @@ export default class BasketProductView extends View {
       classList: ['cart-product-prices'],
     };
     this.pricesContainer = new BaseComponent(pricesProductAttrs);
-
-    // const price = `${(this.productCartData.lineItem.price.value.centAmount / 10 ** this.productCartData.lineItem.price.value.fractionDigits).toFixed(this.productCartData.lineItem.price.value.fractionDigits)}`;
 
     const { lineItem } = this.productCartData;
     // Основная цена

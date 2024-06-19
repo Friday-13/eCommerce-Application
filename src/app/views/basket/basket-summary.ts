@@ -38,7 +38,6 @@ export default class BasketSummaryView extends View {
     };
     super(attrs);
     this.addCard();
-    console.log(currentCart.cartData);
   }
 
   addCard() {
@@ -148,6 +147,10 @@ export default class BasketSummaryView extends View {
       ) {
         this._summary.discountedPrice = discountedPrice;
         this.updateDiscountedPrice();
+      }
+
+      if (totalPrice === discountedPrice) {
+        this._totalPriceBlock.removeClass(styles.basketSummaryOldPrice);
       }
     }
   }
