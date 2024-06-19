@@ -1,3 +1,7 @@
+.catalog-content {
+  padding: 0 10px;
+}
+
 .product-card {
   height: 600px;
   transition: transform 0.7s;
@@ -29,7 +33,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 40%;
+    height: 30%;
   }
 }
 
