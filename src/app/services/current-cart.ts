@@ -13,7 +13,7 @@ import { addProductToCart } from './add-product-cart';
 import applyPromocodeToCart from './apply-promocode-to-cart';
 import removePromocodeFromCart from './remove-promocode-from-cart';
 import recalculateCart from './recalculate-cart';
-import { removeCart } from './remove-cart';
+import removeCart from './remove-cart';
 
 class CurrentCart {
   cartData: ICartData;
