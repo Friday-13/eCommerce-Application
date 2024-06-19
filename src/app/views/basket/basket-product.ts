@@ -217,6 +217,21 @@ export default class BasketProductView extends View {
     };
     const blockCountButtonPlus = new BaseComponent(blockCountButtonPlusAttrs);
 
+    // обработка клика
+    blockCountButtonMinus.node.addEventListener('click', () => {
+      const currentQuantity = parseInt(productCount.textContent, 10);
+      if (currentQuantity > 1) {
+        productCount.textContent = (currentQuantity - 1).toString();
+        /* TODO: Кодить сюда */
+      }
+    });
+
+    blockCountButtonPlus.node.addEventListener('click', () => {
+      const currentQuantity = parseInt(productCount.textContent, 10);
+      productCount.textContent = (currentQuantity + 1).toString();
+      /* TODO: Кодить сюда */
+    });
+
     blockCountContainer.appendChild(blockCountButtonMinus);
     blockCountContainer.appendChild(productCount);
     blockCountContainer.appendChild(blockCountButtonPlus);
