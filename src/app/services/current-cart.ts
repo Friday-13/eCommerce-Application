@@ -160,6 +160,16 @@ class CurrentCart {
     );
   }
 
+  isProductInside(productId: string) {
+    console.log(`checking ${productId}`);
+    const isInside = this.cartData.lineItems.reduce(
+      (result, product) => result || product.productId === productId,
+      false
+    );
+    console.log(isInside);
+    return isInside;
+  }
+
   removePromocode(
     promocode: DiscountCodeReference,
     sucessCallback: (cartData: Cart) => void,

@@ -150,18 +150,21 @@ export default class ProductCardView extends View {
     };
     const actionBlock = new BaseComponent(blockAttrs);
 
-    /* TODO: add checking if this product exist in card */
-
     const buttonAttrs: IButtonWithIconAttributes = {
       classList: 'waves-effect waves-light btn-small red lighten-2',
       icon: 'add_shopping_cart',
     };
 
     const button = new ButtonWithIconComponent(buttonAttrs);
+
+    if (currentCart.isProductInside(productId)) {
+      button.disabled = !button.disabled;
+      button.icon = 'playlist_add_check';
+    }
+
     button.node.onclick = () => {
       button.disabled = !button.disabled;
       button.icon = 'playlist_add_check';
-      /* TODO: Add add-to-cart feature */
       currentCart.addProduct(productId, 1);
     };
 
