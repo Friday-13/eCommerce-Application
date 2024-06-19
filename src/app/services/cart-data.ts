@@ -26,12 +26,13 @@ export const createCartData = (cart: Cart): ICartData => {
                 centAmount: price.value.centAmount,
                 fractionDigits: price.value.fractionDigits,
               },
-              discountedPrice: price.discounted
+              discounted: price.discounted
                 ? {
-                    // Проверяем, есть ли скидочная цена
-                    currencyCode: price.discounted.value.currencyCode,
-                    centAmount: price.discounted.value.centAmount,
-                    fractionDigits: price.discounted.value.fractionDigits,
+                    value: {
+                      currencyCode: price.discounted.value.currencyCode,
+                      centAmount: price.discounted.value.centAmount,
+                      fractionDigits: price.discounted.value.fractionDigits,
+                    },
                   }
                 : null, // Если нет скидочной цены, возвращаем null
             }))
@@ -97,7 +98,7 @@ export const createCartData = (cart: Cart): ICartData => {
 
 export const getCartById = (
   cartId: string,
-  successCallback: (cartData: ICartData) => void,
+  successCallback: (cartData: Cart) => void,
   errorCallback: (message: string) => void
 ): void => {
   ApiRoot.root
@@ -106,8 +107,7 @@ export const getCartById = (
     .get()
     .execute()
     .then(({ body }) => {
-      const cartData = createCartData(body);
-      successCallback(cartData);
+      successCallback(body);
     })
     .catch((error) => {
       errorCallback(`Failed to load cart: ${error.message}`);

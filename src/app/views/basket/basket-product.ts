@@ -1,6 +1,8 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
+import { IButtonAttributes } from '@components/button-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import { ICartData, ILineItem } from '@models/cart';
+import currentCart from '@services/current-cart';
 import View from '@views/view';
 
 interface IProductCartData {
@@ -15,16 +17,27 @@ export default class BasketProductView extends View {
 
   private pricesContainer!: BaseComponent;
 
+  private iconDeleteCart!: BaseComponent;
+
   private productCartData?: IProductCartData | null = null;
 
-  constructor(productCartData: IProductCartData) {
+  private _updateCallback?: () => void;
+
+  constructor(productCartData: IProductCartData, updateCallback?: () => void) {
     const attrs: IAttributes = {
       tag: 'article',
       classList: 'card',
     };
     super(attrs);
     this.productCartData = productCartData;
+    if (updateCallback) {
+      this.setUpdateCallback = updateCallback;
+    }
     this.initializeContentProductBlockInCart();
+  }
+
+  setUpdateCallback(updateCallback: () => void) {
+    this._updateCallback = updateCallback;
   }
 
   // добавляем то, что в корзине
@@ -98,11 +111,18 @@ export default class BasketProductView extends View {
       classList: ['small', 'material-icons'],
       content: 'delete',
     };
-    const iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
+    this.iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
+
+    const { id } = this.productCartData.lineItem;
+
+    this.iconDeleteCart.node.addEventListener('click', () => {
+      currentCart.removeProduct(id, this._updateCallback?.bind(this));
+      this._htmlElement.addClass('none');
+    });
 
     contentTextCart.appendChild(contentTitleCart);
     contentTextCart.appendChild(contentDeleteCart);
-    contentDeleteCart.appendChild(iconDeleteCart);
+    contentDeleteCart.appendChild(this.iconDeleteCart);
 
     // блок для цен и количества
     const digitsTitleCartAttrs: IAttributes = {
@@ -116,7 +136,16 @@ export default class BasketProductView extends View {
     };
     this.pricesContainer = new BaseComponent(pricesProductAttrs);
 
-    const price = `${(this.productCartData.lineItem.price.value.centAmount / 10 ** this.productCartData.lineItem.price.value.fractionDigits).toFixed(this.productCartData.lineItem.price.value.fractionDigits)}`;
+    const { lineItem } = this.productCartData;
+    // Основная цена
+    const price = `${(lineItem.variant.prices[0].value.centAmount / 10 ** lineItem.variant.prices[0].value.fractionDigits).toFixed(lineItem.variant.prices[0].value.fractionDigits)}`;
+
+    // Скидочная цена
+    const discountedPrice =
+      lineItem.variant.prices[0].discounted &&
+      lineItem.variant.prices[0].discounted.value
+        ? `${(lineItem.variant.prices[0].discounted.value.centAmount / 10 ** lineItem.variant.prices[0].discounted.value.fractionDigits).toFixed(lineItem.variant.prices[0].discounted.value.fractionDigits)}`
+        : '';
 
     const productPriceAttrs: IAttributes = {
       classList: ['cart-product-price'],
@@ -125,35 +154,69 @@ export default class BasketProductView extends View {
     const productPrice = new BaseComponent(productPriceAttrs);
     this.pricesContainer.appendChild(productPrice);
 
-    // Форматируем скидочную цену, если она существует, без currencyCode
-    const discountedPrice = this.productCartData.lineItem.variant.prices[0]
-      .discounted
-      ? `${(this.productCartData.lineItem.variant.prices[0].discounted.value.centAmount / 10 ** this.productCartData.lineItem.variant.prices[0].discounted.value.fractionDigits).toFixed(this.productCartData.lineItem.variant.prices[0].discounted.value.fractionDigits)}`
-      : '';
-
-    console.log(`Discounted Price: ${discountedPrice}`);
-
     // Добавляем цену со скидкой только если она есть
+
+    // Условное добавление элемента для скидочной цены, если она существует
     if (discountedPrice) {
-      const productDiscountPriceAttrs: IAttributes = {
-        classList: ['product-price-discount'],
+      const discountedPriceAttrs: IAttributes = {
+        classList: ['cart-product-discounted-price'],
         content: `$ ${discountedPrice}`,
       };
-      const productDiscountPrice = new BaseComponent(productDiscountPriceAttrs);
-      this.pricesContainer.appendChild(productDiscountPrice);
+      const discountedPriceElement = new BaseComponent(discountedPriceAttrs);
+      this.pricesContainer.appendChild(discountedPriceElement);
       productPrice.addClass('price-strikethrough');
     }
-    const { quantity } = this.productCartData.lineItem;
+
+    // добавляем блок для изменения количества
+    const blockCountContainerAttrs: IAttributes = {
+      classList: ['cart-block-count'],
+    };
+    const blockCountContainer = new BaseComponent(blockCountContainerAttrs);
+
+    const blockCountButtonMinusAttrs: IButtonAttributes = {
+      classList: ['cart-block-count-minus'],
+      content: '-',
+    };
+    const blockCountButtonMinus = new BaseComponent(blockCountButtonMinusAttrs);
 
     // Добавляем контейнер для количества
+    const { quantity } = this.productCartData.lineItem;
+
     const productCountAttrs: IAttributes = {
       classList: ['cart-product-quantity'],
       content: `${quantity}`,
     };
     const productCount = new BaseComponent(productCountAttrs);
 
+    const blockCountButtonPlusAttrs: IButtonAttributes = {
+      classList: ['cart-block-count-plus'],
+      content: '+',
+    };
+    const blockCountButtonPlus = new BaseComponent(blockCountButtonPlusAttrs);
+
+    // обработка клика
+    blockCountButtonMinus.node.addEventListener('click', () => {
+      const currentQuantity = parseInt(productCount.textContent, 10);
+      if (currentQuantity > 1) {
+        productCount.textContent = (currentQuantity - 1).toString();
+        /* TODO: Кодить сюда */
+        currentCart.removeProduct(lineItem.id, this?._updateCallback, 1);
+      }
+    });
+
+    blockCountButtonPlus.node.addEventListener('click', () => {
+      const currentQuantity = parseInt(productCount.textContent, 10);
+      productCount.textContent = (currentQuantity + 1).toString();
+      /* TODO: Кодить сюда */
+      currentCart.addProduct(lineItem.productId, 1, this?._updateCallback);
+    });
+
+    blockCountContainer.appendChild(blockCountButtonMinus);
+    blockCountContainer.appendChild(productCount);
+    blockCountContainer.appendChild(blockCountButtonPlus);
+
     digitsTitleCart.appendChild(this.pricesContainer);
-    digitsTitleCart.appendChild(productCount);
+    digitsTitleCart.appendChild(blockCountContainer);
 
     // this.imageContainerCart.appendChild(imageProductCart);
 
@@ -163,4 +226,6 @@ export default class BasketProductView extends View {
     // убираем в основной блок
     detailsProductCart.appendChild(this.contentContainerCart);
   }
+
+  // private initializeProductCountBlockCart(detailsProductCart: BaseComponent) {}
 }

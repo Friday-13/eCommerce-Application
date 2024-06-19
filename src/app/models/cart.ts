@@ -29,13 +29,17 @@ export interface ILineItem {
 export interface IVariant {
   id: number;
   sku?: string;
-  prices: IPrice[];
+  prices: IPrices[];
   images: { url: string }[];
 }
 
 export interface IPrice {
   value: IMoney;
-  discounted?: IDiscounted;
+}
+
+export interface IPrices {
+  value: IMoney;
+  discounted?: IDiscounted | null;
 }
 
 export interface IMoney {

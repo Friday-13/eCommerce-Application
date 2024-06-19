@@ -1,39 +1,56 @@
 import { IAttributes } from '@components/base-component';
 import View from '@views/view';
-import { ICartData } from '@models/cart';
+import currentCart from '@services/current-cart';
 import BasketProductView from './basket-product';
 import BasketEmptyView from './basket-empty';
 
 export default class BasketContentView extends View {
-  private cartData?: ICartData | null = null;
+  private _updateCallback?: () => void;
 
-  constructor(cartData?: ICartData) {
+  private _products: Array<BasketProductView> = [];
+
+  constructor() {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l8'],
     };
     super(attrs);
-    this.cartData = cartData;
-    if (this.cartData) {
-      this.addProducts();
-    } else {
-      this.addEmptyCartMessage();
-    }
+    this.updateProducts();
   }
 
-  addProducts() {
-    if (!this.cartData || !this.cartData.lineItems) {
+  set updateCallback(updateCallback: () => void) {
+    this._updateCallback = updateCallback;
+    this._products.forEach((product) => {
+      product.setUpdateCallback(() => {
+        updateCallback();
+        const numberOfProducts = currentCart.cartData.lineItems.length;
+        if (numberOfProducts === 0) {
+          this.updateProducts();
+        }
+      });
+    });
+  }
+
+  updateProducts() {
+    const numberOfProducts = currentCart.cartData.lineItems.length;
+    this._products = [];
+    this.removeContent();
+    if (numberOfProducts === 0) {
+      this.addEmptyCartMessage();
       return;
     }
-    const numberOfProducts = Math.min(10, this.cartData.lineItems.length);
 
     for (let i = 0; i < numberOfProducts; i += 1) {
       // Создаём объект, содержащий ссылку на общие данные корзины и данные конкретного товара
       const productCartData = {
-        cartData: this.cartData, // Полные данные корзины
-        lineItem: this.cartData.lineItems[i], // Данные конкретного товара
+        cartData: currentCart.cartData, // Полные данные корзины
+        lineItem: currentCart.cartData.lineItems[i], // Данные конкретного товара
       };
-      const product = new BasketProductView(productCartData);
+      const product = new BasketProductView(
+        productCartData,
+        this._updateCallback
+      );
       product.htmlElement.style.setProperty('min-height', '100px');
+      this._products.push(product);
       this.appendChild(product);
     }
   }

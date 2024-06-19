@@ -9,6 +9,7 @@ import {
   ButtonWithIconComponent,
   IButtonWithIconAttributes,
 } from '@components/button-with-icons';
+import currentCart from '@services/current-cart';
 import CardTitleView from './card-title';
 import styles from './card-style.module.scss';
 
@@ -38,7 +39,7 @@ export default class ProductCardView extends View {
       content.id
     );
     this.addPriceBlock(content.price, content.discountedPrice);
-    this.addAddtoCartButton();
+    this.addAddtoCartButton(content.id);
   }
 
   addCardContiner() {
@@ -143,13 +144,11 @@ export default class ProductCardView extends View {
     priceBlock.appendChild(productDuscountedPrice);
   }
 
-  addAddtoCartButton() {
+  addAddtoCartButton(productId: string) {
     const blockAttrs: IAttributes = {
       classList: 'card-action',
     };
     const actionBlock = new BaseComponent(blockAttrs);
-
-    /* TODO: add checking if this product exist in card */
 
     const buttonAttrs: IButtonWithIconAttributes = {
       classList: 'waves-effect waves-light btn-small red lighten-2',
@@ -157,10 +156,16 @@ export default class ProductCardView extends View {
     };
 
     const button = new ButtonWithIconComponent(buttonAttrs);
+
+    if (currentCart.isProductInside(productId)) {
+      button.disabled = !button.disabled;
+      button.icon = 'playlist_add_check';
+    }
+
     button.node.onclick = () => {
       button.disabled = !button.disabled;
       button.icon = 'playlist_add_check';
-      /* TODO: Add add-to-cart feature */
+      currentCart.addProduct(productId, 1);
     };
 
     actionBlock.appendChild(button);

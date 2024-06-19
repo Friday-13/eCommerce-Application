@@ -1,0 +1,16 @@
+.basket-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: left;
+  padding: 10px;
+
+  &_price {
+    font-size: 18px;
+  }
+
+  &_old-price {
+    color: #90a4ae;
+    text-decoration: line-through;
+  }
+}
