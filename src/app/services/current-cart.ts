@@ -15,7 +15,7 @@ import removePromocodeFromCart from './remove-promocode-from-cart';
 import recalculateCart from './recalculate-cart';
 
 class CurrentCart {
-  cartData?: ICartData;
+  cartData: ICartData;
 
   public currentCartId?: string;
 
