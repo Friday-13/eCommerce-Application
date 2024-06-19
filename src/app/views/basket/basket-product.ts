@@ -1,4 +1,5 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
+import { IButtonAttributes } from '@components/button-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import { ICartData, ILineItem } from '@models/cart';
 import currentCart from '@services/current-cart';
@@ -166,17 +167,54 @@ export default class BasketProductView extends View {
       productPrice.addClass('price-strikethrough');
     }
 
-    const { quantity } = this.productCartData.lineItem;
+    // добавляем блок для изменения количества
+    const blockCountContainerAttrs: IAttributes = {
+      classList: ['cart-block-count'],
+    };
+    const blockCountContainer = new BaseComponent(blockCountContainerAttrs);
+
+    const blockCountButtonMinusAttrs: IButtonAttributes = {
+      classList: ['cart-block-count-minus'],
+      content: '-',
+    };
+    const blockCountButtonMinus = new BaseComponent(blockCountButtonMinusAttrs);
 
     // Добавляем контейнер для количества
+    const { quantity } = this.productCartData.lineItem;
+
     const productCountAttrs: IAttributes = {
       classList: ['cart-product-quantity'],
       content: `${quantity}`,
     };
     const productCount = new BaseComponent(productCountAttrs);
 
+    const blockCountButtonPlusAttrs: IButtonAttributes = {
+      classList: ['cart-block-count-plus'],
+      content: '+',
+    };
+    const blockCountButtonPlus = new BaseComponent(blockCountButtonPlusAttrs);
+
+    // обработка клика
+    blockCountButtonMinus.node.addEventListener('click', () => {
+      const currentQuantity = parseInt(productCount.textContent, 10);
+      if (currentQuantity > 1) {
+        productCount.textContent = (currentQuantity - 1).toString();
+        /* TODO: Кодить сюда */
+      }
+    });
+
+    blockCountButtonPlus.node.addEventListener('click', () => {
+      const currentQuantity = parseInt(productCount.textContent, 10);
+      productCount.textContent = (currentQuantity + 1).toString();
+      /* TODO: Кодить сюда */
+    });
+
+    blockCountContainer.appendChild(blockCountButtonMinus);
+    blockCountContainer.appendChild(productCount);
+    blockCountContainer.appendChild(blockCountButtonPlus);
+
     digitsTitleCart.appendChild(this.pricesContainer);
-    digitsTitleCart.appendChild(productCount);
+    digitsTitleCart.appendChild(blockCountContainer);
 
     // this.imageContainerCart.appendChild(imageProductCart);
 
@@ -186,4 +224,6 @@ export default class BasketProductView extends View {
     // убираем в основной блок
     detailsProductCart.appendChild(this.contentContainerCart);
   }
+
+  // private initializeProductCountBlockCart(detailsProductCart: BaseComponent) {}
 }

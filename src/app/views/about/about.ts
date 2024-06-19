@@ -15,7 +15,9 @@ export default class AboutUsView extends View {
   private aboutContainer!: BaseComponent;
 
   constructor() {
-    const attrs: IAttributes = {};
+    const attrs: IAttributes = {
+      classList: ['about-us-container'],
+    };
     super(attrs);
     this.initializeAboutContent();
   }
@@ -52,6 +54,7 @@ export default class AboutUsView extends View {
 
     const logoTextAttr: IAttributes = {
       tag: 'h6',
+      classList: ['title-text'],
       content:
         'This project is developed as part of the final task of the course JavaScript/Front-end (2023Q4) from the RS School.',
     };
@@ -61,7 +64,7 @@ export default class AboutUsView extends View {
     const aboutTitleAttr: IAttributes = {
       tag: 'h5',
       content: 'Team members',
-      classList: ['center-align'],
+      classList: ['center-align', 'title'],
     };
     const aboutTitle = new BaseComponent(aboutTitleAttr);
     this.aboutContainer.appendChild(aboutTitle);
@@ -69,7 +72,7 @@ export default class AboutUsView extends View {
     const aboutSectionAttr: IAttributes = {
       tag: 'section',
       id: 'about',
-      classList: ['row'],
+      classList: ['row', 'row-team'],
     };
     const aboutSection = new BaseComponent(aboutSectionAttr);
     this.aboutContainer.appendChild(aboutSection);
@@ -105,7 +108,7 @@ export default class AboutUsView extends View {
     const contributionSectionAttr: IAttributes = {
       tag: 'section',
       id: 'contribution',
-      classList: ['row'],
+      classList: ['row', 'row-contribution'],
     };
     const contributionSection = new BaseComponent(contributionSectionAttr);
     this.aboutContainer.appendChild(contributionSection);
@@ -113,7 +116,7 @@ export default class AboutUsView extends View {
     const contributionTitleAttr: IAttributes = {
       tag: 'h5',
       content: 'Contributions',
-      classList: ['center-align'],
+      classList: ['center-align', 'contributions-title'],
     };
     const contributionTitle = new BaseComponent(contributionTitleAttr);
     contributionSection.appendChild(contributionTitle);
@@ -155,7 +158,7 @@ export default class AboutUsView extends View {
     const collabSectionAttr: IAttributes = {
       tag: 'section',
       id: 'collaboration',
-      classList: ['row'],
+      classList: ['row', 'row-collaboration'],
     };
     const collabSection = new BaseComponent(collabSectionAttr);
     this.aboutContainer.appendChild(collabSection);
@@ -163,7 +166,7 @@ export default class AboutUsView extends View {
     const collabTitleAttr: IAttributes = {
       tag: 'h5',
       content: 'Collaboration',
-      classList: ['center-align'],
+      classList: ['center-align', 'collaboration-title'],
     };
     const collabTitleTitle = new BaseComponent(collabTitleAttr);
     collabSection.appendChild(collabTitleTitle);
