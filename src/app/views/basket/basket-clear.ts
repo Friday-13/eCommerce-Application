@@ -9,6 +9,7 @@ import {
 } from '@components/button-with-icons';
 import currentCart from '@services/current-cart';
 import View from '@views/view';
+import styles from './basket-clear.module.scss';
 
 export default class BasketClearView extends View {
   private _submitBlock = new BaseComponent({});
@@ -16,7 +17,9 @@ export default class BasketClearView extends View {
   private _updateCallback: () => void;
 
   constructor(updateCallbak: () => void) {
-    super({});
+    super({
+      classList: styles.basketClear,
+    });
     this._updateCallback = updateCallbak;
     this.addClearButton();
     this.addSubmitBlock();
@@ -26,14 +29,18 @@ export default class BasketClearView extends View {
     const attrs: IButtonAttributes = {
       classList: 'waves-effect waves-light btn red lighten-2',
       content: 'Clear cart',
-      onClick: () => {},
+      onClick: () => {
+        this._submitBlock.removeClass(styles.basketClearSubmitHidden);
+      },
     };
     const clearButton = new ButtonComponent(attrs);
     this.appendChild(clearButton);
   }
 
   addSubmitBlock() {
-    const attrs: IAttributes = {};
+    const attrs: IAttributes = {
+      classList: [styles.basketClearSubmit, styles.basketClearSubmitHidden],
+    };
     this._submitBlock = new BaseComponent(attrs);
     this.appendChild(this._submitBlock);
     this.addCancelButton();
@@ -43,7 +50,9 @@ export default class BasketClearView extends View {
   addCancelButton() {
     const attrs: IButtonWithIconAttributes = {
       classList: 'waves-effect waves-light btn-small red lighten-2',
-      onClick: () => {},
+      onClick: () => {
+        this._submitBlock.addClass(styles.basketClearSubmitHidden);
+      },
       icon: 'clear',
     };
     const cancelButton = new ButtonWithIconComponent(attrs);
