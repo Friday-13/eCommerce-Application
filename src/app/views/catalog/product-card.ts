@@ -39,7 +39,7 @@ export default class ProductCardView extends View {
       content.id
     );
     this.addPriceBlock(content.price, content.discountedPrice);
-    this.addAddtoCartButton();
+    this.addAddtoCartButton(content.id);
   }
 
   addCardContiner() {
@@ -62,8 +62,7 @@ export default class ProductCardView extends View {
     imgContainer.appendChild(this._image);
     // Добавление обработчика клика на изображение
     imgContainer.node.addEventListener('click', () => {
-      // Router.navigateTo(`#product/${productId}`);
-      currentCart.addProduct(productId, 1);
+      Router.navigateTo(`#product/${productId}`);
     });
     this._container.appendChild(imgContainer);
     this._image.node.setAttribute('loading', 'lazy');
@@ -145,7 +144,7 @@ export default class ProductCardView extends View {
     priceBlock.appendChild(productDuscountedPrice);
   }
 
-  addAddtoCartButton() {
+  addAddtoCartButton(productId: string) {
     const blockAttrs: IAttributes = {
       classList: 'card-action',
     };
@@ -163,6 +162,7 @@ export default class ProductCardView extends View {
       button.disabled = !button.disabled;
       button.icon = 'playlist_add_check';
       /* TODO: Add add-to-cart feature */
+      currentCart.addProduct(productId, 1);
     };
 
     actionBlock.appendChild(button);
