@@ -209,4 +209,6 @@ export default class BasketProductView extends View {
     // убираем в основной блок
     detailsProductCart.appendChild(this.contentContainerCart);
   }
+
+  // private initializeProductCountBlockCart(detailsProductCart: BaseComponent) {}
 }

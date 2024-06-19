@@ -12,12 +12,6 @@
   margin-left: 2%;
 }
 
-.member-items-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
 #contribution > h5 {
   margin-bottom: 35px;
 }
@@ -31,6 +25,10 @@
   justify-content: center;
   max-height: 70px;
   margin: 2% 2% 70px;
+  & .title-text {
+    font-size: 28px;
+    font-weight: 600;
+  }
 }
 
 .logo-container a {
@@ -72,4 +70,19 @@
     align-items: center;
     text-align: center;
   }
+}
+
+.row .member-item .col .m4 {
+  flex: 0 1 33.333%;
+  padding: 0;
+  margin: 0;
+}
+
+.card:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.center-align.title {
+  font-size: 32px;
+  font-weight: 600;
 }

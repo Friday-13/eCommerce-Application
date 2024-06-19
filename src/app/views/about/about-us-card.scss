@@ -1,0 +1,89 @@
+.row.row-team {
+  display: flex;
+  flex-wrap: wrap;
+  &:not(:last-child) {
+    margin-bottom: 80px;
+  }
+
+  &.col.s12.m4.center-align {
+    flex: 0 1 33.3333%;
+    padding: 0 15px;
+  }
+  & .card {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    & .card-image {
+      display: flex;
+      justify-content: center;
+      flex-grow: 2;
+      padding: 10px;
+      img {
+        height: 700px;
+        width: auto;
+        object-fit: contain;
+      }
+    }
+  }
+  & .card-action.github-link {
+    margin-top: auto;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .row .col.m4 {
+    flex: 0 1 33.3333%;
+    padding: 0 15px;
+  }
+}
+
+.about-us-container {
+  padding: 10px;
+}
+
+.card .card-image .card-title {
+  bottom: 20px;
+  left: 100px;
+}
+
+.row.row-contribution {
+  margin: 0;
+  &:not(:last-child) {
+    margin-bottom: 80px;
+  }
+  & .member-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 15px;
+    gap: 10px;
+    & .member-item.card.col.s12.m4.center-align {
+      flex: 1 1 calc(33.3333% - 20px);
+      padding: 0 15px;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+      padding: 0 15px;
+      padding-top: 20px;
+      border-radius: 0;
+    }
+  }
+  & .contributions-title {
+    font-size: 32px;
+    font-weight: 600;
+  }
+}
+
+.row.row-collaboration {
+  & .collaboration-title {
+    font-size: 32px;
+    font-weight: 600;
+  }
+  font-size: 20px;
+  & li {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}
