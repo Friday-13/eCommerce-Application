@@ -10,6 +10,7 @@ import View from '@views/view';
 import { showErrorMessage } from '@utils/toast-messages';
 import currentCart from '@services/current-cart';
 import styles from './basket-summary.module.scss';
+import BasketClearView from './basket-clear';
 
 interface ISummary {
   totalPrice: number;
@@ -49,6 +50,7 @@ export default class BasketSummaryView extends View {
     this.addPromocodeField();
     this.addTotalPriceBlock();
     this.addDiscountedPrice();
+    this.addClearBlock();
     this.updateData();
   }
 
@@ -153,5 +155,10 @@ export default class BasketSummaryView extends View {
         this._totalPriceBlock.removeClass(styles.basketSummaryOldPrice);
       }
     }
+  }
+
+  addClearBlock() {
+    const clearBlock = new BasketClearView();
+    this._card.appendChild(clearBlock);
   }
 }
