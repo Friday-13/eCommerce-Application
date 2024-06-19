@@ -1,9 +1,5 @@
 import PageView from '@views/page-view';
-import { ICartData } from '@models/cart';
-import { createCartData, getCartById } from '@services/cart-data';
-import { showErrorMessage } from '@utils/toast-messages';
-import LocalStorageManager from '@utils/local-cart-id';
-import { Cart } from '@commercetools/platform-sdk';
+import currentCart from '@services/current-cart';
 import BasketTitleView from './basket-title';
 import BasketContentView from './basket-content';
 import BasketSummaryView from './basket-summary';
@@ -15,38 +11,10 @@ export default class BasketPageView extends PageView {
 
   private _summary: BasketSummaryView | null = null;
 
-  private cartId?: string;
-
-  private cartData?: ICartData;
-
   constructor() {
     super();
-    const cartId = LocalStorageManager.getCartId();
-    if (cartId) {
-      this.cartId = cartId;
-    }
     this.addTitle();
-    this.loadCartData(() => {
-      this.initializeBasketContent();
-    });
-  }
-
-  private loadCartData(callback: () => void): void {
-    if (this.cartId) {
-      getCartById(
-        this.cartId,
-        (cartData: Cart) => {
-          console.log('Cart data loaded:', cartData);
-          this.cartData = createCartData(cartData);
-          callback();
-        },
-        (errorMsg: string) => {
-          showErrorMessage(`Error fetching product details: ${errorMsg}`);
-        }
-      );
-    } else {
-      this.initializeBasketContent();
-    }
+    this.initializeBasketContent();
   }
 
   private initializeBasketContent = (): void => {
@@ -56,8 +24,8 @@ export default class BasketPageView extends PageView {
 
   addTitle() {
     let countItemsInCart;
-    if (this.cartData) {
-      countItemsInCart = this.cartData.lineItems.length;
+    if (currentCart.cartData) {
+      countItemsInCart = currentCart.cartData.lineItems.length;
     } else {
       countItemsInCart = 0;
     }

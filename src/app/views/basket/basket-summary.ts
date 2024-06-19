@@ -4,13 +4,11 @@ import {
   IButtonAttributes,
 } from '@components/button-component';
 import { InputFieldComponent } from '@components/input-field-component';
-import { ICartData, ILineItem } from '@models/cart';
+import { ILineItem } from '@models/cart';
 import { IFormInputField, createInputField } from '@utils/create-input-field';
 import View from '@views/view';
-import applyPromocodeToCart from '@services/apply-promocode-to-cart';
 import { showErrorMessage } from '@utils/toast-messages';
-import { createCartData } from '@services/cart-data';
-import { Cart } from '@commercetools/platform-sdk';
+import currentCart from '@services/current-cart';
 import styles from './basket-summary.module.scss';
 
 interface ISummary {
@@ -20,8 +18,6 @@ interface ISummary {
 
 export default class BasketSummaryView extends View {
   protected _card = new View({});
-
-  private cartData?: ICartData | null = null;
 
   private _totalPriceBlock = new BaseComponent({});
 
@@ -36,13 +32,13 @@ export default class BasketSummaryView extends View {
     discountedPrice: 0,
   };
 
-  constructor(cartData?: ICartData) {
+  constructor() {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l4'],
     };
     super(attrs);
-    this.cartData = cartData;
     this.addCard();
+    console.log(currentCart.cartData);
   }
 
   addCard() {
@@ -58,7 +54,7 @@ export default class BasketSummaryView extends View {
   }
 
   addTotalPriceBlock() {
-    if (this.cartData) {
+    if (currentCart.cartData) {
       const attrs: IAttributes = {
         classList: styles.basketSummaryPrice,
       };
@@ -92,7 +88,7 @@ export default class BasketSummaryView extends View {
   }
 
   addDiscountedPrice() {
-    if (this.cartData) {
+    if (currentCart.cartData) {
       const attrs: IAttributes = {
         classList: styles.basketSummaryPrice,
       };
@@ -102,7 +98,7 @@ export default class BasketSummaryView extends View {
   }
 
   updateDiscountedPrice() {
-    if (this.cartData) {
+    if (currentCart.cartData) {
       if (this._summary.discountedPrice !== this._summary.totalPrice) {
         this._discountedPriceBlock.textContent = `Discounted price: $${this._summary.discountedPrice}`;
         this._totalPriceBlock.addClass(styles.basketSummaryOldPrice);
@@ -113,27 +109,21 @@ export default class BasketSummaryView extends View {
   }
 
   updateTotalPrice() {
-    if (this.cartData) {
+    if (currentCart.cartData) {
       this._totalPriceBlock.textContent = `Total price: $${this._summary.totalPrice}`;
     }
   }
 
   applyPromocode() {
     const promocode = this._promocodeField.getValue();
-    if (promocode.length > 0 && this.cartData) {
-      applyPromocodeToCart(
-        this.cartData.id,
-        this.cartData.version,
-        promocode,
-        this.updateData.bind(this),
-        () => {
-          showErrorMessage('Wrong promocode');
-        }
-      );
+    if (promocode.length > 0 && currentCart.cartData) {
+      currentCart.applyPromocode(promocode, this.updateData.bind(this), () => {
+        showErrorMessage('Wrong promocode');
+      });
     }
   }
 
-  updateData(newCart?: Cart) {
+  updateData() {
     const getTotalPrice = (lineItems: Array<ILineItem>) => {
       const totalPrice =
         lineItems.reduce(
@@ -142,13 +132,10 @@ export default class BasketSummaryView extends View {
         ) / 100;
       return totalPrice;
     };
-    if (newCart) {
-      this.cartData = createCartData(newCart);
-    }
-    if (this.cartData) {
-      const { lineItems } = this.cartData;
+    if (currentCart.cartData) {
+      const { lineItems } = currentCart.cartData;
       const totalPrice = getTotalPrice(lineItems);
-      const discountedPrice = this.cartData.totalPrice.centAmount / 100;
+      const discountedPrice = currentCart.cartData.totalPrice.centAmount / 100;
 
       if (totalPrice !== this._summary.totalPrice) {
         this._summary.totalPrice = totalPrice;

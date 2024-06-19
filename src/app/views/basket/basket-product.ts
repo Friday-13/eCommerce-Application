@@ -108,7 +108,7 @@ export default class BasketProductView extends View {
     const { id } = this.productCartData.lineItem;
 
     this.iconDeleteCart.node.addEventListener('click', () => {
-      currentCart.removeProductFromAnonymus(
+      currentCart.removeProduct(
         id
         // (cartData) => {
         //   console.log('Product removed from cart:', cartData);

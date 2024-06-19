@@ -5,7 +5,6 @@ import BasketProductView from './basket-product';
 import BasketEmptyView from './basket-empty';
 
 export default class BasketContentView extends View {
-
   constructor() {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l8'],
@@ -19,7 +18,10 @@ export default class BasketContentView extends View {
   }
 
   addProducts() {
-    const numberOfProducts = Math.min(10, currentCart.cartData.lineItems.length);
+    const numberOfProducts = Math.min(
+      10,
+      currentCart.cartData.lineItems.length
+    );
 
     for (let i = 0; i < numberOfProducts; i += 1) {
       // Создаём объект, содержащий ссылку на общие данные корзины и данные конкретного товара

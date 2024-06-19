@@ -1,5 +1,5 @@
 import { ICartData } from '@models/cart';
-import { Cart } from '@commercetools/platform-sdk';
+import { Cart, DiscountCodeReference } from '@commercetools/platform-sdk';
 import CookieManager from '@utils/cookie';
 import LocalStorageManager from '@utils/local-cart-id';
 import {
@@ -10,6 +10,9 @@ import {
 } from './carts';
 import { createCartData, getCartById } from './cart-data';
 import { addProductToCart } from './add-product-cart';
+import applyPromocodeToCart from './apply-promocode-to-cart';
+import removePromocodeFromCart from './remove-promocode-from-cart';
+import recalculateCart from './recalculate-cart';
 
 class CurrentCart {
   cartData: ICartData;
@@ -18,15 +21,12 @@ class CurrentCart {
 
   public currentCartVersion?: number;
 
-  private _userId?: string;
-
   constructor(userId?: string) {
     this.initCurrentCart(userId);
   }
 
   public initCurrentCart(userId?: string) {
     console.log(`Initializing ID ${userId}`);
-    this._userId = userId;
     if (userId) {
       this.loadCustomerCart(userId);
       LocalStorageManager.removeAnonymusCart();
@@ -104,6 +104,67 @@ class CurrentCart {
   createCustomerCart(userId: string) {
     createCustomerCart(userId, this.updateCartData.bind(this), (msg) =>
       console.log(`Creating customer cart error ${msg}`)
+    );
+  }
+
+  applyPromocode(
+    promocode: string,
+    sucessCallback: () => void,
+    errorCallabck: () => void
+  ) {
+    applyPromocodeToCart(
+      this.cartData.id,
+      this.cartData.version,
+      promocode,
+      (cartData) => {
+        this.updateCartData(cartData);
+        sucessCallback();
+      },
+      errorCallabck
+    );
+  }
+
+  removePromocode(
+    promocode: DiscountCodeReference,
+    sucessCallback: (cartData: Cart) => void,
+    errorCallabck: () => void
+  ) {
+    removePromocodeFromCart(
+      this.cartData.id,
+      this.cartData.version,
+      (cartData: Cart) => {
+        this.updateCartData(cartData);
+        sucessCallback(cartData);
+      },
+      errorCallabck,
+      promocode
+    );
+  }
+
+  removeAllPromocodes() {
+    console.log('removing all promocodes');
+
+    this.cartData.discountCodes.forEach((codeId) => {
+      this.removePromocode(
+        { id: codeId.id, typeId: 'discount-code' },
+        () => {},
+        () => {}
+      );
+    });
+  }
+
+  recalculate(
+    sucessCallback: (cartData: Cart) => void,
+    errorCallabck: () => void
+  ) {
+    recalculateCart(
+      this.cartData.id,
+      this.cartData.version,
+      (cartData: Cart) => {
+        this.updateCartData(cartData);
+        sucessCallback(cartData);
+      },
+      errorCallabck
     );
   }
 }
