@@ -8,7 +8,7 @@ import BasketSummaryView from './basket-summary';
 export default class BasketPageView extends PageView {
   private _title = new BasketTitleView();
 
-  private _content: BasketContentView | null = null;
+  private _content?: BasketContentView;
 
   private _summary: BasketSummaryView | null = null;
 
@@ -48,7 +48,7 @@ export default class BasketPageView extends PageView {
   }
 
   addOrderSummary() {
-    this._summary = new BasketSummaryView();
+    this._summary = new BasketSummaryView(this._content);
     this._pageWrapper.appendChild(this._summary);
   }
 }

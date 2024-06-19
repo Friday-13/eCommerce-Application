@@ -14,25 +14,30 @@ export default class BasketContentView extends View {
       classList: ['col', 's12', 'm12', 'l8'],
     };
     super(attrs);
-    if (currentCart.cartData.lineItems.length !== 0) {
-      this.addProducts();
-    } else {
-      this.addEmptyCartMessage();
-    }
+    this.updateProducts();
   }
 
   set updateCallback(updateCallback: () => void) {
     this._updateCallback = updateCallback;
     this._products.forEach((product) => {
-      product.setUpdateCallback(updateCallback);
+      product.setUpdateCallback(() => {
+        updateCallback();
+        const numberOfProducts = currentCart.cartData.lineItems.length;
+        if (numberOfProducts === 0) {
+          this.updateProducts();
+        }
+      });
     });
   }
 
-  addProducts() {
-    const numberOfProducts = Math.min(
-      10,
-      currentCart.cartData.lineItems.length
-    );
+  updateProducts() {
+    const numberOfProducts = currentCart.cartData.lineItems.length;
+    this._products = [];
+    this.removeContent();
+    if (numberOfProducts === 0) {
+      this.addEmptyCartMessage();
+      return;
+    }
 
     for (let i = 0; i < numberOfProducts; i += 1) {
       // Создаём объект, содержащий ссылку на общие данные корзины и данные конкретного товара

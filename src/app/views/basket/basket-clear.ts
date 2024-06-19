@@ -10,17 +10,21 @@ import {
 import currentCart from '@services/current-cart';
 import View from '@views/view';
 import styles from './basket-clear.module.scss';
+import BasketContentView from './basket-content';
 
 export default class BasketClearView extends View {
   private _submitBlock = new BaseComponent({});
 
   private _updateCallback: () => void;
 
-  constructor(updateCallbak: () => void) {
+  private _productListView?: BasketContentView;
+
+  constructor(updateCallback: () => void, productListView?: BasketContentView) {
     super({
       classList: styles.basketClear,
     });
-    this._updateCallback = updateCallbak;
+    this._updateCallback = updateCallback;
+    this._productListView = productListView;
     this.addClearButton();
     this.addSubmitBlock();
   }
@@ -63,7 +67,10 @@ export default class BasketClearView extends View {
     const attrs: IButtonWithIconAttributes = {
       classList: 'waves-effect waves-light btn-small red lighten-2',
       onClick: () => {
-        currentCart.removeCart(this._updateCallback);
+        currentCart.removeCart(() => {
+          this._updateCallback();
+          this._productListView?.updateProducts();
+        });
       },
       icon: 'done',
     };

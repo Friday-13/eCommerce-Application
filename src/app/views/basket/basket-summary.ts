@@ -11,6 +11,7 @@ import { showErrorMessage } from '@utils/toast-messages';
 import currentCart from '@services/current-cart';
 import styles from './basket-summary.module.scss';
 import BasketClearView from './basket-clear';
+import BasketContentView from './basket-content';
 
 interface ISummary {
   totalPrice: number;
@@ -33,11 +34,14 @@ export default class BasketSummaryView extends View {
     discountedPrice: 0,
   };
 
-  constructor() {
+  private _productListView?: BasketContentView;
+
+  constructor(productListView?: BasketContentView) {
     const attrs: IAttributes = {
       classList: ['col', 's12', 'm12', 'l4'],
     };
     super(attrs);
+    this._productListView = productListView;
     this.addCard();
   }
 
@@ -158,7 +162,10 @@ export default class BasketSummaryView extends View {
   }
 
   addClearBlock() {
-    const clearBlock = new BasketClearView(this.updateData.bind(this));
+    const clearBlock = new BasketClearView(
+      this.updateData.bind(this),
+      this._productListView
+    );
     this._card.appendChild(clearBlock);
   }
 }
