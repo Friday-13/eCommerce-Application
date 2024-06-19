@@ -9,6 +9,7 @@ import {
   ButtonWithIconComponent,
   IButtonWithIconAttributes,
 } from '@components/button-with-icons';
+import currentCart from '@services/current-cart';
 import CardTitleView from './card-title';
 import styles from './card-style.module.scss';
 
@@ -61,7 +62,8 @@ export default class ProductCardView extends View {
     imgContainer.appendChild(this._image);
     // Добавление обработчика клика на изображение
     imgContainer.node.addEventListener('click', () => {
-      Router.navigateTo(`#product/${productId}`);
+      // Router.navigateTo(`#product/${productId}`);
+      currentCart.addProduct(productId, 1);
     });
     this._container.appendChild(imgContainer);
     this._image.node.setAttribute('loading', 'lazy');

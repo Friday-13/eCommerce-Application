@@ -7,9 +7,9 @@ export default class CookieManager {
   }
 
   // Получение userId из cookie
-  static getUserId(): string | null {
+  static getUserId(): string | undefined {
     const match = document.cookie.match(/(^|;\s*)userId=([^;]+)/);
-    return match ? decodeURIComponent(match[2]) : null;
+    return match ? decodeURIComponent(match[2]) : undefined;
   }
 
   // Очистка userId из cookie

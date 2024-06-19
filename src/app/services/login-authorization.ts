@@ -2,6 +2,7 @@ import { customerTokenResponse } from '@models/customer';
 import { UserAuthOptions } from '@commercetools/sdk-client-v2';
 import CookieManager from '@utils/cookie';
 import ApiRoot from './api-root';
+import currentCart from './current-cart';
 
 function login(
   customer: { email: string; password: string },
@@ -15,12 +16,23 @@ function login(
   const root = ApiRoot.getPasswordRoot(user);
   root
     .login()
-    .post({ body: customer })
+    .post({
+      body: {
+        email: customer.email,
+        password: customer.password,
+        anonymousCart: {
+          id: currentCart.cartData.id,
+          typeId: 'cart',
+        },
+      },
+    })
     .execute()
     .then((response) => {
       const customerDataForId = customerTokenResponse(response.body.customer);
       if (customerDataForId && customerDataForId.id) {
         CookieManager.setUserId(customerDataForId.id);
+        const userId = CookieManager.getUserId();
+        currentCart.initCurrentCart(userId);
       }
       sucessCallback('You have successfully logged in!');
     })

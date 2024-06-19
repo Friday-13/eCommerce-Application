@@ -59,12 +59,36 @@ export const createCustomerCart = (
     });
 };
 
+export const isCustomerCartExist = (
+  customerId: string,
+  successCallback: (cartData: Cart) => void,
+  errorCallback: (customerId: string) => void
+): void => {
+  ApiRoot.root
+    .carts()
+    .withCustomerId({ customerId })
+    .get()
+    .execute()
+    .then((response) => {
+      const { body } = response;
+      successCallback(body);
+    })
+    .catch((err) => {
+      if (err.statusCode === 404) {
+        errorCallback(customerId);
+      } else {
+        throw err;
+      }
+    });
+};
+
 export const removeProductFromCart = (
   cartId: string,
   cartVersion: number,
   lineItemId: string,
   successCallback: (cartData: Cart) => void,
-  errorCallback: (message: string) => void
+  errorCallback: (message: string) => void,
+  quantity?: number
 ): void => {
   ApiRoot.root
     .carts()
@@ -76,6 +100,7 @@ export const removeProductFromCart = (
           {
             action: 'removeLineItem',
             lineItemId,
+            quantity,
           },
         ],
       },

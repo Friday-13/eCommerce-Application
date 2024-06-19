@@ -15,4 +15,8 @@ export default class LocalStorageManager {
   static clearCartId() {
     localStorage.removeItem(this.CART_KEY);
   }
+
+  static removeAnonymusCart() {
+    localStorage.removeItem('anonymousCart');
+  }
 }

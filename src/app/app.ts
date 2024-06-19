@@ -1,4 +1,6 @@
+import currentCart from '@services/current-cart';
 import isPageAccessable from '@utils/access-control';
+import CookieManager from '@utils/cookie';
 
 import {
   Error404,
@@ -39,6 +41,9 @@ class App {
 
     window.addEventListener('hashchange', this.route);
     window.addEventListener('load', this.route);
+
+    const userId = CookieManager.getUserId();
+    currentCart.initCurrentCart(userId);
   }
 
   private addHeader(): void {

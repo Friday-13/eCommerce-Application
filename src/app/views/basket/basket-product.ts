@@ -1,10 +1,7 @@
 import { BaseComponent, IAttributes } from '@components/base-component';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import { ICartData, ILineItem } from '@models/cart';
-import cartHandler from '@services/cart-handler';
-import { removeProductFromCart } from '@services/carts';
-import CookieManager from '@utils/cookie';
-// import { removeProductFromCart } from '@services/carts';
+import currentCart from '@services/current-cart';
 import View from '@views/view';
 
 interface IProductCartData {
@@ -23,14 +20,23 @@ export default class BasketProductView extends View {
 
   private productCartData?: IProductCartData | null = null;
 
-  constructor(productCartData: IProductCartData) {
+  private _updateCallback?: () => void;
+
+  constructor(productCartData: IProductCartData, updateCallback?: () => void) {
     const attrs: IAttributes = {
       tag: 'article',
       classList: 'card',
     };
     super(attrs);
     this.productCartData = productCartData;
+    if (updateCallback) {
+      this.setUpdateCallback = updateCallback;
+    }
     this.initializeContentProductBlockInCart();
+  }
+
+  setUpdateCallback(updateCallback: () => void) {
+    this._updateCallback = updateCallback;
   }
 
   // добавляем то, что в корзине
@@ -106,38 +112,11 @@ export default class BasketProductView extends View {
     };
     this.iconDeleteCart = new BaseComponent(iconDeleteCartAttrs);
 
-    const cartId = cartHandler.currentCartId as string;
-    const cartVersion = cartHandler.currentCartVersion as number;
     const { id } = this.productCartData.lineItem;
 
     this.iconDeleteCart.node.addEventListener('click', () => {
-      removeProductFromCart(
-        cartId,
-        cartVersion,
-        id,
-        (cartData) => {
-          console.log('Product removed from cart:', cartData);
-          this._htmlElement.addClass('none');
-          const userId = CookieManager.getUserId();
-          // Проверка на наличие userID для определения типа пользователя
-          if (userId) {
-            // Зарегистрированный пользователь
-            cartHandler.currentCustomerCartId = cartData.id;
-            cartHandler.currentCustomerCartVersion = cartData.version;
-            cartHandler.saveCartAuthToLocalStorage();
-          } else {
-            // Анонимный пользователь
-            cartHandler.currentCartId = cartData.id;
-            cartHandler.currentCartVersion = cartData.version;
-            cartHandler.saveCartToLocalStorage();
-          }
-          console.log(id);
-          localStorage.removeItem(`product-${id}-disabled`);
-        },
-        (errorMessage) => {
-          console.error('Error removing product from cart:', errorMessage);
-        }
-      );
+      currentCart.removeProduct(id, this._updateCallback?.bind(this));
+      this._htmlElement.addClass('none');
     });
 
     contentTextCart.appendChild(contentTitleCart);
@@ -155,8 +134,6 @@ export default class BasketProductView extends View {
       classList: ['cart-product-prices'],
     };
     this.pricesContainer = new BaseComponent(pricesProductAttrs);
-
-    // const price = `${(this.productCartData.lineItem.price.value.centAmount / 10 ** this.productCartData.lineItem.price.value.fractionDigits).toFixed(this.productCartData.lineItem.price.value.fractionDigits)}`;
 
     const { lineItem } = this.productCartData;
     // Основная цена
