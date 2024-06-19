@@ -166,7 +166,6 @@ class CurrentCart {
       (result, product) => result || product.productId === productId,
       false
     );
-    console.log(isInside);
     return isInside;
   }
 

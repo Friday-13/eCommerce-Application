@@ -7,12 +7,11 @@ import View from '@views/view';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Theme, themeToBrandImageMap } from '@models/brend-images';
-import { IButtonAttributes } from '@components/button-component';
-import { Cart } from '@commercetools/platform-sdk';
-import cartHandler from '@services/cart-handler';
-import { getCartById } from '@services/cart-data';
-import { ICartData } from '@models/cart';
-import CookieManager from '@utils/cookie';
+import {
+  ButtonComponent,
+  IButtonAttributes,
+} from '@components/button-component';
+import currentCart from '@services/current-cart';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -34,8 +33,6 @@ export default class ProductPageView extends View {
   private currentImageUrls: string[] = [];
 
   private productData?: IProductData;
-
-  private cartData?: Cart;
 
   private addCartButton!: BaseComponent;
 
@@ -231,69 +228,6 @@ export default class ProductPageView extends View {
     detailsProduct.appendChild(this.pricesContainer);
   }
 
-  private handleAddToCartPage() {
-    if (!this.productData) {
-      return;
-    }
-
-    const productId = this.productData.id;
-    const quantity = 1;
-
-    // Перед добавлением в корзину, проверяем, есть ли уже этот продукт в корзине
-    this.fetchCartAndCheckProduct(productId, (isInCart) => {
-      if (!isInCart) {
-        // Если продукта нет в корзине, добавляем его
-        cartHandler.handleAddToCart(productId, quantity);
-        this.addCartButton.node.classList.add('button-disabled');
-        localStorage.setItem(`product-${productId}-disabled`, 'true');
-      } else {
-        this.addCartButton.node.classList.remove('button-disabled');
-        localStorage.removeItem(`product-${productId}-disabled`);
-      }
-    });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  private fetchCartAndCheckProduct(
-    productId: string,
-    callback: (isInCart: boolean) => void
-  ): void {
-    // Получаем userId из куков
-    const userId = CookieManager.getUserId();
-
-    // Если userId существует, используем метод для зарегистрированных пользователей
-    if (userId) {
-      cartHandler.loadCartAuthFromLocalStorage(); // Загрузка корзины зарегистрированного пользователя
-    } else {
-      cartHandler.loadCartFromLocalStorage(); // Загрузка корзины анонимного пользователя
-    }
-    // Определяем, какой ID корзины использовать
-    const cartId = userId
-      ? cartHandler.currentCustomerCartId
-      : cartHandler.currentCartId;
-
-    // Проверяем, есть ли ID корзины после загрузки данных
-    if (!cartId) {
-      callback(false);
-      return;
-    }
-
-    getCartById(
-      cartId,
-      (cartData: ICartData) => {
-        // Проверка наличия продукта в корзине
-        const isInCart = cartData.lineItems.some(
-          (lineItem) => lineItem.productId === productId
-        );
-        callback(isInCart);
-      },
-      (errorMsg: string) => {
-        showErrorMessage(`Error fetching cart: ${errorMsg}`);
-        callback(false); // Обработка ошибки, продукт считается не в корзине
-      }
-    );
-  }
-
   private initializeProductCart(detailsProduct: BaseComponent) {
     if (!this.productData) return;
 
@@ -306,12 +240,18 @@ export default class ProductPageView extends View {
       classList: ['button-add-cart', 'waves-light', 'btn', 'no-text-transform'],
       content: 'Add to cart',
     };
-    this.addCartButton = new BaseComponent(addCartButtonAttrs);
+    this.addCartButton = new ButtonComponent(addCartButtonAttrs);
     cartContainer.appendChild(this.addCartButton);
+
+    if (currentCart.isProductInside(this.productId)) {
+      this.addCartButton.node.classList.add('button-disabled');
+    }
 
     this.addCartButton.node.addEventListener('click', (event) => {
       event.preventDefault();
-      this.handleAddToCartPage();
+      currentCart.addProduct(this.productId, 1, () => {
+        this.addCartButton.node.classList.add('button-disabled');
+      });
     });
 
     detailsProduct.appendChild(cartContainer);
