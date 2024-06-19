@@ -1,6 +1,8 @@
 .row.row-team {
   display: flex;
   flex-wrap: wrap;
+  row-gap: 20px;
+
   &:not(:last-child) {
     margin-bottom: 80px;
   }
@@ -8,30 +10,46 @@
   &.col.s12.m4.center-align {
     flex: 0 1 33.3333%;
     padding: 0 15px;
+
+    @media (width <= 1824px) {
+      flex: 0 1 50%;
+    }
   }
+
   & .card {
-    height: 100%;
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
+    height: 100%;
+
     & .card-image {
       display: flex;
-      justify-content: center;
       flex-grow: 2;
+      justify-content: center;
       padding: 10px;
+
       img {
-        height: 700px;
-        width: auto;
+        width: 600px;
+        height: 550px;
         object-fit: contain;
+      }
+
+      @media (width <= 1824px) {
+        img {
+          width: 350px;
+          height: 300px;
+          object-fit: contain;
+        }
       }
     }
   }
+
   & .card-action.github-link {
     margin-top: auto;
   }
 }
 
-@media only screen and (min-width: 601px) {
+@media only screen and (width >= 601px) {
   .row .col.m4 {
     flex: 0 1 33.3333%;
     padding: 0 15px;
@@ -49,18 +67,20 @@
 
 .row.row-contribution {
   margin: 0;
+
   &:not(:last-child) {
     margin-bottom: 80px;
   }
+
   & .member-items-container {
     display: flex;
     flex-wrap: wrap;
-    padding: 0 15px;
     gap: 10px;
+    padding: 0 15px;
+
     & .member-item.card.col.s12.m4.center-align {
-      flex: 1 1 calc(33.3333% - 20px);
-      padding: 0 15px;
       display: flex;
+      flex: 1 1 calc(33.3333% - 20px);
       flex-direction: column;
       margin: 0;
       padding: 0;
@@ -69,6 +89,7 @@
       border-radius: 0;
     }
   }
+
   & .contributions-title {
     font-size: 32px;
     font-weight: 600;
@@ -76,14 +97,44 @@
 }
 
 .row.row-collaboration {
+  font-size: 20px;
+
   & .collaboration-title {
     font-size: 32px;
     font-weight: 600;
   }
-  font-size: 20px;
+
   & li {
     &:not(:last-child) {
       margin-bottom: 10px;
     }
+  }
+}
+
+@media (width <= 1824px) {
+  .col.s12.m4.center-align {
+    flex: 0 1 100%;
+  }
+}
+
+@media (width <= 1050px) {
+  .about-us-container .logo-container {
+    flex-direction: column;
+    row-gap: 20px;
+    justify-content: center;
+    min-height: 70px;
+    margin: 0;
+  }
+}
+
+@media (width <= 1050px) {
+  .title {
+    font-weight: 400;
+  }
+}
+
+@media (width <= 563px) {
+  .about-us-container .logo-container .title-text {
+    font-size: 20px;
   }
 }
