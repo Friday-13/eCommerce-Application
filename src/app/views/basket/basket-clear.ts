@@ -7,13 +7,17 @@ import {
   ButtonWithIconComponent,
   IButtonWithIconAttributes,
 } from '@components/button-with-icons';
+import currentCart from '@services/current-cart';
 import View from '@views/view';
 
 export default class BasketClearView extends View {
   private _submitBlock = new BaseComponent({});
 
-  constructor() {
+  private _updateCallback: () => void;
+
+  constructor(updateCallbak: () => void) {
     super({});
+    this._updateCallback = updateCallbak;
     this.addClearButton();
     this.addSubmitBlock();
   }
@@ -49,7 +53,9 @@ export default class BasketClearView extends View {
   addSubmitButton() {
     const attrs: IButtonWithIconAttributes = {
       classList: 'waves-effect waves-light btn-small red lighten-2',
-      onClick: () => {},
+      onClick: () => {
+        currentCart.removeCart(this._updateCallback);
+      },
       icon: 'done',
     };
     const cancelButton = new ButtonWithIconComponent(attrs);

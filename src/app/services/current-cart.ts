@@ -13,6 +13,7 @@ import { addProductToCart } from './add-product-cart';
 import applyPromocodeToCart from './apply-promocode-to-cart';
 import removePromocodeFromCart from './remove-promocode-from-cart';
 import recalculateCart from './recalculate-cart';
+import { removeCart } from './remove-cart';
 
 class CurrentCart {
   cartData: ICartData;
@@ -137,9 +138,16 @@ class CurrentCart {
     );
   }
 
-  createCustomerCart(userId: string) {
-    createCustomerCart(userId, this.updateCartData.bind(this), (msg) =>
-      console.log(`Creating customer cart error ${msg}`)
+  createCustomerCart(userId: string, sucessCallback?: () => void) {
+    createCustomerCart(
+      userId,
+      (cart: Cart) => {
+        this.updateCartData(cart);
+        if (sucessCallback) {
+          sucessCallback();
+        }
+      },
+      (msg) => console.log(`Creating customer cart error ${msg}`)
     );
   }
 
@@ -211,6 +219,23 @@ class CurrentCart {
       },
       errorCallabck
     );
+  }
+
+  removeCart(sucessCallback?: () => void) {
+    const userId = CookieManager.getUserId();
+    if (userId) {
+      removeCart(
+        this.cartData.id,
+        this.cartData.version,
+        this.createCustomerCart.bind(this, userId, sucessCallback),
+        (msg) => {
+          console.log(`Error on clearing ${msg}`);
+        }
+      );
+    } else {
+      localStorage.removeItem('anonymousCart');
+      this.loadAnonymusCart();
+    }
   }
 }
 const userId = CookieManager.getUserId();

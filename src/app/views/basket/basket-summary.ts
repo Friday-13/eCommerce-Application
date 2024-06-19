@@ -158,7 +158,7 @@ export default class BasketSummaryView extends View {
   }
 
   addClearBlock() {
-    const clearBlock = new BasketClearView();
+    const clearBlock = new BasketClearView(this.updateData.bind(this));
     this._card.appendChild(clearBlock);
   }
 }
