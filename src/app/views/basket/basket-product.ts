@@ -200,6 +200,7 @@ export default class BasketProductView extends View {
       if (currentQuantity > 1) {
         productCount.textContent = (currentQuantity - 1).toString();
         /* TODO: Кодить сюда */
+        currentCart.removeProduct(lineItem.id, this?._updateCallback, 1);
       }
     });
 
@@ -207,6 +208,7 @@ export default class BasketProductView extends View {
       const currentQuantity = parseInt(productCount.textContent, 10);
       productCount.textContent = (currentQuantity + 1).toString();
       /* TODO: Кодить сюда */
+      currentCart.addProduct(lineItem.productId, 1, this?._updateCallback);
     });
 
     blockCountContainer.appendChild(blockCountButtonMinus);
