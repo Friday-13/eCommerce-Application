@@ -1,6 +1,7 @@
 import { ICartData } from '@models/cart';
 import { Cart } from '@commercetools/platform-sdk';
 import CookieManager from '@utils/cookie';
+import LocalStorageManager from '@utils/local-cart-id';
 import {
   createAnonymousCart,
   createCustomerCart,
@@ -17,14 +18,18 @@ class CurrentCart {
 
   public currentCartVersion?: number;
 
+  private _userId?: string;
+
   constructor(userId?: string) {
     this.initCurrentCart(userId);
   }
 
   public initCurrentCart(userId?: string) {
     console.log(`Initializing ID ${userId}`);
+    this._userId = userId;
     if (userId) {
       this.loadCustomerCart(userId);
+      LocalStorageManager.removeAnonymusCart();
     } else {
       this.loadAnonymusCart();
     }
@@ -100,6 +105,10 @@ class CurrentCart {
     createCustomerCart(userId, this.updateCartData.bind(this), (msg) =>
       console.log(`Creating customer cart error ${msg}`)
     );
+  }
+
+  get cart() {
+    return this.cartData;
   }
 }
 

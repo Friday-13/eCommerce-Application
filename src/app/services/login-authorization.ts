@@ -16,7 +16,16 @@ function login(
   const root = ApiRoot.getPasswordRoot(user);
   root
     .login()
-    .post({ body: customer })
+    .post({
+      body: {
+        email: customer.email,
+        password: customer.password,
+        anonymousCart: {
+          id: currentCart.cartData.id,
+          typeId: 'cart',
+        },
+      },
+    })
     .execute()
     .then((response) => {
       const customerDataForId = customerTokenResponse(response.body.customer);
