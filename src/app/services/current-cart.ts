@@ -1,6 +1,12 @@
 import { ICartData } from '@models/cart';
 import { Cart } from '@commercetools/platform-sdk';
-import { createAnonymousCart, removeProductFromCart } from './carts';
+import CookieManager from '@utils/cookie';
+import {
+  createAnonymousCart,
+  createCustomerCart,
+  isCustomerCartExist,
+  removeProductFromCart,
+} from './carts';
 import { createCartData, getCartById } from './cart-data';
 import { addProductToCart } from './add-product-cart';
 
@@ -12,18 +18,25 @@ class CurrentCart {
   public currentCartVersion?: number;
 
   constructor(userId?: string) {
+    this.initCurrentCart(userId);
+  }
+
+  public initCurrentCart(userId?: string) {
+    console.log(`Initializing ID ${userId}`);
     if (userId) {
-      // TODO: Load from server
+      this.loadCustomerCart(userId);
     } else {
       this.loadAnonymusCart();
     }
   }
 
-  // private loadCustomerCart(userId: string) {
-  //   // TODO: Check if cart exist
-  //   // TODO: Create if doesn't exist
-  //   // TODO: Get cart, save to cart data
-  // }
+  private loadCustomerCart(userId: string) {
+    isCustomerCartExist(
+      userId,
+      this.updateCartData.bind(this),
+      this.createCustomerCart.bind(this)
+    );
+  }
 
   private loadAnonymusCart() {
     const savedCart = localStorage.getItem('anonymousCart');
@@ -82,8 +95,16 @@ class CurrentCart {
       quantity
     );
   }
+
+  createCustomerCart(userId: string) {
+    createCustomerCart(userId, this.updateCartData.bind(this), (msg) =>
+      console.log(`Creating customer cart error ${msg}`)
+    );
+  }
 }
 
-const currentCart = new CurrentCart();
+const userId = CookieManager.getUserId();
+
+const currentCart = new CurrentCart(userId);
 
 export default currentCart;

@@ -3,6 +3,7 @@ import { customerTokenResponse } from '@models/customer';
 import CookieManager from '@utils/cookie';
 import ApiRoot from './api-root';
 import login from './login-authorization';
+import currentCart from './current-cart';
 
 const EMAIL_EXIST_ADD_MSG = 'Use another email or try to login';
 const EMAIL_EXIST_DEF_MSG =
@@ -23,6 +24,7 @@ const registration = (
       const customerDataForId = customerTokenResponse(response.body.customer);
       if (customerDataForId && customerDataForId.id) {
         CookieManager.setUserId(customerDataForId.id);
+        currentCart.createCustomerCart(customerDataForId.id);
       }
       login(
         { email: customer.email, password: customer.password as string },
