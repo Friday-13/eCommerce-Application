@@ -7,9 +7,11 @@ import View from '@views/view';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Theme, themeToBrandImageMap } from '@models/brend-images';
-import { IButtonAttributes } from '@components/button-component';
-import { Cart } from '@commercetools/platform-sdk';
-import CartHandler from '@services/cart-handler';
+import {
+  ButtonComponent,
+  IButtonAttributes,
+} from '@components/button-component';
+import currentCart from '@services/current-cart';
 import ImageSliderProducts from './slider';
 import ModalImageSliderProducts from './slider-modal';
 
@@ -32,17 +34,14 @@ export default class ProductPageView extends View {
 
   private productData?: IProductData;
 
-  private cartData?: Cart;
+  private addCartButton!: BaseComponent;
 
-  private cartHandler: CartHandler;
-
-  constructor(productId: string, userId: string | null = null) {
+  constructor(productId: string) {
     const attrs: IAttributes = {
       classList: ['main-container-product'],
     };
     super(attrs);
     this.productId = productId;
-    this.cartHandler = new CartHandler(userId);
     this.fetchProductData(() => {
       this.initializeContentProductPage();
     });
@@ -160,10 +159,6 @@ export default class ProductPageView extends View {
     addImagesToSlider(this.productData.imageUrls);
   }
 
-  // private setupAdditionalDivs(parentComponent: BaseComponent) {
-  // Создание дополнительных divs
-  // }
-
   private initializeProductTitle(detailsProduct: BaseComponent) {
     if (!this.productData) return;
 
@@ -233,17 +228,6 @@ export default class ProductPageView extends View {
     detailsProduct.appendChild(this.pricesContainer);
   }
 
-  private handleAddToCartPage() {
-    if (!this.productData) {
-      return;
-    }
-
-    const productId = this.productData.id;
-    const quantity = 1;
-
-    this.cartHandler.handleAddToCart(productId, quantity);
-  }
-
   private initializeProductCart(detailsProduct: BaseComponent) {
     if (!this.productData) return;
 
@@ -256,15 +240,29 @@ export default class ProductPageView extends View {
       classList: ['button-add-cart', 'waves-light', 'btn', 'no-text-transform'],
       content: 'Add to cart',
     };
-    const addCartButton = new BaseComponent(addCartButtonAttrs);
-    cartContainer.appendChild(addCartButton);
+    this.addCartButton = new ButtonComponent(addCartButtonAttrs);
+    cartContainer.appendChild(this.addCartButton);
 
-    addCartButton.node.addEventListener('click', (event) => {
+    if (currentCart.isProductInside(this.productId)) {
+      this.addCartButton.node.classList.add('button-disabled');
+    }
+
+    this.addCartButton.node.addEventListener('click', (event) => {
       event.preventDefault();
-      this.handleAddToCartPage();
+      currentCart.addProduct(this.productId, 1, () => {
+        this.addCartButton.node.classList.add('button-disabled');
+      });
     });
 
     detailsProduct.appendChild(cartContainer);
+
+    // Проверяем и восстанавливаем состояние кнопки из localStorage
+    const disabledState = localStorage.getItem(
+      `product-${this.productData.id}-disabled`
+    );
+    if (disabledState) {
+      this.addCartButton.node.classList.add('button-disabled');
+    }
   }
 
   private initializeProductDescription(detailsProduct: BaseComponent) {

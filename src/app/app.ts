@@ -1,4 +1,7 @@
+import currentCart from '@services/current-cart';
 import isPageAccessable from '@utils/access-control';
+import CookieManager from '@utils/cookie';
+
 import {
   Error404,
   MainPageView,
@@ -12,6 +15,7 @@ import {
   ProductPageView,
   BasketPageView,
   AboutUsView,
+  PasswordChangeView,
 } from '@views/index';
 
 type Page =
@@ -38,6 +42,9 @@ class App {
 
     window.addEventListener('hashchange', this.route);
     window.addEventListener('load', this.route);
+
+    const userId = CookieManager.getUserId();
+    currentCart.initCurrentCart(userId);
   }
 
   private addHeader(): void {
@@ -76,6 +83,7 @@ class App {
 
     if (route === 'product' && productId) {
       this.hideFooterHeader = false;
+
       this.mainView.page = new ProductPageView(productId);
     } else {
       switch (window.location.hash) {
@@ -99,6 +107,12 @@ class App {
           if (isPageAccessable('authorized')) {
             this.hideFooterHeader = false;
             this.mainView.page = new ProfileView();
+          }
+          break;
+        case '#change':
+          if (isPageAccessable('authorized')) {
+            this.hideFooterHeader = false;
+            this.mainView.page = new PasswordChangeView();
           }
           break;
         case '#catalog':

@@ -7,7 +7,7 @@ const contributionList = [
       'Implementation of the catalog',
       'Base web components kit',
       'Basket',
-      'Technical support of the team'
+      'Technical support of the team',
     ],
   },
   {
@@ -20,12 +20,17 @@ const contributionList = [
       'Basket',
       'Main page',
       'CommerceTools products database creation',
-      'Active participation in code review'
+      'Active participation in code review',
     ],
   },
   {
     name: 'Daria Borzova',
-    contributions: ['Login Page', 'User Profile Page', 'About us page', 'Setup CommerceTools project'],
+    contributions: [
+      'Login Page',
+      'User Profile Page',
+      'About us page',
+      'Setup CommerceTools project',
+    ],
   },
 ];
 

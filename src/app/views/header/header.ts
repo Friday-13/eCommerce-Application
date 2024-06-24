@@ -3,10 +3,10 @@ import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
-import { isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
 import { IButtonAttributes } from '@components/button-component';
 import logoutCustomer from '@services/logout-customer';
+import CookieManager from '@utils/cookie';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
@@ -122,7 +122,7 @@ export default class HeaderView extends View {
 
     const menuItems = [];
 
-    if (isCustomerAuthorized()) {
+    if (CookieManager.isCustomerAuthorized()) {
       menuItems.push(
         createMenuItem('#catalog', 'Catalog'),
         createMenuItem('#login', 'Sign out', logoutCustomer),

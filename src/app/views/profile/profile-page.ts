@@ -18,11 +18,14 @@ import atLeastOneCharacter from '@utils/validators/at-least-one-character-valida
 import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
 import createPasswordField from '@utils/create-password-field';
-import {
-  passwordValidator,
-  specialCharValidator,
-} from '@utils/validators/password-validator';
+// import {
+//   passwordValidator,
+//   specialCharValidator,
+// } from '@utils/validators/password-validator';
 import { IButtonAttributes } from '@components/button-component';
+import createEmailField from '@utils/create-email-field';
+// import Router from '@utils/router';
+import updateCutomerPersonalInfo from './change-personal-info';
 
 export default class ProfileView extends View {
   private form = new FormComponent({});
@@ -59,6 +62,12 @@ export default class ProfileView extends View {
 
   private confirmPasswordInput = new InputFieldComponent({}, {}, {});
 
+  private credentialsSection = new FormSectionView();
+
+  private emailInput = new InputFieldComponent({}, {}, {});
+
+  private passwordInput = new InputFieldComponent({}, {}, {});
+
   constructor() {
     const attrs: IAttributes = {
       classList: 'row',
@@ -68,7 +77,8 @@ export default class ProfileView extends View {
     this.addForm();
     this.populateProfileView();
     this.addPersonalInformation();
-    this.addPasswordFields();
+    this.addCredentials();
+    // this.createChangePasswordButton();
     this.addEditButton();
     this.addSaveButton();
   }
@@ -109,6 +119,11 @@ export default class ProfileView extends View {
       } else {
         showErrorMessage('Date of birth is undefined');
       }
+      if (customer.email !== undefined) {
+        this.emailInput.input.value = customer.email;
+      } else {
+        showErrorMessage('Email is undefined');
+      }
     } else {
       showErrorMessage('Error getting customer data');
     }
@@ -140,39 +155,30 @@ export default class ProfileView extends View {
     this.form.node.appendChild(this.pesonalSection.htmlElement);
   }
 
-  private addPasswordFields() {
-    this.passwordSection = new FormSectionView('Password Management');
-    this.currentPasswordInput = createPasswordField({
-      label: 'Current password',
-      id: 'new-password',
-      placeholder: 'Enter your current password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    });
-    this.newPasswordInput = createPasswordField({
-      label: 'New password',
-      id: 'new-password',
-      placeholder: 'Enter your new password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    });
-    this.confirmPasswordInput = createPasswordField({
-      label: 'Confirm new password',
-      id: 'new-password',
-      placeholder: 'Enter your confirm new password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    });
-
-    this.currentPasswordInput.input.setDisable(true);
-    this.newPasswordInput.input.setDisable(true);
-    this.confirmPasswordInput.input.setDisable(true);
-
-    this.passwordSection.appendChild(this.currentPasswordInput);
-    this.passwordSection.appendChild(this.newPasswordInput);
-    this.passwordSection.appendChild(this.confirmPasswordInput);
-    this.form.node.appendChild(this.passwordSection.htmlElement);
+  private addCredentials() {
+    this.credentialsSection = new FormSectionView('Email and Password');
+    this.emailInput = createEmailField();
+    this.emailInput.input.setDisable(true);
+    this.passwordInput = createPasswordField();
+    this.passwordInput.input.setDisable(true);
+    this.credentialsSection.appendChild(this.emailInput);
+    this.credentialsSection.appendChild(this.passwordInput);
+    this.form.node.appendChild(this.credentialsSection.htmlElement);
   }
+
+  // private createChangePasswordButton() {
+  //   const buttonAttrs: IButtonAttributes = {
+  //     type: 'button',
+  //     content: 'Change Password',
+  //     tag: 'button',
+  //     onClick: () => {
+  //       Router.navigateTo('#change');
+  //     },
+  //   };
+
+  //   const button = new ButtonComponent(buttonAttrs);
+  //   this.form.appendChild(button);
+  // }
 
   private populateAddresses(customerData: Customer | null): void {
     this.addressContainer = new FormSectionView('Addresses');
@@ -408,7 +414,10 @@ export default class ProfileView extends View {
     });
     buttonSavePersonal.node.addEventListener('click', (event) => {
       event.preventDefault();
-      this.enableSavePersonal();
+      const firstName = this.firstNameInput.input.value;
+      const lastName = this.lastNameInput.input.value;
+      const dateOfBirth = this.birthdayInput.input.value;
+      updateCutomerPersonalInfo(firstName, lastName, dateOfBirth);
     });
     buttonSaveAddress.node.addEventListener('click', (event) => {
       event.preventDefault();
