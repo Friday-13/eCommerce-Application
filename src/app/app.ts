@@ -25,7 +25,8 @@ type Page =
   | LoginView
   | ProfileView
   | CatalogPageView
-  | AboutUsView;
+  | AboutUsView
+  | PasswordChangeView;
 
 class App {
   private headerView: HeaderView;

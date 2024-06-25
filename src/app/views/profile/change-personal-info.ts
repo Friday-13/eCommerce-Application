@@ -4,7 +4,8 @@ import { showErrorMessage, showSucessMessage } from '@utils/toast-messages';
 export default function updateCustomerPersonalInfo(
   firstName: string,
   lastName: string,
-  dateOfBirth: string
+  dateOfBirth: string,
+  email: string
 ) {
   ApiRoot.root
     .me()
@@ -29,6 +30,10 @@ export default function updateCustomerPersonalInfo(
               {
                 action: 'setDateOfBirth',
                 dateOfBirth,
+              },
+              {
+                action: 'changeEmail',
+                email,
               },
             ],
             version: currentVersion,

@@ -1,7 +1,7 @@
 # eCommerce Application
 
 Welcome to eCommerce application🛍️! This platform replicates real-world shopping experiences in a digital environment.
-The project is a part of the final task of the course [JavaScript/Front-end 2023Q4](https://rs.school/courses/javascript-mentoring-program) from the [RS School](https://rs.school/).
+The project is a part of the final task of the course [JavaScript/Front-end 2023Q4](https://rs.school/courses/javascript-ru) from the [RS School](https://rs.school/).
 
 ## Key pages in the application include:
 
