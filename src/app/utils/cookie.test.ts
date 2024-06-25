@@ -23,7 +23,7 @@ describe('CookieManager', () => {
     document.cookie = 'userId=12345; path=/;';
     CookieManager.clearUserId();
     expect(document.cookie).not.toContain('userId=12345');
-    expect(CookieManager.getUserId()).toBeNull();
+    expect(CookieManager.getUserId()).toBeUndefined();
   });
 
   test('should verify if customer is authorized based on userId in cookies', () => {
