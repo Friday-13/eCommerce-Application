@@ -4,7 +4,6 @@ export default function initMaterializeComponent(
   initCallback: () => void
 ) {
   const waitRangeLoaded = setInterval(() => {
-    console.log('setting');
     if (parrentElement.querySelector(selector)) {
       clearInterval(waitRangeLoaded);
       try {
