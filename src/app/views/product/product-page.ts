@@ -252,7 +252,7 @@ export default class ProductPageView extends View {
         'btn',
         'no-text-transform',
       ],
-      content: 'Delete to cart',
+      content: 'Delete from cart',
     };
     this.deleteCartButton = new ButtonComponent(deleteCartButtonAttrs);
     cartContainer.appendChild(this.deleteCartButton);
@@ -273,6 +273,22 @@ export default class ProductPageView extends View {
     this.deleteCartButton.node.addEventListener('click', (event) => {
       event.preventDefault();
       /* TODO: кодить сюда */
+      const lineItem = currentCart.cartData.lineItems.find(
+        (item) => item.productId === this.productId
+      );
+      if (!lineItem) {
+        this.addCartButton.node.classList.remove('button-disabled');
+        this.deleteCartButton.node.classList.remove('button-visibl');
+        return;
+      }
+      currentCart.removeProduct(
+        lineItem.id,
+        () => {
+          this.addCartButton.node.classList.remove('button-disabled');
+          this.deleteCartButton.node.classList.remove('button-visibl');
+        },
+        1
+      );
     });
 
     detailsProduct.appendChild(cartContainer);

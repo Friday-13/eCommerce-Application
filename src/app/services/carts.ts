@@ -85,7 +85,7 @@ export const isCustomerCartExist = (
 export const removeProductFromCart = (
   cartId: string,
   cartVersion: number,
-  productId: string,
+  lineItemId: string,
   successCallback: (cartData: Cart) => void,
   errorCallback: (message: string) => void,
   quantity?: number
@@ -99,7 +99,7 @@ export const removeProductFromCart = (
         actions: [
           {
             action: 'removeLineItem',
-            lineItemId: productId,
+            lineItemId,
             quantity,
           },
         ],
