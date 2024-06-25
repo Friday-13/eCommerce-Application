@@ -27,7 +27,6 @@ class CurrentCart {
   }
 
   public initCurrentCart(userId?: string, sucessCallback?: () => void) {
-    console.log(`Initializing ID ${userId}`);
     if (userId) {
       this.loadCustomerCart(userId, sucessCallback);
       LocalStorageManager.removeAnonymusCart();
@@ -73,9 +72,17 @@ class CurrentCart {
         }
       );
     } else {
-      createAnonymousCart(this.updateCartData.bind(this), () => {
-        console.log('Problem on creating');
-      });
+      createAnonymousCart(
+        (cart: Cart) => {
+          this.updateCartData(cart);
+          if (successCallback) {
+            successCallback();
+          }
+        },
+        () => {
+          console.log('Problem on creating');
+        }
+      );
     }
   }
 
@@ -169,7 +176,6 @@ class CurrentCart {
   }
 
   isProductInside(productId: string) {
-    console.log(`checking ${productId}`);
     const isInside = this.cartData.lineItems.reduce(
       (result, product) => result || product.productId === productId,
       false
@@ -195,8 +201,6 @@ class CurrentCart {
   }
 
   removeAllPromocodes() {
-    console.log('removing all promocodes');
-
     this.cartData.discountCodes.forEach((codeId) => {
       this.removePromocode(
         { id: codeId.id, typeId: 'discount-code' },
@@ -234,7 +238,7 @@ class CurrentCart {
       );
     } else {
       localStorage.removeItem('anonymousCart');
-      this.loadAnonymusCart();
+      this.loadAnonymusCart(sucessCallback);
     }
   }
 }
