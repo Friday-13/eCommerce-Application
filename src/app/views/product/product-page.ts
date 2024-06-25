@@ -272,7 +272,6 @@ export default class ProductPageView extends View {
 
     this.deleteCartButton.node.addEventListener('click', (event) => {
       event.preventDefault();
-      /* TODO: кодить сюда */
       const lineItem = currentCart.cartData.lineItems.find(
         (item) => item.productId === this.productId
       );
@@ -281,14 +280,10 @@ export default class ProductPageView extends View {
         this.deleteCartButton.node.classList.remove('button-visibl');
         return;
       }
-      currentCart.removeProduct(
-        lineItem.id,
-        () => {
-          this.addCartButton.node.classList.remove('button-disabled');
-          this.deleteCartButton.node.classList.remove('button-visibl');
-        },
-        1
-      );
+      currentCart.removeProduct(lineItem.id, () => {
+        this.addCartButton.node.classList.remove('button-disabled');
+        this.deleteCartButton.node.classList.remove('button-visibl');
+      });
     });
 
     detailsProduct.appendChild(cartContainer);
