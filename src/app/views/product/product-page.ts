@@ -36,6 +36,8 @@ export default class ProductPageView extends View {
 
   private addCartButton!: BaseComponent;
 
+  private deleteCartButton!: BaseComponent;
+
   constructor(productId: string) {
     const attrs: IAttributes = {
       classList: ['main-container-product'],
@@ -243,15 +245,34 @@ export default class ProductPageView extends View {
     this.addCartButton = new ButtonComponent(addCartButtonAttrs);
     cartContainer.appendChild(this.addCartButton);
 
+    const deleteCartButtonAttrs: IButtonAttributes = {
+      classList: [
+        'button-delete-cart',
+        'waves-light',
+        'btn',
+        'no-text-transform',
+      ],
+      content: 'Delete to cart',
+    };
+    this.deleteCartButton = new ButtonComponent(deleteCartButtonAttrs);
+    cartContainer.appendChild(this.deleteCartButton);
+
     if (currentCart.isProductInside(this.productId)) {
       this.addCartButton.node.classList.add('button-disabled');
+      this.deleteCartButton.node.classList.add('button-visibl');
     }
 
     this.addCartButton.node.addEventListener('click', (event) => {
       event.preventDefault();
       currentCart.addProduct(this.productId, 1, () => {
         this.addCartButton.node.classList.add('button-disabled');
+        this.deleteCartButton.node.classList.add('button-visibl');
       });
+    });
+
+    this.deleteCartButton.node.addEventListener('click', (event) => {
+      event.preventDefault();
+      /* TODO: кодить сюда */
     });
 
     detailsProduct.appendChild(cartContainer);
