@@ -1,51 +1,78 @@
 import View from '@views/view';
 import { BaseComponent, IAttributes } from '@components/base-component';
-import { IImageAttributes, ImageComponent } from '@components/image-component';
-import carUrl from '@assets/main-image.webp';
 import { ICardAttributes } from '@components/card-component';
 import getActivePromocodes from '@services/get-active-promocodes';
 import { DiscountCode } from '@commercetools/platform-sdk';
+import ParallaxView from '@views/parallax-view';
+import paralaxImgUrl1 from '@assets/main/haberdoedas-GCb-JayNikc-unsplash.jpg';
+import paralaxImgUrl2 from '@assets/main/alan-rodriguez-rUtX6dvmCeM-unsplash.jpg';
+import paralaxImgUrl3 from '@assets/main/lego-2383096_1280.jpg';
 import DiscountCardComponent from './discount-card';
+import MainSectionView from './main-section';
 
 export default class MainPageView extends View {
-  private mainContainer!: BaseComponent; // добавлять разные блоки сюда
-
-  private _promoSection = new BaseComponent({});
+  private _promoSection = new MainSectionView({});
 
   constructor() {
-    const attrs: IAttributes = {};
+    const attrs: IAttributes = {
+      classList: ['main-container'],
+    };
     super(attrs);
     this.initializeMainContent();
   }
 
   private initializeMainContent(): void {
-    const mainContainerAttrs: IAttributes = {
-      classList: ['main-container'],
-    };
-    this.mainContainer = new BaseComponent(mainContainerAttrs);
-
-    const mainImgAttrs: IImageAttributes = {
-      src: carUrl,
-      alt: 'Car',
-      classList: ['main-image', 'responsive-img'],
-    };
-    const mainImg = new ImageComponent(mainImgAttrs);
-
-    this.mainContainer.appendChild(mainImg);
-    this.appendChild(this.mainContainer);
     document.body.appendChild(this.htmlElement);
 
-    const promoSectionAttr: IAttributes = {
-      tag: 'section',
-      id: 'promo-section',
-      classList: ['row'],
+    const parallax1 = new ParallaxView('parallax1', paralaxImgUrl1);
+    this.appendChild(parallax1);
+
+    this.addTaglineSection();
+
+    const parallax2 = new ParallaxView('parallax2', paralaxImgUrl2);
+    this.appendChild(parallax2);
+
+    this.addPromoSection();
+
+    const parallax3 = new ParallaxView('parallax2', paralaxImgUrl3);
+    this.appendChild(parallax3);
+  }
+
+  addPromoSection() {
+    const promoHeaderAttrs: IAttributes = {
+      classList: 'header',
+      tag: 'h3',
+      content: 'Promocodes',
     };
-    this._promoSection = new BaseComponent(promoSectionAttr);
-    this.mainContainer.appendChild(this._promoSection);
+
+    this._promoSection = new MainSectionView(promoHeaderAttrs);
+
+    this.appendChild(this._promoSection);
     getActivePromocodes(this.showDiscountCodes.bind(this), () => {});
   }
 
+  addTaglineSection() {
+    const headerAttrs: IAttributes = {
+      content: 'Bricktopia',
+      classList: 'header',
+      tag: 'h2',
+    };
+    const taglineAttrs: IAttributes = {
+      content:
+        'Let your imagination soar with our colorful bricks and build a world of endless possibilities, one block at a time!',
+      tag: 'p',
+      classList: 'flow-text',
+    };
+
+    const section = new MainSectionView(headerAttrs);
+    const tagline = new BaseComponent(taglineAttrs);
+    section.content = tagline;
+
+    this.appendChild(section);
+  }
+
   showDiscountCodes(discountCodes: Array<DiscountCode>) {
+    this._promoSection.content = new BaseComponent({});
     discountCodes.forEach((discountCode) => {
       const descriptionField = discountCode.description;
       let description = '';
@@ -58,7 +85,7 @@ export default class MainPageView extends View {
       };
 
       const card = new DiscountCardComponent(cardAttr);
-      this._promoSection.appendChild(card);
+      this._promoSection.appendContent(card);
     });
   }
 }

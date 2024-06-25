@@ -114,6 +114,8 @@ export default class HeaderView extends View {
           callback();
         }
         Router.navigateTo(href);
+        document.body.classList.remove('lock');
+        this.menuContainerList.node.classList.toggle('menu-active');
       });
 
       item.appendChild(link);
