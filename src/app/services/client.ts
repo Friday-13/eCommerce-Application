@@ -114,12 +114,10 @@ export class ApiClient {
   }
 
   private static get baseClient() {
-    return (
-      new ClientBuilder()
-        .withProjectKey(projectKey)
-        // .withLoggerMiddleware()
-        .withHttpMiddleware(httpMiddlewareOptions)
-    );
+    return new ClientBuilder()
+      .withProjectKey(projectKey)
+      .withLoggerMiddleware()
+      .withHttpMiddleware(httpMiddlewareOptions);
   }
 }
 

@@ -16,12 +16,11 @@ const changeCustomerPassword = async (
 
   try {
     const response = await apiRoot.root
-      .customers()
+      .me()
       .password()
       .post({ body })
       .execute();
     const customer = response.body as Customer;
-
     console.log('Password changed successfully:', customer);
     return customer;
   } catch (error) {

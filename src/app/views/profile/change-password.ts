@@ -20,6 +20,8 @@ import {
 } from '@utils/validators/password-validator';
 import ApiRoot from '@services/api-root';
 import { UserAuthOptions } from '@commercetools/sdk-client-v2';
+import logoutCustomer from '@services/logout-customer';
+import loginWithoutMerge from '@services/login-without-merge';
 import changeCustomerPassword from './password';
 
 export default class PasswordChangeView extends View {
@@ -241,14 +243,23 @@ export default class PasswordChangeView extends View {
         currentPassword,
         newPassword
       )
-        .then(() => PasswordChangeView.successChange())
+        .then(() => {
+          PasswordChangeView.successChange();
+          loginWithoutMerge(
+            { email: customerData.email, password: newPassword },
+            () => {
+              Router.navigateTo('#profile');
+            },
+            () => {}
+          );
+        })
         .catch(() => showErrorMessage('Passwords do not match'));
     }
   }
 
   static successChange() {
     const SUCSESS_MSG = 'The password has been changed';
-    Router.navigateTo('#profile');
+    logoutCustomer();
     showSucessMessage(SUCSESS_MSG);
   }
 }
