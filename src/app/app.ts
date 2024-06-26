@@ -15,6 +15,7 @@ import {
   ProductPageView,
   BasketPageView,
   AboutUsView,
+  PasswordChangeView,
 } from '@views/index';
 
 type Page =
@@ -24,7 +25,8 @@ type Page =
   | LoginView
   | ProfileView
   | CatalogPageView
-  | AboutUsView;
+  | AboutUsView
+  | PasswordChangeView;
 
 class App {
   private headerView: HeaderView;
@@ -106,6 +108,12 @@ class App {
           if (isPageAccessable('authorized')) {
             this.hideFooterHeader = false;
             this.mainView.page = new ProfileView();
+          }
+          break;
+        case '#change':
+          if (isPageAccessable('authorized')) {
+            this.hideFooterHeader = false;
+            this.mainView.page = new PasswordChangeView();
           }
           break;
         case '#catalog':

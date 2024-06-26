@@ -26,6 +26,7 @@ export const createAnonymousCart = (
       }
     })
     .catch((error: ClientResponse<{ message: string }>) => {
+      console.log(errorCallback(error.body.message));
       errorCallback(error.body.message);
     });
 };

@@ -14,7 +14,7 @@ export default class AboutUsCardComponent extends CardComponent {
 
     const cardImage = new BaseComponent({
       tag: 'div',
-      classList: ['card-image', 'standard-size'],
+      classList: ['card-image', 'standard-size', 'small'],
     });
     this.card.appendChild(cardImage);
 
