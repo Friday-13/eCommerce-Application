@@ -114,7 +114,6 @@ class CartHandler {
           this.currentCartVersion = cartData.version;
           this.saveCartToLocalStorage();
         }
-        console.log('Product added to cart:', cartData);
       },
       (errorMessage) => {
         const SUCSESS_MSG = `Error adding product to cart: ${errorMessage}`;

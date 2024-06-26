@@ -132,7 +132,7 @@ export default class BasketSummaryView extends View {
     const getTotalPrice = (lineItems: Array<ILineItem>) => {
       const totalPrice =
         lineItems.reduce(
-          (sum, currentItem) => sum + currentItem.price.value.centAmount,
+          (sum, currentItem) => sum + currentItem.totalPrice.centAmount,
           0
         ) / 100;
       return totalPrice;
