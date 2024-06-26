@@ -76,9 +76,6 @@ export default class PasswordChangeView extends View {
 
   private async getData() {
     try {
-      // const customer = JSON.parse(
-      //   localStorage.getItem('codecraftCustomer') as string
-      // );
       const customerData = await getCustomer();
       this.populateForm(customerData);
       this.addConfirmPasswordButton();
@@ -133,6 +130,14 @@ export default class PasswordChangeView extends View {
   public addConfirmPasswordButton() {
     const attrs: IButtonAttributes = {
       type: 'button',
+      classList: [
+        'save-profile-button',
+        'profile-button',
+        'waves-effect',
+        'waves-light',
+        'btn',
+        'no-text-transform',
+      ],
       content: 'Confirm current password',
       onClick: () => {
         const email = this.emailField.getValue();
@@ -146,6 +151,14 @@ export default class PasswordChangeView extends View {
     this.currentWrapper.appendChild(this.button);
 
     const toggleButtonAttrs: IButtonAttributes = {
+      classList: [
+        'save-profile-button',
+        'profile-button',
+        'waves-effect',
+        'waves-light',
+        'btn',
+        'no-text-transform',
+      ],
       content: 'Show/Hide Password',
       onClick: (event) => {
         if (event) {
@@ -222,6 +235,14 @@ export default class PasswordChangeView extends View {
   public addChangePasswordButton(customerData: Customer | null) {
     const attrs: IButtonAttributes = {
       type: 'button',
+      classList: [
+        'save-profile-button',
+        'profile-button',
+        'waves-effect',
+        'waves-light',
+        'btn',
+        'no-text-transform',
+      ],
       content: 'Save new password',
       onClick: () => this.handlePasswordChange(customerData),
     };
@@ -250,12 +271,19 @@ export default class PasswordChangeView extends View {
             () => {
               Router.navigateTo('#profile');
             },
-            () => {}
+            () => {
+              showErrorMessage('Login without merge failed')
+            }
           );
         })
-        .catch(() => showErrorMessage('Passwords do not match'));
+        .catch(() => {
+          showErrorMessage('Failed to change password. Please try again.');
+        });
+    } else {
+      showErrorMessage('Passwords do not match');
     }
   }
+  
 
   static successChange() {
     const SUCSESS_MSG = 'The password has been changed';
