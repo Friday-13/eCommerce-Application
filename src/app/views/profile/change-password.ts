@@ -272,7 +272,7 @@ export default class PasswordChangeView extends View {
               Router.navigateTo('#profile');
             },
             () => {
-              showErrorMessage('Login without merge failed')
+              showErrorMessage('Login without merge failed');
             }
           );
         })
@@ -283,7 +283,6 @@ export default class PasswordChangeView extends View {
       showErrorMessage('Passwords do not match');
     }
   }
-  
 
   static successChange() {
     const SUCSESS_MSG = 'The password has been changed';

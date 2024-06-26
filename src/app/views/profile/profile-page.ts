@@ -219,7 +219,7 @@ export default class ProfileView extends View {
           'Billing'
         );
         this.addressContainer.appendChild(this.shippingAddressContainer);
-        this.addressContainer.appendChild(this.billingAddressContainer);  
+        this.addressContainer.appendChild(this.billingAddressContainer);
       }
     } else {
       showErrorMessage('Error getting customer data or addresses');
@@ -412,9 +412,8 @@ export default class ProfileView extends View {
       event.preventDefault();
       this.enableSaveAddress();
     });
-   
+
     this.pesonalSection.appendChild(buttonSavePersonal);
     this.addressContainer.appendChild(buttonSaveAddress);
-    
   }
 }

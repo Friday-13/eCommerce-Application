@@ -101,7 +101,7 @@ export default class ProductPageView extends View {
   private initializeGalleryWrapper(detailsProduct: BaseComponent) {
     const galleryAttrs: IAttributes = {
       tag: 'section',
-      classList: ['gallery-wrapper'],
+      classList: ['gallery-wrapper card'],
     };
     this.galleryWrapper = new BaseComponent(galleryAttrs);
     detailsProduct.appendChild(this.galleryWrapper);
@@ -114,7 +114,7 @@ export default class ProductPageView extends View {
   private initializeProductContainer(detailsProduct: BaseComponent) {
     const productContainerAttrs: IAttributes = {
       tag: 'section',
-      classList: ['product-container'],
+      classList: ['product-container card'],
     };
     this.productContainer = new BaseComponent(productContainerAttrs);
     detailsProduct.appendChild(this.productContainer);
@@ -302,7 +302,7 @@ export default class ProductPageView extends View {
 
     const productDescriptionContainerAttrs: IAttributes = {
       tag: 'section',
-      classList: ['product-description-container'],
+      classList: ['product-description-container card'],
       content: '',
     };
     this.productDescriptionContainer = new BaseComponent(
