@@ -1,7 +1,11 @@
 # eCommerce Application
 
 Welcome to eCommerce application🛍️! This platform replicates real-world shopping experiences in a digital environment.
-The project is a part of the final task of the course [JavaScript/Front-end 2023Q4](https://rs.school/courses/javascript-ru) from the [RS School](https://rs.school/).
+The project is a part of the final task of the course [JavaScript/Front-end 2023Q4](https://rs.school/courses/javascript-mentoring-program) from the [RS School](https://rs.school/). It features the implementation of an online store for LEGO products, offering a diverse range of items. 
+
+## Deploy
+
+[codecraft-lego](https://codecraft-lego.netlify.app/)
 
 ## Key pages in the application include:
 
@@ -22,6 +26,7 @@ The project is a part of the final task of the course [JavaScript/Front-end 2023
 - Jest [docs](https://jestjs.io/docs/getting-started)
 - SCSS [docs](https://sass-lang.com/documentation/)
 - CommerceTools API [docs](https://docs.commercetools.com/api/general-concepts)
+- Materialize [dosc](https://materializecss.com/getting-started.html)
 - Teamwork tools:
   - Prettier [docs](https://prettier.io/docs/en/)
   - Husky [docs](https://typicode.github.io/husky/)
