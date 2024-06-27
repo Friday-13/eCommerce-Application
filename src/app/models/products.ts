@@ -15,12 +15,11 @@ export interface IAttributeProducts {
   value: string | number;
 }
 
-interface ILocalizedString {
+export interface ILocalizedString {
   [key: string]: string;
 }
 
 export interface ICurrent {
-  id: string;
   name: ILocalizedString;
   description?: ILocalizedString;
   masterVariant: {

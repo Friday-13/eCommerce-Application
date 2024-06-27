@@ -5,7 +5,7 @@ const getCategories = (
   sucessCallback: (categories: Array<ICategory>) => void,
   errorCallback: (message: string) => void
 ) => {
-  apiRoot
+  apiRoot.root
     .categories()
     .get({
       queryArgs: {

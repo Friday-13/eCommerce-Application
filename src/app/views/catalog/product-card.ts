@@ -9,6 +9,7 @@ import {
   ButtonWithIconComponent,
   IButtonWithIconAttributes,
 } from '@components/button-with-icons';
+import currentCart from '@services/current-cart';
 import CardTitleView from './card-title';
 import styles from './card-style.module.scss';
 
@@ -28,7 +29,7 @@ export default class ProductCardView extends View {
     };
     super(attrs);
     this.addCardContiner();
-    this.addImage(content.id, content.imageUrls[0]); // и вот тут добавила - надеюсь дальше не пошло?
+    this.addImage(content.id, content.imageUrls[0]);
     this.addContent(content.productName);
     this.addDescription(
       content.productName,
@@ -38,11 +39,12 @@ export default class ProductCardView extends View {
       content.id
     );
     this.addPriceBlock(content.price, content.discountedPrice);
+    this.addAddtoCartButton(content.id);
   }
 
   addCardContiner() {
     const attrs: IAttributes = {
-      classList: ['card', styles.productCard],
+      classList: ['card', 'sticky-action', styles.productCard],
     };
     this._container = new BaseComponent(attrs);
     this.appendChild(this._container);
@@ -63,6 +65,7 @@ export default class ProductCardView extends View {
       Router.navigateTo(`#product/${productId}`);
     });
     this._container.appendChild(imgContainer);
+    this._image.node.setAttribute('loading', 'lazy');
   }
 
   addContent(title: string = DEFAULT_TITLE) {
@@ -139,5 +142,33 @@ export default class ProductCardView extends View {
       styles.priceBlockNewPrice
     );
     priceBlock.appendChild(productDuscountedPrice);
+  }
+
+  addAddtoCartButton(productId: string) {
+    const blockAttrs: IAttributes = {
+      classList: 'card-action',
+    };
+    const actionBlock = new BaseComponent(blockAttrs);
+
+    const buttonAttrs: IButtonWithIconAttributes = {
+      classList: 'waves-effect waves-light btn-small red lighten-2',
+      icon: 'add_shopping_cart',
+    };
+
+    const button = new ButtonWithIconComponent(buttonAttrs);
+
+    if (currentCart.isProductInside(productId)) {
+      button.disabled = !button.disabled;
+      button.icon = 'playlist_add_check';
+    }
+
+    button.node.onclick = () => {
+      button.disabled = !button.disabled;
+      button.icon = 'playlist_add_check';
+      currentCart.addProduct(productId, 1);
+    };
+
+    actionBlock.appendChild(button);
+    this._container.appendChild(actionBlock);
   }
 }

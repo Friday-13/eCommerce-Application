@@ -3,9 +3,10 @@ import { AnchorComponent, IAnchorAttrs } from '@components/anchor-component';
 import View from '@views/view';
 import { IImageAttributes, ImageComponent } from '@components/image-component';
 import Router from '@utils/router';
-import { customerClear, isCustomerAuthorized } from '@models/customer';
 import logoUrl from '@assets/logo.webp';
 import { IButtonAttributes } from '@components/button-component';
+import logoutCustomer from '@services/logout-customer';
+import CookieManager from '@utils/cookie';
 
 export default class HeaderView extends View {
   private headerInitialized: boolean;
@@ -96,12 +97,25 @@ export default class HeaderView extends View {
       };
       const link = new AnchorComponent(linkAttrs);
 
+      if (content === 'About Us') {
+        const iconHtml =
+          '<i class="tiny material-icons header-icons">group</i>';
+        link.node.innerHTML = iconHtml;
+      }
+      if (content === 'Cart') {
+        const iconHtml =
+          '<i class="tiny material-icons header-icons">shopping_cart</i>';
+        link.node.innerHTML = iconHtml;
+      }
+
       link.node.addEventListener('click', (event) => {
         event.preventDefault();
         if (callback) {
           callback();
         }
         Router.navigateTo(href);
+        document.body.classList.remove('lock');
+        this.menuContainerList.node.classList.toggle('menu-active');
       });
 
       item.appendChild(link);
@@ -110,20 +124,20 @@ export default class HeaderView extends View {
 
     const menuItems = [];
 
-    if (isCustomerAuthorized()) {
+    if (CookieManager.isCustomerAuthorized()) {
       menuItems.push(
         createMenuItem('#catalog', 'Catalog'),
-        createMenuItem('#about-us', 'About Us'),
-        createMenuItem('#login', 'Sign out', customerClear),
+        createMenuItem('#login', 'Sign out', logoutCustomer),
         createMenuItem('#profile', 'Profile'),
+        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#cart', 'Cart')
       );
     } else {
       menuItems.push(
         createMenuItem('#catalog', 'Catalog'),
-        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#login', 'Sign in'),
         createMenuItem('#registration', 'Sign up'),
+        createMenuItem('#about-us', 'About Us'),
         createMenuItem('#cart', 'Cart')
       );
     }

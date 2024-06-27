@@ -1,4 +1,7 @@
+import currentCart from '@services/current-cart';
 import isPageAccessable from '@utils/access-control';
+import CookieManager from '@utils/cookie';
+
 import {
   Error404,
   MainPageView,
@@ -10,6 +13,9 @@ import {
   MainView,
   FooterView,
   ProductPageView,
+  BasketPageView,
+  AboutUsView,
+  PasswordChangeView,
 } from '@views/index';
 
 type Page =
@@ -18,7 +24,9 @@ type Page =
   | RegistrationView
   | LoginView
   | ProfileView
-  | CatalogPageView;
+  | CatalogPageView
+  | AboutUsView
+  | PasswordChangeView;
 
 class App {
   private headerView: HeaderView;
@@ -35,6 +43,9 @@ class App {
 
     window.addEventListener('hashchange', this.route);
     window.addEventListener('load', this.route);
+
+    const userId = CookieManager.getUserId();
+    currentCart.initCurrentCart(userId);
   }
 
   private addHeader(): void {
@@ -73,6 +84,7 @@ class App {
 
     if (route === 'product' && productId) {
       this.hideFooterHeader = false;
+
       this.mainView.page = new ProductPageView(productId);
     } else {
       switch (window.location.hash) {
@@ -98,11 +110,24 @@ class App {
             this.mainView.page = new ProfileView();
           }
           break;
+        case '#change':
+          if (isPageAccessable('authorized')) {
+            this.hideFooterHeader = false;
+            this.mainView.page = new PasswordChangeView();
+          }
+          break;
         case '#catalog':
           this.hideFooterHeader = false;
           this.mainView.page = new CatalogPageView();
           break;
-
+        case '#cart':
+          this.hideFooterHeader = false;
+          this.mainView.page = new BasketPageView();
+          break;
+        case '#about-us':
+          this.hideFooterHeader = false;
+          this.mainView.page = new AboutUsView();
+          break;
         case '#error':
           this.hideFooterHeader = true;
           this.mainView.page = new Error404();

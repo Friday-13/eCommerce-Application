@@ -1,8 +1,10 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
-import { customerTokenResponse, saveCustomerToken } from '@models/customer';
-import apiRoot from './api-root';
+import { customerTokenResponse } from '@models/customer';
+import CookieManager from '@utils/cookie';
+import ApiRoot from './api-root';
+import login from './login-authorization';
+import currentCart from './current-cart';
 
-const SUCSESS_MSG = 'You have successfully registered';
 const EMAIL_EXIST_ADD_MSG = 'Use another email or try to login';
 const EMAIL_EXIST_DEF_MSG =
   'There is already an existing customer with the provided email.';
@@ -12,18 +14,23 @@ const registration = (
   sucessCallback: (message: string) => void,
   errorCallback: (message: string) => void
 ) => {
-  apiRoot
+  ApiRoot.root
     .customers()
     .post({
       body: customer,
     })
     .execute()
     .then((response) => {
-      const customerToken = customerTokenResponse(response.body.customer);
-      if (customerToken) {
-        saveCustomerToken(customerToken);
+      const customerDataForId = customerTokenResponse(response.body.customer);
+      if (customerDataForId && customerDataForId.id) {
+        CookieManager.setUserId(customerDataForId.id);
+        currentCart.createCustomerCart(customerDataForId.id);
       }
-      sucessCallback(SUCSESS_MSG);
+      login(
+        { email: customer.email, password: customer.password as string },
+        sucessCallback,
+        errorCallback
+      );
     })
     .catch((reason) => {
       if (reason.message === EMAIL_EXIST_DEF_MSG) {

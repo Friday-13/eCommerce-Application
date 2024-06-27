@@ -1,27 +1,28 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { IProductData } from '@models/products';
-import apiRoot from './api-root';
+import ApiRoot from './api-root';
 import { createProductData } from './product-data';
 
 function parseProductProjectionResults(
   results: Array<ProductProjection>
 ): Array<IProductData> {
   const products = results.map((result) => {
-    const product = createProductData(result);
+    const product = createProductData(result.id, result);
     return product;
   });
   return products;
 }
 
 const getProducts = (
-  sucessCallback: (products: Array<IProductData>) => void,
+  sucessCallback: (products: Array<IProductData>, total?: number) => void,
   errorCallback: (message: string) => void,
   limit: number = 100,
+  offset: number = 0,
   searchString?: string,
   filterQuery: Array<string> = [],
   sort: Array<string> = []
 ) => {
-  apiRoot
+  ApiRoot.root
     .productProjections()
     .search()
     .get({
@@ -31,13 +32,15 @@ const getProducts = (
         sort,
         'text.en-gb': searchString,
         fuzzy: true,
+        offset,
       },
     })
     .execute()
     .then((response) => {
       const { results } = response.body;
       const products = parseProductProjectionResults(results);
-      sucessCallback(products);
+      const { total } = response.body;
+      sucessCallback(products, total);
     })
     .catch((error) => {
       errorCallback(error.message);

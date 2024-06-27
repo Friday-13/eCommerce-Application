@@ -66,6 +66,7 @@
   "dependencies": {
     "@commercetools/platform-sdk": "^7.8.0",
     "@commercetools/sdk-client-v2": "^2.5.0",
+    "@commercetools/sdk-middleware-auth": "^7.0.1",
     "@types/node-fetch": "^2.6.11",
     "dotenv": "^16.4.5",
     "isomorphic-fetch": "^3.0.0",

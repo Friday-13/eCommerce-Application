@@ -7,7 +7,7 @@ import createNameField from '@utils/create-name-field';
 import createDateField from '@utils/create-date-field';
 import { showErrorMessage } from '@utils/toast-messages';
 import View from '@views/view';
-import { getCustomer } from '@services/getCustomer';
+import { getCustomer } from '@services/get-customer';
 import {
   postalCodeNoCountryValidator,
   postalCodeUKValidator,
@@ -17,12 +17,13 @@ import { IFormInputField, createInputField } from '@utils/create-input-field';
 import atLeastOneCharacter from '@utils/validators/at-least-one-character-validator';
 import noSpecialCharacterOrNumber from '@utils/validators/no-special-characters-or-numbers-validator';
 import { CheckboxComponent } from '@components/checkbox-component';
-import createPasswordField from '@utils/create-password-field';
 import {
-  passwordValidator,
-  specialCharValidator,
-} from '@utils/validators/password-validator';
-import { IButtonAttributes } from '@components/button-component';
+  ButtonComponent,
+  IButtonAttributes,
+} from '@components/button-component';
+import createEmailField from '@utils/create-email-field';
+import Router from '@utils/router';
+import updateCutomerPersonalInfo from './change-personal-info';
 
 export default class ProfileView extends View {
   private form = new FormComponent({});
@@ -59,6 +60,8 @@ export default class ProfileView extends View {
 
   private confirmPasswordInput = new InputFieldComponent({}, {}, {});
 
+  private emailInput = new InputFieldComponent({}, {}, {});
+
   constructor() {
     const attrs: IAttributes = {
       classList: 'row',
@@ -69,6 +72,7 @@ export default class ProfileView extends View {
     this.populateProfileView();
     this.addPersonalInformation();
     this.addPasswordFields();
+    this.createChangePasswordButton();
     this.addEditButton();
     this.addSaveButton();
   }
@@ -83,10 +87,7 @@ export default class ProfileView extends View {
 
   private async populateProfileView() {
     try {
-      const customer = JSON.parse(
-        localStorage.getItem('codecraftCustomer') as string
-      );
-      const customerData = await getCustomer(customer.id);
+      const customerData = await getCustomer();
       this.populateForm(customerData);
       this.populateAddresses(customerData);
     } catch (error) {
@@ -112,6 +113,11 @@ export default class ProfileView extends View {
       } else {
         showErrorMessage('Date of birth is undefined');
       }
+      if (customer.email !== undefined) {
+        this.emailInput.input.value = customer.email;
+      } else {
+        showErrorMessage('Email is undefined');
+      }
     } else {
       showErrorMessage('Error getting customer data');
     }
@@ -134,46 +140,42 @@ export default class ProfileView extends View {
       'Birthday',
       this.birthdayInput.input.value
     );
+    this.emailInput = createEmailField();
     this.firstNameInput.input.setDisable(true);
     this.lastNameInput.input.setDisable(true);
     this.birthdayInput.input.setDisable(true);
+    this.emailInput.input.setDisable(true);
     this.pesonalSection.appendChild(this.firstNameInput);
     this.pesonalSection.appendChild(this.lastNameInput);
     this.pesonalSection.appendChild(this.birthdayInput);
+    this.pesonalSection.appendChild(this.emailInput);
     this.form.node.appendChild(this.pesonalSection.htmlElement);
+  }
+
+  private createChangePasswordButton() {
+    const buttonAttrs: IButtonAttributes = {
+      type: 'button',
+      classList: [
+        'edit-profile-button',
+        'profile-button',
+        'waves-effect',
+        'waves-light',
+        'btn',
+        'no-text-transform',
+      ],
+      content: 'Change Password',
+      tag: 'button',
+      onClick: () => {
+        Router.navigateTo('#change');
+      },
+    };
+
+    const button = new ButtonComponent(buttonAttrs);
+    this.form.appendChild(button);
   }
 
   private addPasswordFields() {
     this.passwordSection = new FormSectionView('Password Management');
-    this.currentPasswordInput = createPasswordField({
-      label: 'Current password',
-      id: 'new-password',
-      placeholder: 'Enter your current password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    });
-    this.newPasswordInput = createPasswordField({
-      label: 'New password',
-      id: 'new-password',
-      placeholder: 'Enter your new password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    });
-    this.confirmPasswordInput = createPasswordField({
-      label: 'Confirm new password',
-      id: 'new-password',
-      placeholder: 'Enter your confirm new password',
-      type: 'password',
-      customValidators: [passwordValidator, specialCharValidator],
-    });
-
-    this.currentPasswordInput.input.setDisable(true);
-    this.newPasswordInput.input.setDisable(true);
-    this.confirmPasswordInput.input.setDisable(true);
-
-    this.passwordSection.appendChild(this.currentPasswordInput);
-    this.passwordSection.appendChild(this.newPasswordInput);
-    this.passwordSection.appendChild(this.confirmPasswordInput);
     this.form.node.appendChild(this.passwordSection.htmlElement);
   }
 
@@ -182,7 +184,6 @@ export default class ProfileView extends View {
     this.shippingAddressContainer = new FormSectionView('Shipping Address');
     this.billingAddressContainer = new FormSectionView('Billing Address');
     this.billingAndShipping = new FormSectionView('Billing & Shipping Address');
-
     if (customerData && customerData.addresses) {
       const { addresses } = customerData;
       const defaultShippingId = customerData.defaultShippingAddressId;
@@ -195,7 +196,6 @@ export default class ProfileView extends View {
           this.billingAndShipping,
           'Both'
         );
-        this.form.node.appendChild(this.addressContainer.htmlElement);
         this.addressContainer.appendChild(this.billingAndShipping);
       } else {
         const shippingAddress =
@@ -218,14 +218,13 @@ export default class ProfileView extends View {
           this.billingAddressContainer,
           'Billing'
         );
-
-        this.form.node.appendChild(this.addressContainer.htmlElement);
         this.addressContainer.appendChild(this.shippingAddressContainer);
         this.addressContainer.appendChild(this.billingAddressContainer);
       }
     } else {
       showErrorMessage('Error getting customer data or addresses');
     }
+    this.form.node.appendChild(this.addressContainer.htmlElement);
   }
 
   private addAddressInputs(
@@ -332,6 +331,7 @@ export default class ProfileView extends View {
     this.firstNameInput.input.setDisable(false);
     this.lastNameInput.input.setDisable(false);
     this.birthdayInput.input.setDisable(false);
+    this.emailInput.input.setDisable(false);
   }
 
   public enableEditAddress() {
@@ -350,6 +350,7 @@ export default class ProfileView extends View {
     this.firstNameInput.input.setDisable(true);
     this.lastNameInput.input.setDisable(true);
     this.birthdayInput.input.setDisable(true);
+    this.emailInput.input.setDisable(true);
   }
 
   public enableSaveAddress() {
@@ -370,13 +371,8 @@ export default class ProfileView extends View {
       ],
       content: 'Edit',
     };
-    const buttonEditPassword = new BaseComponent(buttonEditAttr);
     const buttonEditPersonal = new BaseComponent(buttonEditAttr);
     const buttonEditAddress = new BaseComponent(buttonEditAttr);
-    buttonEditPassword.node.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.enableEditPassword();
-    });
     buttonEditPersonal.node.addEventListener('click', (event) => {
       event.preventDefault();
       this.enableEditPersonal();
@@ -385,9 +381,8 @@ export default class ProfileView extends View {
       event.preventDefault();
       this.enableEditAddress();
     });
-    this.passwordSection.appendChild(buttonEditPassword);
     this.pesonalSection.appendChild(buttonEditPersonal);
-    this.form.appendChild(buttonEditAddress);
+    this.addressContainer.appendChild(buttonEditAddress);
   }
 
   private addSaveButton() {
@@ -402,23 +397,23 @@ export default class ProfileView extends View {
       ],
       content: 'Save',
     };
-    const buttonSavePassword = new BaseComponent(buttonSaveAttr);
     const buttonSavePersonal = new BaseComponent(buttonSaveAttr);
     const buttonSaveAddress = new BaseComponent(buttonSaveAttr);
-    buttonSavePassword.node.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.enableSavePassword();
-    });
     buttonSavePersonal.node.addEventListener('click', (event) => {
       event.preventDefault();
+      const firstName = this.firstNameInput.input.value;
+      const lastName = this.lastNameInput.input.value;
+      const dateOfBirth = this.birthdayInput.input.value;
+      const email = this.emailInput.input.value;
+      updateCutomerPersonalInfo(firstName, lastName, dateOfBirth, email);
       this.enableSavePersonal();
     });
     buttonSaveAddress.node.addEventListener('click', (event) => {
       event.preventDefault();
       this.enableSaveAddress();
     });
-    this.passwordSection.appendChild(buttonSavePassword);
+
     this.pesonalSection.appendChild(buttonSavePersonal);
-    this.form.appendChild(buttonSaveAddress);
+    this.addressContainer.appendChild(buttonSaveAddress);
   }
 }
