@@ -35,6 +35,14 @@
     justify-content: space-between;
     height: 30%;
   }
+
+  .card-action {
+    height: 10%;
+
+    &:last-child {
+      border-radius: 10px;
+    }
+  }
 }
 
 .price-block {
