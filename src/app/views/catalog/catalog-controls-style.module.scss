@@ -1,0 +1,53 @@
+.control-panel {
+  position: sticky;
+  z-index: 4;
+  top: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px;
+
+  button {
+    display: block;
+  }
+}
+
+.active-sort-option {
+  text-decoration: underline;
+}
+
+.narrow-wrapper {
+  padding: 0 10px;
+}
+
+.narrow-input {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.search-button {
+  cursor: pointer;
+}
+
+.sub-category {
+  padding-left: 30px;
+}
+
+.breadcrumb-nav {
+  min-height: auto;
+  background-color: inherit;
+  box-shadow: none;
+}
+
+.breadcrumb-black {
+  cursor: pointer;
+  color: rgb(33 33 33 / 50%);
+
+  &::before {
+    color: rgb(33 33 33 / 50%);
+  }
+
+  &:last-child {
+    color: #212121;
+  }
+}

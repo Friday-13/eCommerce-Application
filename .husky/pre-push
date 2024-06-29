@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+# Запуск тестов Jest
+echo "Running Jest..."
+npm run jest:test

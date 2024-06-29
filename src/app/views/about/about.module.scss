@@ -1,0 +1,89 @@
+.github-link > a {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ee6e73 !important ;
+}
+
+#collaboration,
+#contribution {
+  margin-right: 2%;
+  margin-left: 2%;
+}
+
+#contribution > h5 {
+  margin-bottom: 35px;
+}
+
+.rs-school {
+  max-height: 70px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  min-height: 70px;
+  margin: 2% 2% 70px;
+
+  & .title-text {
+    font-size: 28px;
+    font-weight: 600;
+  }
+}
+
+.logo-container a {
+  display: contents;
+}
+
+.logo-container img {
+  margin-right: 5%;
+}
+
+.standard-size {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.standard-size img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media screen and (max-width <= 550px) {
+  .logo-container {
+    flex-direction: column;
+  }
+
+  .logo-container h6 {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width <= 640px) {
+  .member-items-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.row .member-item .col .m4 {
+  flex: 0 1 33.333%;
+  margin: 0;
+  padding: 0;
+}
+
+.card:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.center-align.title {
+  font-size: 32px;
+  font-weight: 600;
+}

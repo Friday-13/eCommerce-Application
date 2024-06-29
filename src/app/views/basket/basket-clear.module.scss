@@ -1,0 +1,15 @@
+.basket-clear {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__submit {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    &_hidden {
+      display: none;
+    }
+  }
+}
